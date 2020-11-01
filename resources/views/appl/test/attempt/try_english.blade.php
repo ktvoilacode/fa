@@ -5,7 +5,7 @@
 @section('content')
 
 @guest
-@if($test->status!=2)
+@if($test->status!=2 && $test->status!=3)
 <div class="alert alert-warning alert-dismissible alert-important fade show" role="alert">
   <strong>Note:</strong> Only registered users can submit the test and view the result. 
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -16,6 +16,8 @@
 @endguest
 
 <div class="container" style="padding-left:0px;padding-right:0px;">
+
+
     <form id="test" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post">  
 
     <div class="row p-0 m-0">

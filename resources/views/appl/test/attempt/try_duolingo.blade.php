@@ -4,10 +4,6 @@
 @section('keywords', 'practice tests, '.$test->name)
 @section('content')
 
-
-
-
-
 <div class="container {{$p=1}}" style="padding-left:0px;padding-right:0px;max-width:900px;">
 
   @guest
