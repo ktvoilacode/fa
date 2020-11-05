@@ -187,7 +187,7 @@
 
 
     </div>
-    <div class="col-12 col-md">
+    <div class="col-12 col-md-7">
       
 
       <div class="p-3 bg-white mb-4 border-top">

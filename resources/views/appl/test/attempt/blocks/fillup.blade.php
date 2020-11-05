@@ -22,9 +22,13 @@
       @elseif($f->layout=='two_blank')
         @include('appl.test.attempt.layouts.two_blank') 
       @elseif($test->category->name=='IELTS' && $f->qno==-1)
-          @include('appl.test.attempt.layouts.ielts_example') 
-      @else
+          @include('appl.test.attempt.layouts.ielts_example')
+      @elseif($f->layout=='ielts_number') 
             @include('appl.test.attempt.layouts.ielts_title') 
+      @elseif($f->layout) 
+            @include('appl.test.attempt.layouts.'.$f->layout) 
+      @else
+          @include('appl.test.attempt.layouts.ielts_label') 
       @endif   
     @endforeach
   @else
@@ -36,7 +40,14 @@
       @elseif($f->layout=='ielts_two_blank')
         @include('appl.test.attempt.layouts.ielts_two_blank') 
       @else
+
+          @if($f->layout=='ielts_number') 
+            @include('appl.test.attempt.layouts.ielts_title') 
+          @elseif($f->layout) 
+            @include('appl.test.attempt.layouts.'.$f->layout) 
+          @else
             @include('appl.test.attempt.layouts.'.$extract->layout) 
+          @endif
       @endif 
     @endforeach
   @endif
