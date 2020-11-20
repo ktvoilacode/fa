@@ -40,15 +40,15 @@
                               
                             </a>
 
-                            @if($obj->attempted($obj->id,$test->id))
+                            @if($obj->has_attempted($test->id))
                             <span class="badge badge-secondary">attempted</span>
                             @endif
 
-                            {{$obj->testscore($obj->id,$test->id)}}</li>
+                            {{$obj->get_testscore($obj->id,$test->id)}}</li>
                           @endforeach
                         </ul>
                         @endif
-                        
+
                         @endif
                       </td>
                       <td><a href="{{ route('order.show',[$order->id])}}">{{$order->order_id}}</a>

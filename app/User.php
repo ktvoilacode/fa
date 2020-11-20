@@ -12,6 +12,7 @@ use App\Models\Product\Order;
 use App\Models\Product\Coupon;
 use App\Models\Test\Attempt;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable 
 {
@@ -216,6 +217,8 @@ class User extends Authenticatable
     public function testscore($user_id,$test_id){
         $attempt = Attempt::where('test_id',$test_id)->where('user_id',$user_id)->get();
 
+
+
         $score = 0;
         $total = 0;
         foreach($attempt as $r){
@@ -231,6 +234,33 @@ class User extends Authenticatable
             return null;
     }
 
+    public function get_testscore($user_id,$test_id){
+        //$attempt = Attempt::where('test_id',$test_id)->where('user_id',$user_id)->get();
+
+        $attempts = Cache::remember('attempted_'.$this->id, 240, function() use ($user_id){
+            return Attempt::where('user_id',$user_id)->get();
+        });
+
+        $score = 0;
+        $attempted =  false;
+        $total = 0;
+        foreach($attempts as $r){
+            if($r->test_id == $test_id){
+                if($r->accuracy==1)
+                  $score++;
+              $total++;
+              $attempted = true;
+            }
+                
+        }
+        if($attempted){
+            //echo $attempt;
+            return 'Score - '.$score.' / '.$total;
+        }
+        else
+            return null;
+    }
+
     public function attempted($user_id,$test_id){
         $attempt = Attempt::where('test_id',$test_id)->where('user_id',$user_id)->first();
 
@@ -238,6 +268,20 @@ class User extends Authenticatable
             return true;
         else
             return false;
+    }
+
+    public function has_attempted($test_id){
+        $user_id = $this->id;
+        $attempts = Cache::remember('attempted_'.$this->id, 240, function() use ($user_id){
+            return Attempt::where('user_id',$user_id)->get();
+        });
+
+        foreach($attempts as $a){
+            if($a->test_id == $test_id)
+                return true;
+        }
+
+        return false;
     }
 
 
