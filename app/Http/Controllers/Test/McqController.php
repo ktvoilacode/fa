@@ -296,6 +296,7 @@ class McqController extends Controller
                 $obj->extract->extract_update($obj->qno);
             }
 
+            
             $obj = $obj->update($request->all()); 
 
            

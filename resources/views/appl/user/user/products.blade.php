@@ -31,6 +31,8 @@
                         {{$obj->testscore($obj->id,$order->test->id)}}
                       
                         @else
+
+                        @if(isset($order->product->name))
                         {{ strip_tags($order->product->name)}}
                         <ul>
                           @foreach($order->product->tests as $test)
@@ -45,6 +47,8 @@
                             {{$obj->testscore($obj->id,$test->id)}}</li>
                           @endforeach
                         </ul>
+                        @endif
+                        
                         @endif
                       </td>
                       <td><a href="{{ route('order.show',[$order->id])}}">{{$order->order_id}}</a>
