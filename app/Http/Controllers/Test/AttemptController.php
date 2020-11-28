@@ -1373,10 +1373,10 @@ class AttemptController extends Controller
       }
 
 
-      // if(!$user ){
-      //   $session_id =  $request->session()->getID();
-      //   $user= Session::where('id',$session_id)->first();
-      // }
+        // if(!$user ){
+        //   $session_id =  $request->session()->getID();
+        //   $user= Session::where('id',$session_id)->first();
+        // }
 
 
       if(count($result)==0)
