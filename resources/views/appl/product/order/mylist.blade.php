@@ -23,33 +23,43 @@
                 </td>
                 <td>
                 @if($obj->test_id)
-                @if(isset($obj->test->name))
+                  @if(isset($obj->test->name))
                   {{ strip_tags($obj->test->name) }} 
                   @else
                   -
                   @endif
                 @else
-                {{ strip_tags($obj->product->name) }} 
+                  @if(isset($obj->product->name))
+                  {{ strip_tags($obj->product->name) }} 
+                  @else
+                  -
+                  @endif
+                
                 @endif
                 </td>
                 <td>
                   @if($obj->test_id)
                     @if(isset($obj->test->name))
-                    @if($obj->test->price==0)
-                    <span class="badge badge-warning">Free</span>
-                    @else
-                    <span class="badge badge-primary">Premium</span>
-                    @endif
+                      @if($obj->test->price==0)
+                      <span class="badge badge-warning">Free</span>
+                      @else
+                      <span class="badge badge-primary">Premium</span>
+                      @endif
                     @else
                     -
                     @endif
                     
                   @else
-                    @if($obj->product->price==0)
-                    <span class="badge badge-warning">Free</span>
+                    @if(isset($obj->product->name))
+                      @if($obj->product->price==0)
+                      <span class="badge badge-warning">Free</span>
+                      @else
+                      <span class="badge badge-primary">Premium</span>
+                      @endif
                     @else
-                    <span class="badge badge-primary">Premium</span>
+                    -
                     @endif
+                    
                   @endif
                 </td>
                 
