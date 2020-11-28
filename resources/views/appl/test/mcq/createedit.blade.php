@@ -83,6 +83,20 @@
       </div>
       </div>
       @endif
+
+      <div class="col-12 col-md">
+          <div class="form-group">
+        <label for="formGroupExampleInput ">Mark</label>
+        <input type="text" class="form-control" name="mark" id="formGroupExampleInput" placeholder="Enter the mark" 
+            @if($stub=='Create')
+            value="{{ (old('mark')) ? old('mark') : 1}}"
+            @else
+            value = "{{ $obj->mark }}"
+            @endif
+          >
+      </div>
+
+        </div>
         
       </div>
 

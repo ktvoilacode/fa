@@ -100,7 +100,8 @@ class Test extends Model
     }
 
     public function mcq_order() {
-        return $this->mcq()->orderBy('qno','asc');
+        
+        return $this->mcq()->orderBy('sno','asc');
     }
 
     public function fillup_q1() {

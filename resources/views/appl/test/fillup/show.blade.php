@@ -156,7 +156,20 @@
         <h5>{{$obj->suffix}}</h5>
       </div>
     </div>
+
+      <hr>
+
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Mark </b></div>
+            <div class="col-md-8">{{ ($obj->mark) ? $obj->mark : '' }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Created </b></div>
+            <div class="col-md-8">{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</div>
+          </div>
   </div>
+
+
 
 <style>
 

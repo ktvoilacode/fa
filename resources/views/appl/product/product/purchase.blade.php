@@ -6,6 +6,7 @@
 
 
 @if($product)
+
 <div class="bg-white">
 <div class="card-body p-4 ">
 <h1 class="text-primary"><i class="fa fa-times-circle"></i> Restricted Access</h1>
@@ -49,7 +50,7 @@
 
 @auth
 
-	@if(\auth::user()->sms_token==1)
+	@if(\auth::user()->sms_token==1 && $product)
 	<a href="{{ route('product.checkout-access',$product->slug) }}">
 	<button class="btn btn-lg btn-outline-primary mt-3">Access Code</button>
 	</a>

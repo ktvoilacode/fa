@@ -110,7 +110,7 @@
   </div>
   <div class="card-body">
       <div class="row">
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-2">
           <div class="form-group">
         <label for="formGroupExampleInput ">Sno</label>
         <input type="text" class="form-control" name="sno" id="formGroupExampleInput" 
@@ -124,7 +124,7 @@
       </div>
 
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-2">
           <div class="form-group">
         <label for="formGroupExampleInput ">Qno  <span data-toggle="tooltip" title="In IELTS test to make question as 'example question' enter -1 in Qno" class="text-secondary"><i class="fa fa-info-circle" aria-hidden="true"></i></span></label>
         <input type="text" class="form-control" name="qno" id="formGroupExampleInput" placeholder="Enter the Question number" 
@@ -135,6 +135,21 @@
             @endif
           >
           <small class="text-secondary"> Used as prefix to the blank in the question. Also used for sequencing the elements in grammar  tests.  </small>
+      </div>
+          
+        </div>
+
+          <div class="col-12 col-md-2">
+          <div class="form-group">
+        <label for="formGroupExampleInput ">Mark</label>
+        <input type="text" class="form-control" name="mark" id="formGroupExampleInput" placeholder="Enter the mark" 
+            @if($stub=='Create')
+            value="{{ (old('mark')) ? old('mark') : 1 }}"
+            @else
+            value = "{{ $obj->mark }}"
+            @endif
+          >
+          
       </div>
           
         </div>

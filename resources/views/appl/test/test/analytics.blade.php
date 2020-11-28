@@ -10,7 +10,7 @@
    <li class="breadcrumb-item"><a href="{{ url('/home')}}">Home</a></li>
     <li class="breadcrumb-item"><a href="{{ url('/admin')}}">Admin</a></li>
     <li class="breadcrumb-item"><a href="{{ route($app->module.'.index') }}">{{ ucfirst($app->module) }}</a></li>
-    <li class="breadcrumb-item">{{ $obj->name }} - Score Analytics</li>
+    <li class="breadcrumb-item"><a href="{{ route($app->module.'.show',$obj->id) }}">{{ $obj->name }} - Score Analytics</a></li>
   </ol>
 </nav>
 
@@ -164,11 +164,11 @@
     <tr>
       <th scope="row">{{$i++}}</th>
       <td>
-        @if($app->test->status==2)
-        <a href="{{ route('test.analysis',$app->test->slug)}}?session_id={{$users[$k]['id']}}">{{ $users[$k]['session']['name']}}</a>
+        @if($app->test->status==2 || $app->test->status==3)
+        <a href="{{ route('test.analysis',$app->test->slug)}}?session_id={{$k}}&admin=1">{{ $users[$k]['session']['name']}}</a>
         @else
         @if(isset($users[$k]['user']))
-        <a href="{{ route('user.show',$users[$k]['user']['id'])}}">{{ $users[$k]['user']['name']}}</a>
+        <a href="{{ route('test.analysis',$app->test->slug)}}?user_id={{$users[$k]['user']['id']}}&admin=1">{{ $users[$k]['user']['name']}}</a>
         @endif
         @endif
       </td>

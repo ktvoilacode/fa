@@ -157,7 +157,7 @@ class HomeController extends Controller
         $i=0;
 
         foreach($orders as $o){
-          if(strtotime($o->expiry) > strtotime(date('Y-m-d'))){
+          //if(strtotime($o->expiry) > strtotime(date('Y-m-d'))){
             if($o->test_id){
                 if(!in_array($o->test_id, $test_ids)){
                      array_push($test_ids, $o->test_id);
@@ -176,7 +176,10 @@ class HomeController extends Controller
                 else
                     $product_status[$o->product_id] = 'Expired';
                 $product_expiry[$o->product_id] = $o->expiry;
-                foreach($o->product->tests as $t){
+                $tests = Cache::remember('my_tests_'.$user->id,240,function() use ($o){
+                    return  $o->product->tests;
+                });
+                foreach($tests as $t){
                     if(!in_array($t->id, $test_ids)){
                         array_push($test_ids, $t->id);
                     }
@@ -187,12 +190,12 @@ class HomeController extends Controller
                         $status[$t->id] = 'Expired';
                 }
             }    
+        
         }
-        }
 
 
 
-        $tests = Test::whereIn('id',$test_ids)->where('name','LIKE',"%{$item}%")->orderBy('name')->get();
+        $tests = Test::whereIn('id',$test_ids)->where('name','LIKE',"%{$item}%")->with('testtype')->orderBy('name')->get();
         $products = Product::whereIn('id',$product_ids)->where('name','LIKE',"%{$item2}%")->orderBy('name')->get();
 
         

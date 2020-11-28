@@ -117,6 +117,10 @@
             </div>
           </div>
 
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Mark </b></div>
+            <div class="col-md-8">{{ ($obj->mark) ? $obj->mark : '' }}</div>
+          </div>
          
           
           <div class="row mb-2">

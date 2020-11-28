@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Test\Test;
 use App\Models\Test\Tag;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class Attempt extends Model
 {
@@ -22,7 +23,8 @@ class Attempt extends Model
         'session_id',
         'dynamic',
         'comment',
-        'status'
+        'status',
+        'marking',
         // add all other fields
     ];
 

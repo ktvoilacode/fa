@@ -48,6 +48,7 @@
           </div>
         </div>
 
+    
         @if($test->status==2)
         @if(isset($user->name))
         <div class="bg-light rounded mb-3 p-2 border">Name: <b>{{$user->name}}</b> &nbsp;&nbsp;&nbsp;Phone: <b>{{$user->phone}}</b> &nbsp;&nbsp;&nbsp;
@@ -60,7 +61,8 @@
         @endif
         @endif
 
-      @if($test->testtype->name!='DUOLINGO')
+        
+      @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
         @include('appl.test.attempt.blocks.solutions')
       @else
         <div class="mt-4">

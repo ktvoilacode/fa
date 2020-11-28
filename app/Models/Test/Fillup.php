@@ -17,6 +17,7 @@ class Fillup extends Model
         'qno',
         'sno',
         'layout',
+        'mark',
         // add all other fields
     ];
 

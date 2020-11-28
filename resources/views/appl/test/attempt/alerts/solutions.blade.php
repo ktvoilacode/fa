@@ -20,7 +20,11 @@
                 <button class="btn btn-sm btn-outline-primary mt-3 ">
                   <i class="fa fa-angle-left"></i> back to Test</button>
               </a>
-              
+              @elseif(request()->get('admin'))
+              <a href="{{ route('test.analytics',$test->id)}}">
+                <button class="btn btn-sm btn-outline-primary mt-3 ">
+                  <i class="fa fa-angle-left"></i> back to Test Analytics</button>
+              </a>
               @elseif(request()->get('product'))
               <a href="{{ route('product.view',request()->get('product'))}}">
                 <button class="btn btn-sm btn-outline-primary mt-3 ">
@@ -67,9 +71,11 @@
           </div>
         </div>
 
+        
+
         @if($test->status==2)
         @if(isset($user->name))
-        <div class="bg-light rounded mb-3 p-2 border">Name: <b>{{$user->name}}</b> &nbsp;&nbsp;&nbsp;Phone: <b>{{$user->phone}}</b> &nbsp;&nbsp;&nbsp;
+        <div class="bg-light rounded mb-3 p-2 border">Name: <b>{{$user->name}}</b> &nbsp;&nbsp;&nbsp;@if($user->phone) Phone: <b>{{$user->phone}}</b> @endif&nbsp;&nbsp;&nbsp;
           @if(\auth::user())
             @if(\auth::user()->isAdmin())
               <a href="{{route('test.analysis',$test->slug)}}?delete=1&session_id={{request()->get('session_id')}}"><i class="fa fa-trash"></i> delete</a>
@@ -79,7 +85,20 @@
         @endif
         @endif
 
-      @if($test->testtype->name!='DUOLINGO')
+        @if($test->status==3)
+        @if(isset($user->name))
+        <div class="bg-light rounded mb-3 p-2 border">Name: <b>{{$user->name}}</b> &nbsp;&nbsp;&nbsp;@if($user->phone)Phone: <b>{{$user->phone}}</b>@endif &nbsp;&nbsp;&nbsp;
+          @if(\auth::user())
+            @if(\auth::user()->isAdmin())
+              <a href="{{route('test.analysis',$test->slug)}}?delete=1&session_id={{request()->get('session_id')}}"><i class="fa fa-trash"></i> delete</a>
+            @endif
+          @endif
+          <span class="float-md-right">IP: <b>{{$user->ip_address}}</b></span> </div>
+        @endif
+        @endif
+
+
+      @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
         @include('appl.test.attempt.blocks.solutions')
       @else
         <div class="mt-4">

@@ -304,6 +304,8 @@ class TestController extends Controller
         $obj = Obj::where('id',$id)->first();
         $this->authorize('view', $obj);
 
+
+
         $filename = $this->cache_path.$this->app.'.'.$obj->slug.'.json'; 
         if(file_exists($filename)){
             $json = json_decode(file_get_contents($filename)); 
@@ -312,8 +314,12 @@ class TestController extends Controller
 
         $app = $this;
         $app->test= $obj;
+
+
          $this->test->sections = $this->test->sections;
               $this->test->mcq_order = $this->test->mcq_order;
+
+              
               $this->test->fillup_order = $this->test->fillup_order;
               $this->test->testtype = $this->test->testtype;
               $this->test->category = $this->test->category;
@@ -341,6 +347,8 @@ class TestController extends Controller
                   }
                       
               }
+
+         
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')
                     ->with('obj',$obj)->with('app',$this)
@@ -568,7 +576,7 @@ class TestController extends Controller
         $app = $this;
         $app->test= $test;
 
-        if($test->status!=2)
+        if($test->status!=2 && $test->status!=3)
             $group = 'user_id';
         else
             $group = 'session_id';
@@ -591,6 +599,7 @@ class TestController extends Controller
             $users = Attempt::where('test_id',$id)->get()->groupBy($group);
 
 
+
         $counter =0;
         $total = 0;
         foreach($users as $i=>$attempt){
@@ -601,6 +610,10 @@ class TestController extends Controller
                 if(!isset($data[$i]['user'])){
                     if($test->status==2)
                     $data[$i]['session'] = $a->session; 
+                    else if($test->status==3){
+                        $data[$i]['session'] = $a->session;
+
+                    }
                     else{
                         if($a->user)
                             $data[$i]['user'] = $a->user;
@@ -717,6 +730,7 @@ class TestController extends Controller
         else
             $view = 'analytics';
 
+        
       
 
         return view('appl.test.test.'.$view)

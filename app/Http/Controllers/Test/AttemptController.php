@@ -18,7 +18,7 @@ use App\User;
 
 use App\Mail\uploadfile;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class AttemptController extends Controller
@@ -760,6 +760,7 @@ class AttemptController extends Controller
           $result[$mcq->qno]['qno']=$mcq->qno;
           $result[$mcq->qno]['type']='mcq';
           $result[$mcq->qno]['answer'] = $mcq->answer;
+          $result[$mcq->qno]['mark'] = $mcq->mark;
           $result[$mcq->qno]['response']= '';
           $result[$mcq->qno]['accuracy']= 0;
           $result[$mcq->qno]['status'] = 1;
@@ -785,6 +786,7 @@ class AttemptController extends Controller
             $result[$fillup->qno]['type']='fillup';
             $result[$fillup->qno]['answer'] = $fillup->answer;
             $result[$fillup->qno]['response']= '';
+            $result[$fillup->qno]['mark']= $fillup->mark;
             $result[$fillup->qno]['accuracy']= 0;
             $result[$fillup->qno]['two_blanks'] =0;
             $result[$fillup->qno]['status'] = 1;
@@ -865,18 +867,21 @@ class AttemptController extends Controller
               $score = $score + $score_bit;
               if($score_bit<1){
                 $data[$i]['accuracy'] =0;
+                $data[$i]['score'] = 0;
                 $result[$qno]['accuracy'] = 0; 
               }
               else{
                 $data[$i]['accuracy'] =1;
                 $result[$qno]['accuracy'] = 1; 
+                $data[$i]['score'] = $score;
               }
             }else{
 
               if($this->matchOptions($res['answer'],$resp)){
                 $data[$i]['accuracy'] =1;
                 $result[$qno]['accuracy'] = 1; 
-                $score++;
+                $data[$i]['score'] = $res['mark'];
+                $score = $score + $res['mark'];
               }elseif($resp == NULL){
 
               }
@@ -898,7 +903,8 @@ class AttemptController extends Controller
               if($this->matchAnswers($res['answer'],$resp)){
                 $data[$i]['accuracy'] =1;
                 $result[$qno]['accuracy'] = 1; 
-                $score++;
+                $data[$i]['score'] = $res['mark'];
+                $score = $score + $res['mark'];
               }
 
             }else if(isset($res['duolingo_missing_letter'])){
@@ -907,7 +913,8 @@ class AttemptController extends Controller
               if($this->compare($res['answer'],$resp)){
                 $data[$i]['accuracy'] =1;
                 $result[$qno]['accuracy'] = 1; 
-                $score++;
+                $data[$i]['score'] = $res['mark'];
+                $score = $score + $res['mark'];
               }
 
             }else if(isset($res['pte_reorder'])){
@@ -916,7 +923,9 @@ class AttemptController extends Controller
 
               $data[$i]['accuracy'] =$qscore;
               $result[$qno]['accuracy'] = $qscore;
+              
               $score = $score+$qscore;
+              $data[$i]['score'] = $score;
 
             }else if(isset($res['duo_multianswer'])){
 
@@ -924,9 +933,12 @@ class AttemptController extends Controller
 
               $data[$i]['accuracy'] =$qscore;
               $result[$qno]['accuracy'] = $qscore;
-              if($qscore)
+              if($qscore){
                 $score = $score+0.5;
+              }
         
+              if($data[$i]['accuracy'])
+              $data[$i]['score'] = $score;
 
             }
             else{
@@ -934,7 +946,8 @@ class AttemptController extends Controller
               if($this->compare($res['answer'],$resp)){
                 $data[$i]['accuracy'] =1;
                 $result[$qno]['accuracy'] = 1; 
-                $score++;
+                 $data[$i]['score'] = $res['mark'];
+                $score = $score + $res['mark'];
               }
 
             }
@@ -1341,9 +1354,11 @@ class AttemptController extends Controller
       }
 
       if($user)
-        $result = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
+        $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('user_id',$user->id)->get();
       else
-        $result = Attempt::where('test_id',$test->id)->where('session_id',$session_id)->get();
+        $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
+
+     
 
       if($request->get('delete') && $request->get('session_id'))
         if(\auth::user()->isAdmin()){
@@ -1352,14 +1367,16 @@ class AttemptController extends Controller
         }
       
 
+
       if($session_id){
         $user= Session::where('id',$session_id)->first();
       }
 
-      if(!$user){
-        $session_id =  $request->session()->getID();
-        $user= Session::where('id',$session_id)->first();
-      }
+
+      // if(!$user ){
+      //   $session_id =  $request->session()->getID();
+      //   $user= Session::where('id',$session_id)->first();
+      // }
 
 
       if(count($result)==0)
@@ -1368,7 +1385,7 @@ class AttemptController extends Controller
       $score = 0;
       foreach($result as $r){
         if($r->accuracy==1)
-          $score++;
+          $score = $score + $r->score;
       }
 
       if($request->get('json')){
@@ -1402,8 +1419,8 @@ class AttemptController extends Controller
           }
         }
 
-     $tags = Attempt::tags($result);
-     $secs = $this->graph($tags);
+     $tags = null;//Attempt::tags($result);
+     $secs = null;//$this->graph($tags);
 
      //dd($secs);
       /* sectional score */
@@ -1456,7 +1473,7 @@ class AttemptController extends Controller
           break;
         }
         if($r->accuracy==1)
-          $score++;
+          $score = $score + $r->score;
       }
 
       $band =0;
