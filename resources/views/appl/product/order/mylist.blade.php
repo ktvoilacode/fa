@@ -23,7 +23,11 @@
                 </td>
                 <td>
                 @if($obj->test_id)
-                {{ strip_tags($obj->test->name) }} 
+                @if(isset($obj->test->name))
+                  {{ strip_tags($obj->test->name) }} 
+                  @else
+                  -
+                  @endif
                 @else
                 {{ strip_tags($obj->product->name) }} 
                 @endif

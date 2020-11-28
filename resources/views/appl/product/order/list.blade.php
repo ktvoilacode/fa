@@ -30,7 +30,11 @@
                 </td>
                 <td>
                 @if($obj->test_id)
-                {{ $obj->test->name }} 
+                  @if(isset($obj->test->name))
+                  {{ $obj->test->name }} 
+                  @else
+                  -
+                  @endif
                 @else
                 {{ $obj->product->name }} 
                 @endif
