@@ -34,11 +34,16 @@
                 </td>
                 <td>
                   @if($obj->test_id)
+                    @if(isset($obj->test->name))
                     @if($obj->test->price==0)
                     <span class="badge badge-warning">Free</span>
                     @else
                     <span class="badge badge-primary">Premium</span>
                     @endif
+                    @else
+                    -
+                    @endif
+                    
                   @else
                     @if($obj->product->price==0)
                     <span class="badge badge-warning">Free</span>
