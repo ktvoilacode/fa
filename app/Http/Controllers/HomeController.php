@@ -161,12 +161,13 @@ class HomeController extends Controller
             if($o->test_id){
                 if(!in_array($o->test_id, $test_ids)){
                      array_push($test_ids, $o->test_id);
+                     $expiry[$o->test_id] = $o->expiry;
+                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                        $status[$o->test_id] = 'Active';
+                    else
+                        $status[$o->test_id] = 'Expired';
                 }
-                $expiry[$o->test_id] = $o->expiry;
-                if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
-                    $status[$o->test_id] = 'Active';
-                else
-                    $status[$o->test_id] = 'Expired';
+                
             }
             
             if($o->product_id){
@@ -182,12 +183,13 @@ class HomeController extends Controller
                 foreach($tests as $t){
                     if(!in_array($t->id, $test_ids)){
                         array_push($test_ids, $t->id);
+                        $expiry[$t->id] = $o->expiry;
+                        if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                            $status[$t->id] = 'Active';
+                        else
+                            $status[$t->id] = 'Expired';
                     }
-                    $expiry[$t->id] = $o->expiry;
-                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
-                        $status[$t->id] = 'Active';
-                    else
-                        $status[$t->id] = 'Expired';
+                    
                 }
             }    
         

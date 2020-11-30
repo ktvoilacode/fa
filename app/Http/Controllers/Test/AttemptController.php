@@ -752,6 +752,7 @@ class AttemptController extends Controller
 
 
       foreach($test->mcq_order as $mcq){
+
         if($mcq->qno && $mcq->qno!=-1){
           $result[$mcq->qno]['id']=$mcq->id;
           $result[$mcq->qno]['mcq_id']=$mcq->id;
@@ -1366,9 +1367,8 @@ class AttemptController extends Controller
           return redirect()->route('test.show',$test->id);
         }
       
-
-
-      if($session_id){
+      
+      if($request->get('session_id')){
         $user= Session::where('id',$session_id)->first();
       }
 
@@ -1377,6 +1377,7 @@ class AttemptController extends Controller
         //   $session_id =  $request->session()->getID();
         //   $user= Session::where('id',$session_id)->first();
         // }
+
 
 
       if(count($result)==0)

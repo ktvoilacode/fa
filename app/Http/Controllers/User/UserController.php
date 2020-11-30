@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 
 
@@ -296,6 +297,7 @@ class UserController extends Controller
     {
         $obj = Obj::where('id',$id)->first();
 
+
         if($request->get('resend_email')){
             $obj['password_string'] = $obj->auto_password;
             Mail::to($obj->email)->send(new usercreate($obj));
@@ -529,10 +531,15 @@ class UserController extends Controller
         $user = Obj::where('id',$user_id)->first();
         $test = Test::where('id',$test_id)->first();
         $attempt = Attempt::where('test_id',$test_id)->where('user_id',$user_id)->get();
+        Cache::forget('attempted_'.$user_id);
         if($request->get('delete')){
+
             foreach($attempt as $a){
                 $a->delete();
             }
+
+            
+
             return redirect()->route($this->module.'.show',$user->id);
         }
         $type = strtolower($test->testtype);

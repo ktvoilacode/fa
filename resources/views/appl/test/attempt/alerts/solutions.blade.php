@@ -71,7 +71,25 @@
           </div>
         </div>
 
-        
+
+        @if($test->status==1)
+        @if(isset($user->name))
+        <div class="bg-light rounded mb-3 p-2 border">
+          @if(\auth::user())
+            @if(\auth::user()->isAdmin())
+              <form method="post" action="{{route('user.test',[$user->id,$test->id])}}">
+              <input type="hidden" name="delete" value="1">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-link float-right"><i class="fa fa-trash"></i> Delete Permanently</button>
+              </form>
+            @endif
+          @endif
+
+          Name: <b>{{$user->name}}</b> &nbsp;&nbsp;&nbsp;@if($user->phone) Phone: <b> {{$user->phone}}</b> @endif&nbsp;&nbsp;&nbsp;
+        </div>
+        @endif
+        @endif
+
 
         @if($test->status==2)
         @if(isset($user->name))
