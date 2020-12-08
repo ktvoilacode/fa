@@ -1384,9 +1384,11 @@ class AttemptController extends Controller
         abort('404','No test analysis found');
 
       $score = 0;
+      $review = false;
       foreach($result as $r){
         if($r->accuracy==1)
           $score = $score + $r->score;
+        
       }
 
       if($request->get('json')){
@@ -1450,7 +1452,8 @@ class AttemptController extends Controller
               ->with('points',$points)
               ->with('tags',$tags)
               ->with('secs',$secs)
-              ->with('score',$score);
+              ->with('score',$score)
+              ->with('review',$review);
    }
 
 

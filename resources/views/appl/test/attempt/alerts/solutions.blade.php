@@ -48,7 +48,7 @@
               @else
                 <div class="">Score</div>
 
-                @if($score)
+                @if(!$review)
                 <div class="display-4">{{ $score }} / {{ $test->marks}} </div>
                 @else
                 <div class="h5 badge badge-warning mt-3">Under Review</div>
