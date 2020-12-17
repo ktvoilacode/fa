@@ -173,6 +173,8 @@
 
           <option value="duolingo_missing_letter" @if(isset($obj)) @if($obj->layout=='duolingo_missing_letter') selected @endif @endif @if(request()->get('layout')=='duolingo_missing_letter') selected @endif>Missing Letters</option>
 
+          <option value="readaloud" @if(isset($obj)) @if($obj->layout=='readaloud') selected @endif @endif @if(request()->get('layout')=='readaloud') selected @endif>Read Aloud</option>
+
           <option value="speak" @if(isset($obj)) @if($obj->layout=='speak') selected @endif @endif @if(request()->get('layout')=='speak') selected @endif>Speak</option>
 
            <option value="write" @if(isset($obj)) @if($obj->layout=='write') selected @endif @endif @if(request()->get('layout')=='write') selected @endif>Write</option>

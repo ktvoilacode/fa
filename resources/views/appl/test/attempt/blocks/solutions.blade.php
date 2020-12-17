@@ -6,7 +6,12 @@
       <th scope="col" style="width:10%">Qno</th>
       <th scope="col" style="width:30%">Question</th>
       <th scope="col" style="width:20%">Your Response</th>
-      <th scope="col" style="width:20%">Result</th>
+      <th scope="col" style="width:10%">Result</th>
+      @if(\auth::user())
+        @if(\auth::user()->isAdmin())
+      <th scope="col" style="width:20%">Evaluate</th>
+        @endif
+      @endif
     </tr>
   </thead>
   <tbody>
@@ -81,6 +86,19 @@
 
       @endif
       </td>
+
+      @if(\auth::user())
+        @if(\auth::user()->isAdmin())
+        <td>
+          @if(isset($score_params[$item['fillup']['layout']]))
+          @foreach($score_params[$item['fillup']['layout']] as $param)
+            @include('appl.test.attempt.blocks.evaluate')
+          @endforeach
+          @endif
+        </td>
+        @endif
+      @endif
+
     </tr>
     @elseif(isset($item['qno']))
     
@@ -135,6 +153,18 @@
             <span class="text-info"><i class="fa fa-circle-o"></i> Under Review</span>
         @endif
       </td>
+
+      @if(\auth::user())
+        @if(\auth::user()->isAdmin())
+        @if(isset($score_params[$item['fillup']['layout']]))
+          @foreach($score_params[$item['fillup']['layout']] as $param)
+            @include('appl.test.attempt.blocks.evaluate')
+          @endforeach
+          @endif
+        @endif
+      @endif
+
+
     </tr>
     @endif
     @endforeach

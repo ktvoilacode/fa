@@ -21,7 +21,7 @@
                   <tr>
                       <td>{{$k+1}}</td>
                       <td>
-                        @if($order->test_id)
+                        @if(isset($order->test->id) && isset($obj->id))
                         <a href="{{ route('user.test',[$obj->id,$order->test->id])}}">
                         {{strip_tags($order->test->name)}}  
                         </a>

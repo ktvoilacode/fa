@@ -125,6 +125,7 @@ Route::get('/test/{test}/review','Test\AttemptController@review')->name('test.re
 
 Route::get('/test/{test}/evaluation','Test\AttemptController@evaluation')->name('attempt.evaluation');
 Route::get('/test/{test}/analysis','Test\AttemptController@analysis')->name('test.analysis');
+Route::post('/test/{test}/analysis','Test\AttemptController@analysis')->name('test.analysis');
 Route::get('/test/{test}/analytics','Test\TestController@analytics')->name('test.oanalytics');
 Route::get('/test/{test}/solutions','Test\AttemptController@solutions')->middleware('auth')->name('test.solutions');
 

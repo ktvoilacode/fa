@@ -1037,7 +1037,7 @@ class AttemptController extends Controller
         else
           $view = 'solutions';
 
-
+        $review = false;
 
         if($url)
           return redirect()->to($url."?status=1&reference=".$session_id."&test=".$this->test->id);
@@ -1052,6 +1052,7 @@ class AttemptController extends Controller
               ->with('secs',$secs)
               ->with('admin',1)
               ->with('try',true)
+              ->with('review',$review)
               ->with('score',$score);
       }
 
@@ -1372,6 +1373,9 @@ class AttemptController extends Controller
         $user= Session::where('id',$session_id)->first();
       }
 
+      $score_params = ['readaloud'=>['pronunciation','fluency','understanding-and-completeness'],'speak'=>['leximic-dextirity','grammatical-proficiency','pronunciation','fluency','understanding-and-completeness'],'write'=>['leximic-dextirity','grammatical-proficiency','understanding-and-completeness'],'duolingo_missing_letter'=>['leximic-dextirity','grammatical-proficiency'],'listen_audio_question'=>['pronunciation','fluency','understanding-and-completeness'],'mcq_default'=>['leximic-dextirity','grammatical-proficiency','understanding-and-completeness']];
+
+    //dd($request->all());
 
         // if(!$user ){
         //   $session_id =  $request->session()->getID();
@@ -1453,6 +1457,7 @@ class AttemptController extends Controller
               ->with('tags',$tags)
               ->with('secs',$secs)
               ->with('score',$score)
+              ->with('score_params',$score_params)
               ->with('review',$review);
    }
 

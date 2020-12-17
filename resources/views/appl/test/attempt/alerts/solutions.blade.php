@@ -117,7 +117,15 @@
 
 
       @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
+       <form action="{{ url()->current() }}?admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
         @include('appl.test.attempt.blocks.solutions')
+        @if(\auth::user())
+          @if(\auth::user()->isAdmin())
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-primary btn-lg mt-4">Save</button>
+          @endif
+        @endif
+        </form>
       @else
         <div class="mt-4">
           <h4 class="pl-3">What does the score mean?</h4>

@@ -44,6 +44,8 @@
         @include('appl.test.attempt.layouts.listen_audio_options') 
       @elseif($f->layout=='listen_audio_question')
         @include('appl.test.attempt.layouts.listen_audio_question')   
+      @elseif($f->layout=='readaloud')
+        @include('appl.test.attempt.layouts.readaloud') 
       @elseif($f->layout=='speak')
         @include('appl.test.attempt.layouts.speak')  
       @elseif($f->layout=='write')
