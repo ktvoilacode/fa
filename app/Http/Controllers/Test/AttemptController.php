@@ -761,7 +761,7 @@ class AttemptController extends Controller
           $result[$mcq->qno]['qno']=$mcq->qno;
           $result[$mcq->qno]['type']='mcq';
           $result[$mcq->qno]['answer'] = $mcq->answer;
-          $result[$mcq->qno]['mark'] = $mcq->mark;
+          $result[$mcq->qno]['mark'] = isset($mcq->mark)?$mcq->mark:1;
           $result[$mcq->qno]['response']= '';
           $result[$mcq->qno]['accuracy']= 0;
           $result[$mcq->qno]['status'] = 1;
@@ -787,7 +787,7 @@ class AttemptController extends Controller
             $result[$fillup->qno]['type']='fillup';
             $result[$fillup->qno]['answer'] = $fillup->answer;
             $result[$fillup->qno]['response']= '';
-            $result[$fillup->qno]['mark']= $fillup->mark;
+            $result[$fillup->qno]['mark']= isset($fillup->mark)?$fillup->mark:1;
             $result[$fillup->qno]['accuracy']= 0;
             $result[$fillup->qno]['two_blanks'] =0;
             $result[$fillup->qno]['status'] = 1;

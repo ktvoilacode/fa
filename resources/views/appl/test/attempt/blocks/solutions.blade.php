@@ -9,7 +9,11 @@
       <th scope="col" style="width:10%">Result</th>
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
+        @if(isset($score_params))
+        @if($test->testtype->name=='DUOLINGO' )
       <th scope="col" style="width:20%">Evaluate</th>
+      @endif
+      @endif
         @endif
       @endif
     </tr>
@@ -87,15 +91,16 @@
       @endif
       </td>
 
-      @if(\auth::user())
+     @if(\auth::user())
         @if(\auth::user()->isAdmin())
-        <td>
-          @if(isset($score_params[$item['fillup']['layout']]))
+        @if(isset($score_params))
+         @if($test->testtype->name=='DUOLINGO')
+
           @foreach($score_params[$item['fillup']['layout']] as $param)
             @include('appl.test.attempt.blocks.evaluate')
           @endforeach
           @endif
-        </td>
+          @endif
         @endif
       @endif
 
@@ -156,10 +161,13 @@
 
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
-        @if(isset($score_params[$item['fillup']['layout']]))
+        @if(isset($score_params))
+         @if($test->testtype->name=='DUOLINGO')
+
           @foreach($score_params[$item['fillup']['layout']] as $param)
             @include('appl.test.attempt.blocks.evaluate')
           @endforeach
+          @endif
           @endif
         @endif
       @endif
