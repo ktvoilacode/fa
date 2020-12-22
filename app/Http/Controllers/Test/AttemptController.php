@@ -1374,7 +1374,7 @@ class AttemptController extends Controller
         $user= Session::where('id',$session_id)->first();
       }
 
-      $score_params = ['readaloud'=>['pronunciation','fluency','understanding-and-completeness'],'speak'=>['leximic-dextirity','grammatical-proficiency','pronunciation','fluency','understanding-and-completeness'],'write'=>['leximic-dextirity','grammatical-proficiency','understanding-and-completeness'],'duolingo_missing_letter'=>['leximic-dextirity','grammatical-proficiency'],'listen_audio_question'=>['pronunciation','fluency','understanding-and-completeness'],'mcq_default'=>['leximic-dextirity','grammatical-proficiency','understanding-and-completeness']];
+      $score_params = ['readaloud'=>['pronunciation','fluency','understanding-and-completeness'],'speak'=>['leximic-dextirity','grammatical-proficiency','pronunciation','fluency','understanding-and-completeness'],'write'=>['leximic-dextirity','grammatical-proficiency','understanding-and-completeness'],'duolingo_missing_letter'=>['leximic-dextirity','grammatical-proficiency'],'select_words'=>['leximic-dextirity','grammatical-proficiency'],'listen_audio_question'=>['pronunciation','fluency','understanding-and-completeness'],'listen_audio_options'=>['pronunciation','fluency','understanding-and-completeness'],'mcq_default'=>['leximic-dextirity','grammatical-proficiency','understanding-and-completeness']];
 
     //dd($request->all());
 
@@ -1427,7 +1427,7 @@ class AttemptController extends Controller
           }
         }
 
-        
+
 
      $tags = null;//Attempt::tags($result);
      $secs = null;//$this->graph($tags);
@@ -1446,6 +1446,7 @@ class AttemptController extends Controller
           $view = 'solutions_private';
       else if($open)
           $view = 'solutions_open';
+
 
 
       

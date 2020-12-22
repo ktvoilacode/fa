@@ -91,18 +91,25 @@
       @endif
       </td>
 
-     @if(\auth::user())
+      
+      
+        @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
          @if($test->testtype->name=='DUOLINGO')
-
+         <td>
+         @if($item['fillup']['layout'])
           @foreach($score_params[$item['fillup']['layout']] as $param)
             @include('appl.test.attempt.blocks.evaluate')
           @endforeach
           @endif
+        </td>
+          
+          @endif
           @endif
         @endif
       @endif
+      
 
     </tr>
     @elseif(isset($item['qno']))
