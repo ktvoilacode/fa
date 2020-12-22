@@ -135,7 +135,7 @@ class Test extends Model
 
       public function duolingoRange($score){
 
-        if($score>0 && $score<=60)
+        if($score>=0 && $score<=60)
             return '10 - 55';
         else if($score>61 && $score<=90)
             return '60 - 85';

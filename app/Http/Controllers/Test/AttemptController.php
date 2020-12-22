@@ -961,6 +961,7 @@ class AttemptController extends Controller
         $i++;
         }
 
+        if(isset($res['qno']))
         if(is_array($result[$qno]['response'])){
           $result[$qno]['response'] = implode(',', $result[$qno]['response']);
         }
@@ -1425,6 +1426,8 @@ class AttemptController extends Controller
 
           }
         }
+
+        
 
      $tags = null;//Attempt::tags($result);
      $secs = null;//$this->graph($tags);

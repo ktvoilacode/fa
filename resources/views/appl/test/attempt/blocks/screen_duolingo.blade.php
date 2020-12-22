@@ -17,7 +17,7 @@
 }
 </style>
 
-<div class="my-3 mt-md-5" style="box-shadow: 1px 1px 2px 2px #e1e1e1;">
+<div class="my-0 mt-md-5 py-4 py-md-0" style="box-shadow: 1px 1px 2px 2px #e1e1e1;">
 	<div class="bg-white  p-3 py-5 p-md-5 duo_section" data-section="1"  data-testid="{{$app->test->id}}" data-url="{{ route('audio.blob')}}" data-token="{{ csrf_token() }}" data-userid="@if($user->id) {{ $user->id }} @elseif($user->email) {{$user->email }} @endif">
 
 		<div class="float-right rounded camera" style="width:50px;height:50px;margin-top: -15px">
@@ -105,3 +105,5 @@
 	</div>
 	</div>
 </div>
+
+

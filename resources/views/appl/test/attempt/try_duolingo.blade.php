@@ -4,7 +4,22 @@
 @section('keywords', 'practice tests, '.$test->name)
 @section('content')
 
+<style>
+  .topright{
+    position:absolute;
+   top:5px;
+   right:15px;
+
+  }
+  </style>
+
+<div class=" rounded  p-1 ml-1 mb-0 mb-md-0 topright btn btn-secondary btn-sm"  data-toggle="modal" data-target="#test_submit">
+            <div class="text-center p-2">End Test
+            </div>
+          </div>
+
 <div class="container {{$p=1}}" style="padding-left:0px;padding-right:0px;max-width:900px;">
+
 
   @guest
     @if($test->status!=3)

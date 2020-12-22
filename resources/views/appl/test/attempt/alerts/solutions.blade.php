@@ -116,7 +116,7 @@
         @endif
 
 
-      @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
+       @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
        <form action="{{ url()->current() }}?admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
         @include('appl.test.attempt.blocks.solutions')
         @if(\auth::user())
