@@ -133,7 +133,7 @@ class Test extends Model
         return $u; 
     }
 
-      public function duolingoRange($score){
+      public static function duolingoRange($score){
 
         if($score>=0 && $score<=60)
             return '10 - 55';
