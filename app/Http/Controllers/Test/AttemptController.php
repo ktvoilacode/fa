@@ -1050,6 +1050,7 @@ class AttemptController extends Controller
               ->with('band',$band)
               ->with('points',$points)
               ->with('tags',$tags)
+              ->with('user',$user)
               ->with('secs',$secs)
               ->with('admin',1)
               ->with('try',true)

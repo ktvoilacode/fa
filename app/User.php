@@ -77,6 +77,18 @@ class User extends Authenticatable
             return false;
     }
 
+    public static function duolingoRange($score){
+
+        if($score>=0 && $score<=60)
+            return '10 - 55';
+        else if($score>61 && $score<=90)
+            return '60 - 85';
+        else if($score>91 && $score<=120)
+            return '90 - 115';
+        else 
+            return '120 - 160';
+    }
+
 
     public function referral($id)
     {

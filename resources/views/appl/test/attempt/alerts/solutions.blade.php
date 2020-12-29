@@ -44,7 +44,7 @@
               
               @if($test->testtype->name=='DUOLINGO')
                 <div class="">Score Range</div>
-                <div class="display-4">{{ $test->duolingoRange($score) }}</div>
+                <div class="display-4">{{ $user->duolingoRange($score) }}</div>
               @else
                 <div class="">Score</div>
 
