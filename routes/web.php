@@ -128,6 +128,7 @@ Route::get('/test/{test}/analysis','Test\AttemptController@analysis')->name('tes
 Route::post('/test/{test}/analysis','Test\AttemptController@analysis')->name('test.analysis');
 Route::get('/test/{test}/analytics','Test\TestController@analytics')->name('test.oanalytics');
 Route::get('/test/{test}/solutions','Test\AttemptController@solutions')->middleware('auth')->name('test.solutions');
+Route::get('/test/{test}/answers','Test\AttemptController@view')->middleware('auth')->name('test.answers');
 
 
 /* Product Routes */

@@ -235,4 +235,24 @@ class Attempt extends Model
 
     }
 
+
+    public function evaluate($request){ 
+        $score_params = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
+
+        $json = [];
+
+        foreach($request->all() as $key =>$value){
+          if(startsWithNumber($key))
+          {
+                $exp = explode('_', $key);
+                $qno = $exp[0];
+                $param = $exp[1];
+
+                $json[$qno][$param]=$value;
+          }
+        }
+
+        dd($json);
+    }
+
 }

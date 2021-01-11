@@ -151,6 +151,14 @@ if (! function_exists('summernote_imageupload')) {
     }
 }
 
+
+if (! function_exists('startsWithNumber')) {
+function startsWithNumber($string) {
+    return strlen($string) > 0 && ctype_digit(substr($string, 0, 1));
+}
+}
+
+
 if (! function_exists('summernote_imageremove')) {
     function summernote_imageremove($editor_data)
     {

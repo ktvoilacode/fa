@@ -11,7 +11,7 @@
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
         @if($test->testtype->name=='DUOLINGO' )
-      <th scope="col" style="width:20%">Evaluate</th>
+      <th scope="col" style="width:30%">Evaluate</th>
       @endif
       @endif
         @endif

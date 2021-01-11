@@ -4,12 +4,21 @@
   	@if($f->layout == 'default' ||  !$f->layout )
 
        @if($f->prefix ) {{$f->prefix }}  @endif 
-	     @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span><input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" ></span><span style="display:inline-block;">
+	     @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span>
+       @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> @else 
+          <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
+            
+        </span>
+       <span style="display:inline-block;">
 	     @endif
 	     @if($f->suffix ){{$f->suffix }}@endif
     @elseif($f->layout=='paragraph')
        @if($f->prefix ) {{$f->prefix }}  @endif 
-       @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span><input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" ></span>
+       @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span>
+          @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> @else 
+          <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
+          
+        </span>
        @endif
        @if($f->suffix ){{$f->suffix }}@endif
     @elseif($f->layout=='ielts_two_blank')

@@ -35,7 +35,25 @@
                 <button class="btn btn-sm btn-outline-primary mt-3 ">
                   <i class="fa fa-angle-left"></i> back to Test</button>
               </a>
+
               @endif
+
+              @if(\auth::user())
+               @if(\auth::user()->isAdmin())
+               <a href="{{ route('test.show',$test->id)}}">
+                <button class="btn btn-sm btn-outline-secondary mt-3 ">
+                  <i class="fa fa-angle-left"></i> Admin Test page</button>
+              </a>
+               @endif
+              @endif
+
+              @if($test->testtype->name=='LISTENING')
+              <a href="{{ route('test.answers',$test->slug)}}">
+                <button class="btn btn-sm btn-primary mt-3 ">
+                  <i class="fa fa-bars"></i> View Question Paper & Answers</button>
+              </a>
+              @endif
+               
             </h3>
 
           </div>
@@ -117,7 +135,7 @@
 
 
        @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
-       <form action="{{ url()->current() }}?admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
+       <form action="{{ url()->current() }}?evaluate=1&admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
         @include('appl.test.attempt.blocks.solutions')
         @if(\auth::user())
           @if(\auth::user()->isAdmin())

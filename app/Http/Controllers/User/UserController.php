@@ -538,9 +538,7 @@ class UserController extends Controller
                 $a->delete();
             }
 
-            
-
-            return redirect()->route($this->module.'.show',$user->id);
+            return redirect()->route('test.show',$test_id);
         }
         $type = strtolower($test->testtype);
         $score =0;

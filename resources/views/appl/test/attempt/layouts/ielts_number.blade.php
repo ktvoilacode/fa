@@ -7,12 +7,18 @@
     <div class="card-text">
     @if($f->layout == 'default' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
-      @if($f->answer) <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" @if(strlen($f->answer)>20) style="width:300px" @endif>
+      @if($f->answer) 
+        @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> 
+        @else <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" @if(strlen($f->answer)>20) style="width:300px" @endif> @endif
+      
       @endif
       @if($f->suffix ){!! $f->suffix !!}@endif
     @elseif($f->layout == 'ielts_number' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
-      @if($f->answer) <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" @if(strlen($f->answer)>20) style="width:300px" @endif>
+      @if($f->answer) 
+          @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> 
+          @else <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" @if(strlen($f->answer)>20) style="width:300px" @endif> @endif
+      
       @endif
       @if($f->suffix ){!! $f->suffix !!}@endif
     @elseif($f->layout=='ielts_two_blank')

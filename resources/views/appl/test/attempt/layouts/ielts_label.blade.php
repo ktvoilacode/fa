@@ -15,12 +15,14 @@
     <div class="card-text">
     @if($f->layout == 'default' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
-      @if($f->answer) <span class="badge badge-warning h2">{{$f->qno}}</span><input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" >
+      @if($f->answer) <span class="badge badge-warning h2">{{$f->qno}}</span> @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> @else <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
       @endif
       @if($f->suffix ){{$f->suffix }}@endif
     @elseif($f->layout == 'ielts_label' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
-      @if($f->answer) <span class="badge badge-warning h2">{{$f->qno}}</span><input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" >
+      @if($f->answer) <span class="badge badge-warning h2">{{$f->qno}}</span>
+      @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> @else <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
+      
       @endif
       @if($f->suffix ){{$f->suffix }}@endif
 

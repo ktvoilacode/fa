@@ -441,7 +441,7 @@ class AttemptController extends Controller
     }
 
 
-
+    $answers = false;
    if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
     return view('appl.test.attempt.try_'.$view)
             ->with('player',true)
@@ -454,6 +454,7 @@ class AttemptController extends Controller
             ->with('product',$product)
             ->with('user',$user)
             ->with('timer',1)
+            ->with('answers',$answers)
             ->with('time',$test->test_time);
     else if($view == 'gre')
     return view('appl.test.attempt.try_'.$view)
@@ -465,6 +466,7 @@ class AttemptController extends Controller
             ->with('test',$test)
             ->with('product',$product)
             ->with('user',$user)
+            ->with('answers',$answers)
             ->with('timer',1)
             ->with('time',$test->test_time);
    else if($view =='reading'){
@@ -478,6 +480,7 @@ class AttemptController extends Controller
         ->with('reading',1)
         ->with('user',$user)
         ->with('timer',1)
+        ->with('answers',$answers)
         ->with('time',$test->test_time);
     }
    elseif($view =='writing'){
@@ -487,6 +490,7 @@ class AttemptController extends Controller
                   ->with('attempt',$attempt)
                   ->with('user',$user)
                   ->with('view',true)
+                  ->with('answers',$answers)
                   ->with('editor',true);
       }
       else{
@@ -501,6 +505,7 @@ class AttemptController extends Controller
                   ->with('user',$user)
                   ->with('time',$test->test_time)
                   ->with('editor',true)
+                  ->with('answers',$answers)
                   ->with('player',1);
       }
 
@@ -509,6 +514,21 @@ class AttemptController extends Controller
 
    /* Test View Function - Here you cannot attempt test */
   public function view($slug,Request $request){
+
+      $current_uri = request()->segments();
+
+      if($current_uri[2]=='answers'){
+
+        $user = \auth::user();
+        $result = Attempt::where('test_id',$this->test->id)->where('user_id',$user->id)->get();
+
+        if(!count($result) && !$user->isAdmin())
+          abort('403','Not attempted the test');
+
+        $answers = true;
+      }
+      else
+        $answers =  false;
       $test = $this->test;
 
       $user = \auth::user();
@@ -552,6 +572,7 @@ class AttemptController extends Controller
             ->with('product',$product)
             ->with('timer',$user)
             ->with('view',true)
+            ->with('answers',$answers)
             ->with('time',$test->test_time);
     else if($view == 'gre'){
       
@@ -566,6 +587,7 @@ class AttemptController extends Controller
             ->with('product',$product)
             ->with('timer',$user)
             ->with('view',true)
+            ->with('answers',$answers)
             ->with('time',$test->test_time);
     }
     
@@ -582,6 +604,7 @@ class AttemptController extends Controller
                 ->with('reading',1)
                 ->with('view',true)
                 ->with('timer',true)
+                ->with('answers',$answers)
                 ->with('time',$test->test_time);
       }
       elseif($view =='writing'){
@@ -591,6 +614,7 @@ class AttemptController extends Controller
                   ->with('user',$user)
                   ->with('attempt',$attempt)
                   ->with('view',true)
+                  ->with('answers',$answers)
                   ->with('editor',true);
       }
       else{
@@ -606,6 +630,7 @@ class AttemptController extends Controller
                   ->with('time',$test->test_time)
                   ->with('view',true)
                   ->with('editor',true)
+                  ->with('answers',$answers)
                   ->with('player',1);
       }
 
@@ -1362,6 +1387,13 @@ class AttemptController extends Controller
       else
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
+
+      // evaluated
+      if($request->get('evaluate')){
+        $attempt = new Attempt();
+        $attempt->evaluate($request);
+        
+      }
      
 
       if($request->get('delete') && $request->get('session_id'))
@@ -1541,6 +1573,28 @@ class AttemptController extends Controller
               ->with('tags',$tags)
               ->with('secs',$secs)
               ->with('score',$score);
+   }
+
+
+   public function answers($slug,Request $request){
+      $test = Test::where('slug',$slug)->first();
+      
+      if($request->get('user_id'))
+        $user = User::where('id',$request->get('user_id'))->first();
+      else
+        $user = \auth::user();
+
+      $result = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
+
+      if(!$result)
+        abort('403','You are not Authorized to view this page');
+
+
+      
+      return view('appl.test.attempt.alerts.answers')
+              ->with('result',$result)
+              ->with('test',$test)
+              ->with('answers',1);
    }
 
    public function graph($tags){

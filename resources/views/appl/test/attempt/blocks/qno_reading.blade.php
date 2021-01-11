@@ -12,12 +12,16 @@
 
                     <div class="col-2 col-md-4">
 
+                        @if(!$answers)
                        <span class="badge badge-warning float-right " id="timer">00:00</span>
-        <span class="badge badge-warning float-center d-none" id="timer2">00:00</span>
+                        <span class="badge badge-warning float-center d-none" id="timer2">00:00</span>
+                        @endif
 
                     </div>
 
                     <div class="col-4 col-md-4">
+
+                        @if(!$answers)
                         <div class="mr-2">
                         @if(!isset($view))
                  <button type="button" class="btn btn-warning btn-sm ml-2 btn-block mr-2" type="button" data-toggle="modal" data-target="#exampleModal">Submit</button>
@@ -25,6 +29,8 @@
                  <button type="button" class="btn btn-warning btn-sm ml-2 btn-block mr-2" type="button" data-toggle="modal" data-target="#exampleModal">Submit</button>
                  @endif
                     </div>
+                    @endif
+
                     </div>
 
                     
