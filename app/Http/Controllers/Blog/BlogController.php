@@ -405,7 +405,7 @@ class BlogController extends Controller
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')
-                    ->with('obj',$obj)->with('categories',$categories)->with('app',$this)->with('dates',$dates);
+                    ->with('obj',$obj)->with('categories',$categories)->with('app',$this)->with('dates',$dates)->with('answers',0);
         else
             abort(404);
     }

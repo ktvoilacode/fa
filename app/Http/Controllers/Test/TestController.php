@@ -357,6 +357,7 @@ class TestController extends Controller
                     ->with('player',true)
                     ->with('testedit',true)
                     ->with('grammar',1)
+                    ->with('answers',0)
                     ->with('try',1);
         else
             abort(404);
