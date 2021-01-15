@@ -15,6 +15,7 @@
 
 @include('flash::message')
 
+
 <div class="">
   <div class="row no-gutters">
     <div class="col-12  col-md-5 col-lg-4 d-block d-sm-none d-md-block">
@@ -56,6 +57,8 @@
     </div>
       <a href="{{ route('coupon.try')}}" class="btn btn-primary" style="border:0px">Activation</a>
     </div>
+
+    
   </div>
 
     <div class="col-12  col-md-5 col-lg-4 d-none d-sm-block d-md-none">
@@ -113,7 +116,7 @@
   
   <div class="col-12  col-md-7 col-lg-8">
     
-
+    @include('blocks.det')
 @if(auth::user()->orders()->where('status',1)->count()!=0)
 <div class="mb-4">
   @include('appl.pages.blocks.tests')

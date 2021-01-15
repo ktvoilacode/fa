@@ -152,6 +152,9 @@ Route::get('products/ielts-short-test', function () {
 /* Product/Orders Public Routes */
 Route::get('/products','Product\ProductController@public')->name('product.public');
 Route::get('/products/{product}','Product\ProductController@view')->name('product.view');
+Route::get('/det', function(){
+    return view('appl.pages.det');
+})->name('det.page');
 Route::get('/checkout/{product}','Product\OrderController@checkout')->name('product.checkout')->middleware('auth');
 Route::get('/checkout-access/{product}','Product\OrderController@checkout_access')->name('product.checkout-access')->middleware('auth');
 Route::post('/order','Product\OrderController@order')->name('product.order');
@@ -201,6 +204,8 @@ Route::get('/{year}/{month}', 'Blog\CollectionController@yearmonth')->name('year
 Route::get('/ieltspage', function(){
     return view('appl.pages.ielts');
 })->name('ielts.page');
+
+
 Route::get('/enroll', function(){
     return view('appl.pages.enroll');
 })->name('enroll.page');

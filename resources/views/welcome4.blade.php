@@ -44,6 +44,7 @@
 </div>
 </div>
 
+ @include('blocks.det')
 <div class="pr-0 pl-0 pt-4 pb-4 pt-md-4 pb-md-3 bg-white">
   @include('blocks.popular_ielts')
 </div>
