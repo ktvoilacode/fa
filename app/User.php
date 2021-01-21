@@ -176,6 +176,11 @@ class User extends Authenticatable
     public function testAccess($id){
         $order = $this->orders()->where('test_id',$id)->orderBy('id','desc')->first();
         
+        $attempt = Attempt::where('test_id',$id)->where('user_id',$this->id)->first();
+
+        if($attempt)
+            return true;
+
         if($order){
             if(strtotime($order->expiry) < strtotime(date('Y-m-d'))){
                 $test = Test::where('id',$id)->first();

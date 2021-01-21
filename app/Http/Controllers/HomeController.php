@@ -143,7 +143,13 @@ class HomeController extends Controller
         $user = \auth::user();
         $orders = \auth::user()->orders()->where('status',1)->orderBy('expiry','desc')->get();
 
+        if($request->get('refresh')){
+            foreach($orders as $o){
+            Cache::forget('my_tests_'.$user->id.'_'.$o->product_id);
+            }
+        }
         $test_ids = array();
+        $test_ids2 = array();
         $product_ids = array();
         $tests=array();
         $status =array();
@@ -170,6 +176,7 @@ class HomeController extends Controller
                 
             }
             
+
             if($o->product_id){
                 array_push($product_ids, $o->product_id);
                 if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
@@ -177,12 +184,13 @@ class HomeController extends Controller
                 else
                     $product_status[$o->product_id] = 'Expired';
                 $product_expiry[$o->product_id] = $o->expiry;
-                $tests = Cache::remember('my_tests_'.$user->id,240,function() use ($o){
+                $tests = Cache::remember('my_tests_'.$user->id.'_'.$o->product_id,240,function() use ($o){
                     return  $o->product->tests;
                 });
                 foreach($tests as $t){
                     if(!in_array($t->id, $test_ids)){
                         array_push($test_ids, $t->id);
+                        array_push($test_ids2, $t->id);
                         $expiry[$t->id] = $o->expiry;
                         if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
                             $status[$t->id] = 'Active';
@@ -194,6 +202,7 @@ class HomeController extends Controller
             }    
         
         }
+        
 
 
 

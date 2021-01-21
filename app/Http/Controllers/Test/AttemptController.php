@@ -304,6 +304,7 @@ class AttemptController extends Controller
     if(\auth::user()){
       $user = \auth::user();
       
+      
       if(!$user->testAccess($id)){
          if($price!=0){
                 return view('appl.product.product.purchase')
