@@ -206,6 +206,7 @@ class McqController extends Controller
             return view('appl.'.$this->app.'.'.$this->module.'.show')
                     ->with('obj',$obj)
                     ->with('m',$obj)
+                    ->with('answers',null)
                     ->with('app',$this)
                     ->with('try',true)
                     ->with('gre',1);
