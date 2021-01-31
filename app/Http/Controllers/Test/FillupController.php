@@ -223,6 +223,7 @@ class FillupController extends Controller
                     ->with('obj',$obj)->with('f',$obj)
                     ->with('try',1)
                     ->with('grammar',1)
+                    ->with('answers',false)
                     ->with('test',$this->test)
                     ->with('app',$this);
         else
