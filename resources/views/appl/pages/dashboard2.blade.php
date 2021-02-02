@@ -35,6 +35,7 @@
         </div>
         <div class="card-body pt-0 text-center mb-3">
           <div class="h4 mb-4 mt-4">Hi, {{ \auth::user()->name}}! </div>
+          <div class=""><span class="badge badge-primary">ID Number: @if(\auth::user()->idno){{ \auth::user()->idno}} @else - @endif</span> </div>
           <p>Develop a passion for learning. If you do, you will never cease to grow <br><span class="text-secondary">-Anthony J Dangelo</span></p>
           <a href="{{ route('useredit')}}">
           <button class="btn btn-primary">Edit</button></a>
