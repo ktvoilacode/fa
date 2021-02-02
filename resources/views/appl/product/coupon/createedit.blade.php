@@ -31,7 +31,7 @@
       
       <div class="form-group">
         <label for="formGroupExampleInput ">Expiry</label>
-        <input type="text" class="form-control" name="expiry" id="formGroupExampleInput" 
+        <input id="datetimepicker2" type="text" class="form-control" name="expiry" id="formGroupExampleInput" 
             @if($stub=='Create')
             value="{{ (old('expiry')) ? old('expiry') : $obj->expiry }}"
             @else

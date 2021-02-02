@@ -35,6 +35,25 @@ $(document).ready(function() {
 <script type="application/javascript" src="{{asset('js/jquery.form.js')}}"></script> 
 <script type="application/javascript" src="{{asset('js/global.js?new=4')}}"></script>  
 
+<script type="text/javascript"
+         src="{{asset('jquery-ui/jquery-ui.min.js')}}">
+  </script>
+<script src="{{ asset('js/datetime/jquery-ui-timepicker-addon.min.js')}}"></script>
+<script src="{{ asset('js/datetime/jquery-ui-sliderAccess.js')}}"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({dateFormat: 'yy-mm-dd'});
+    $('#datetimepicker').datetimepicker({
+      dateFormat:'yy-mm-dd',
+      timeFormat: 'HH:mm:ss',
+    });
+    $('#datetimepicker2').datetimepicker({
+      dateFormat:'yy-mm-dd',
+      timeFormat: 'HH:mm:ss',
+    });
+  } );
+  </script>
+
 <script type="application/javascript">
 $(document).ready(function() {
     $(document).on("keyup", function(){

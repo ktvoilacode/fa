@@ -36,7 +36,9 @@
 
     @if(isset($editor))
     <link href="{{asset('js/summernote/summernote-bs4.css')}}" rel="stylesheet">
-    @endif
+<link href="{{ asset('jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/datetime/jquery-ui-timepicker-addon.min.css')}}">
+@endif
     @if(isset($try) || isset($reading))
     <link rel='stylesheet' href='{{ asset("css/try.css") }}'>
     @endif
