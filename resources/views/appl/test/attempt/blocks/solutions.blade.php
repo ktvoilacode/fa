@@ -65,6 +65,7 @@
         @endif
       </td>
       <td>
+        <div style="max-width: 200px">
         @if($item->response) {!! $item->response !!} 
         @else
         @if(isset($item->fillup->id))
@@ -76,6 +77,7 @@
           @endif
         @endif
         @endif
+      </div>
       </td>
 
       <td>
