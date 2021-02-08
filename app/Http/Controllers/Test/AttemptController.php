@@ -1389,11 +1389,15 @@ class AttemptController extends Controller
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
 
+      $attempt = new Attempt();
+      $marking = [];
       // evaluated
       if($request->get('evaluate')){
-        $attempt = new Attempt();
-        $attempt->evaluate($request);
         
+        $attempt->evaluate($request,$result);
+        $marking = $attempt->loadMarking($result);
+      }else{
+        $marking = $attempt->loadMarking($result);
       }
      
 
@@ -1427,8 +1431,11 @@ class AttemptController extends Controller
       foreach($result as $r){
         if($r->accuracy==1)
           $score = $score + $r->score;
-        
+        else
+          $score = $score + $r->score;
       }
+
+
 
       if($request->get('json')){
         echo json_encode(['score'=>$score]);
@@ -1494,6 +1501,7 @@ class AttemptController extends Controller
               ->with('points',$points)
               ->with('tags',$tags)
               ->with('secs',$secs)
+              ->with('marking',$marking)
               ->with('score',$score)
               ->with('score_params',$score_params)
               ->with('review',$review);

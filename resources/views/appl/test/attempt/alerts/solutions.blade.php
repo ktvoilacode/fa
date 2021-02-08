@@ -61,8 +61,9 @@
              <div class="text-center  mt-3 mb-3 mt-md-0 mb-md-0 float-md-right border bg-light p-3 rounded ">
               
               @if($test->testtype->name=='DUOLINGO')
-                <div class="">Score Range</div>
+                <div class="">Score </div>
                 <div class="display-4">{{ $user->duolingoRange($score) }}</div>
+    
               @else
                 <div class="">Score</div>
 

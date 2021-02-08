@@ -4,8 +4,9 @@
   <thead>
     <tr>
       <th scope="col" style="width:10%">Qno</th>
-      <th scope="col" style="width:30%">Question</th>
+      <th scope="col" style="width:20%">Question</th>
       <th scope="col" style="width:20%">Your Response</th>
+      <th scope="col" style="width:10%">Score</th>
       <th scope="col" style="width:10%">Result</th>
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
@@ -76,6 +77,10 @@
         @endif
         @endif
       </td>
+
+      <td>
+        {{ $item->score }}
+      </td>
       <td>
       @if($item->status)
         @if($item->accuracy==1) 
@@ -91,7 +96,7 @@
       @endif
       </td>
 
-      
+        
       
         @if(\auth::user())
         @if(\auth::user()->isAdmin())
@@ -115,7 +120,7 @@
     @elseif(isset($item['qno']))
     
     <tr>
-      <th scope="row">{{ $item['qno']}}</th>
+      <td scope="row">{{ $item['qno']}}</td>
       <td class="text-wrap text-break">
         @if(isset($item['fillup']))
           @if($item['fillup']->label)<b class=''>{{$item['fillup']->label}}</b> @endif
@@ -154,6 +159,9 @@
           @endif
           @endif
         @endif</td>
+        <td>
+        {{ $item['score'] }}
+      </td>
       <td>
         @if($item['status'])
           @if($item['accuracy']==1 || $item['accuracy']>1 ) 
@@ -165,7 +173,9 @@
             <span class="text-info"><i class="fa fa-circle-o"></i> Under Review</span>
         @endif
       </td>
+      
 
+      <td>
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
@@ -178,6 +188,7 @@
           @endif
         @endif
       @endif
+    </td>
 
 
     </tr>

@@ -236,7 +236,8 @@ class Attempt extends Model
     }
 
 
-    public function evaluate($request){ 
+    public function evaluate($request,$result){ 
+
         $score_params = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
 
         $json = [];
@@ -247,12 +248,35 @@ class Attempt extends Model
                 $exp = explode('_', $key);
                 $qno = $exp[0];
                 $param = $exp[1];
-
                 $json[$qno][$param]=$value;
+               
           }
         }
 
-        dd($json);
+        foreach($json as $qno =>$data){
+            $r = $result->where('qno',$qno)->first();
+            $total = 0; $count = 0;
+            foreach($data as $param=>$sc){
+                $total = $total + intval($sc);
+                $count++;
+            }
+            if($count)
+                $r->score = intval($total);
+            else
+                $r->score = 0;
+
+            $r->marking = json_encode($data);
+            $r->save();
+        }
+
     }
+
+    public function loadMarking($result){
+        foreach($result as $r){
+            $data[$r->qno] = json_decode($r->marking,true);
+        }
+        return $data;
+    }
+
 
 }

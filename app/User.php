@@ -79,6 +79,7 @@ class User extends Authenticatable
 
     public static function duolingoRange($score){
 
+        return $score;
         if($score>=0 && $score<=60)
             return '10 - 55';
         else if($score>61 && $score<=90)
