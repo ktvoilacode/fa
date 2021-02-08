@@ -48,6 +48,8 @@ Route::get('/help/fillup', function () {
 
 Route::post('audioblob','Test\AttemptController@saveAudio')->name('audio.blob');
 
+Route::post('webcamimage','Test\AttemptController@saveImage')->name('image.save');
+
 
 /* Admin Routes */
 Route::get('/admin', 'Admin\AdminController@index')->name('admin')->middleware('auth');

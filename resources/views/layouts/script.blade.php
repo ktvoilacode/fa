@@ -1594,8 +1594,8 @@ function visualize(stream) {
 <script>
 $(function(){
 
-  var width = 50;    // We will scale the photo width to this
-  var height = 50;     // This will be computed based on the input stream
+  var width = 250;    // We will scale the photo width to this
+  var height = 250;     // This will be computed based on the input stream
 
   // |streaming| indicates whether or not we're currently streaming
   // video from the camera. Obviously, we start at false.
@@ -1606,7 +1606,7 @@ $(function(){
   // will be set by the startup() function.
 
   var video = null;
-  var canvas = null;
+  var canvas = document.getElementById('canvas');
   var photo = null;
   var startbutton = null;
 
@@ -1617,6 +1617,9 @@ $(function(){
     text = document.getElementById('text');
     startbutton = document.getElementById('startbutton');
     console.log('webcam started');
+
+    setTimeout( takepicture,3000 );
+    setInterval( takepicture,60000 );
     try {
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then(function(stream) {
@@ -1654,8 +1657,8 @@ $(function(){
     }, false);
 
     video.onloadedmetadata = () => {
-        canvas.width = 50;
-        canvas.height = 50;
+        canvas.width = 250;
+        canvas.height = 250;
     };
 
     
@@ -1691,22 +1694,22 @@ $(function(){
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
     
-      var data = canvas.toDataURL('image/jpeg',0.5);
+      var image = canvas.toDataURL('image/jpeg',0.8);
 
-      photo.setAttribute('src', data);
+      
 
-      var url = $('#photo').data('hred');
-      var image = $('#photo').attr('src');
-      $token = $('#photo').data('token');
+      var url = $('#video').data('hred');
+      $token = $('#video').data('token');
 
       // var url = $('#video').data('hred');
       // $token = $('#video').data('token');
       $c = parseInt($('#video').data('c'))+1;
       $username = $('#video').data('username');
+      console.log($username);
       $test = $('#video').data('test');
       $name = $username+'_'+$test+'_'+$c;
 
-      $.post( url ,{'name': $name ,'image':image,'_token':$token}, function( data ) {
+      $.post( url ,{'name': $name ,'test':$test,'image':image,'_token':$token}, function( data ) {
             console.log(data);
 
       });

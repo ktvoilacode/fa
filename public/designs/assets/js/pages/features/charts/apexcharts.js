@@ -172,22 +172,30 @@ var KTApexChartsDemo = function () {
 
 	var _demo4 = function () {
 		const apexChart = "#chart_4";
+		var ld = parseInt(document.getElementById("ld").innerHTML);
+		var gp = parseInt(document.getElementById("gp").innerHTML);
+		var pr = parseInt(document.getElementById("pr").innerHTML);
+		var fl = parseInt(document.getElementById("fl").innerHTML);
+		var uc = parseInt(document.getElementById("uc").innerHTML);
+
+		console.log(ld);
+		
 		var options = {
 			series: [{
-				name: 'Marine Sprite',
-				data: [44, 55, 41, 37, 22, 43, 21]
+				name: 'Leximic Dextirity (LD)',
+				data: [ld, 0,0,0,0]
 			}, {
-				name: 'Striking Calf',
-				data: [53, 32, 33, 52, 13, 43, 32]
+				name: 'Gramatical Proficiency (GP)',
+				data: [0, gp,0,0,0]
 			}, {
-				name: 'Tank Picture',
-				data: [12, 17, 11, 9, 15, 11, 20]
+				name: 'Pronunciation (PR)',
+				data: [0, 0,pr,0,0 ]
 			}, {
-				name: 'Bucket Slope',
-				data: [9, 7, 5, 8, 6, 9, 4]
+				name: 'Fluency (FL)',
+				data: [0, 0,0,fl,0 ]
 			}, {
-				name: 'Reborn Kid',
-				data: [25, 12, 19, 32, 25, 24, 10]
+				name: 'Understanding and Completeness (UC)',
+				data: [0, 0,0,0,uc ]
 			}],
 			chart: {
 				type: 'bar',
@@ -204,13 +212,13 @@ var KTApexChartsDemo = function () {
 				colors: ['#fff']
 			},
 			title: {
-				text: 'Fiction Books Sales'
+				text: ''
 			},
 			xaxis: {
-				categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+				categories: ['LD', 'GP', 'PR', 'FL','UC'],
 				labels: {
 					formatter: function (val) {
-						return val + "K"
+						return val + ""
 					}
 				}
 			},

@@ -160,7 +160,9 @@
           @endif
         @endif</td>
         <td>
+          @if(isset($item['score']))
         {{ $item['score'] }}
+        @endif
       </td>
       <td>
         @if($item['status'])
@@ -196,4 +198,9 @@
     @endforeach
   </tbody>
 </table>
+
+<div class="form-group mb-1 mt-4">
+    <label for="exampleTextarea">Comments (add &lt;/br> for new lines)</label>
+    <textarea class="form-control" id="exampleTextarea" name="comments" rows="3">@if($result->first()->comment) {!! $result->first()->comment !!}@endif</textarea>
+   </div>
 </div>

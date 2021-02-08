@@ -21,7 +21,7 @@
 	<div class="bg-white  p-3 py-5 p-md-5 duo_section" data-section="1"  data-testid="{{$app->test->id}}" data-url="{{ route('audio.blob')}}" data-token="{{ csrf_token() }}" data-userid="@if($user->id) {{ $user->id }} @elseif($user->email) {{$user->email }} @endif">
 
 		<div class="float-right rounded camera" style="width:50px;height:50px;margin-top: -15px">
-			<video id="video" class="mb-3  w-100" data-token="{{ csrf_token() }}" data-hred="" data-count="0" data-c="0" data-username="{{$user->username}}" data-test="">Video stream not available.</video>
+			<video id="video" class="mb-3  w-100" data-token="{{ csrf_token() }}" data-hred="{{ route('image.save')}}" data-count="0" data-c="0" data-username="{{$user->id}}" data-test="{{$test->id}}">Video stream not available.</video>
     <canvas id="canvas" class="" style='display: none' width="50" height="50">
   	</canvas>
 		</div>

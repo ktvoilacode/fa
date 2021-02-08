@@ -331,6 +331,7 @@ class AttemptController extends Controller
         $user->email = $request->get('source').'_'.$request->get('id');
         $user->username = $request->get('username');
         $user->name = $request->get('name');
+        $user->id = $request->get('username');
     }else
       $user = null;
     }
@@ -533,6 +534,7 @@ class AttemptController extends Controller
       $test = $this->test;
 
       $user = \auth::user();
+
       $product = Product::first();
     
       (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
@@ -1399,6 +1401,9 @@ class AttemptController extends Controller
       }else{
         $marking = $attempt->loadMarking($result);
       }
+
+      
+
      
 
       if($request->get('delete') && $request->get('session_id'))
@@ -1435,6 +1440,10 @@ class AttemptController extends Controller
           $score = $score + $r->score;
       }
 
+      if(strtoupper($test->category->name)=='DUOLINGO'){
+        $param_percent = $attempt->scoreDuolingo($result);
+        $score = $param_percent['score'];
+      }
 
 
       if($request->get('json')){
@@ -1488,6 +1497,9 @@ class AttemptController extends Controller
       else if($open)
           $view = 'solutions_open';
 
+      if($request->get('duo_analysis'))
+          $view = 'duo_analysis';
+
 
 
       
@@ -1504,6 +1516,7 @@ class AttemptController extends Controller
               ->with('marking',$marking)
               ->with('score',$score)
               ->with('score_params',$score_params)
+              ->with('param_percent',$param_percent)
               ->with('review',$review);
    }
 
@@ -1662,6 +1675,32 @@ class AttemptController extends Controller
                 $path = Storage::disk('s3')->putFileAs('responses', $request->file('audio'),$filename);
         }
         echo $path;
+   }
+
+
+   public function saveImage(Request $request){
+    //dd($request->all());
+        if(count($request->all())){
+            $image = $request->image;  // your base64 encoded
+        $image = str_replace('data:image/jpeg;base64,', '', $image);
+        $image = str_replace(' ', '+', $image);
+
+        $file      = $request->all()['image'];
+        $name = $request->get('name');
+        $test = $request->get('test');
+        //echo $name;
+        
+        $filename = 'webcam/'.$test.'/'.$name.'.jpg';
+        
+        $path = Storage::disk('s3')->put($filename, base64_decode($image),'public');
+        echo $path;
+        dd();
+            /*
+        $file      = $request->all()['image'];
+        $filename = 'image.'.$file->getClientOriginalExtension();
+        $path = Storage::disk('public')->putFileAs('articles', $request->file('image'),$filename);
+        echo $path;*/
+        }
    }
    /**
      * Display the specified resource.

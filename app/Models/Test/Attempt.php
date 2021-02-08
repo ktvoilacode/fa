@@ -265,9 +265,14 @@ class Attempt extends Model
             else
                 $r->score = 0;
 
+            if($qno==1)
+                $r->comment = $request->get('comments');
+            
             $r->marking = json_encode($data);
             $r->save();
         }
+
+        
 
     }
 
@@ -276,6 +281,40 @@ class Attempt extends Model
             $data[$r->qno] = json_decode($r->marking,true);
         }
         return $data;
+    }
+
+    public function scoreDuolingo($result){
+        $param_count = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
+        $param_score = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
+        $param_percent = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
+
+
+        foreach($result as $r){
+            $data = json_decode($r->marking,true);
+           
+            foreach($param_count as $p=>$v){
+                if(isset($data[$p])){
+                    $param_score[$p] = $param_score[$p] +$data[$p];
+                    $param_count[$p]++;
+                }
+            }
+        }
+
+        $score = 0;
+
+        foreach($param_count as $p=>$v){
+               if($param_count[$p]!=0)
+               $param_percent[$p] = round(($param_score[$p]/(5*$param_count[$p])) * 100,2);
+           $score = $score + $param_percent[$p];
+
+        }
+
+        $score = round($score/5,2);
+
+        $param_percent['score'] = $score;
+        return $param_percent;
+
+
     }
 
 
