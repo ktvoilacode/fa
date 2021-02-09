@@ -69,9 +69,9 @@
         @if($item->response) {!! $item->response !!} 
         @else
         @if(isset($item->fillup->id))
-          @if(\Storage::disk('s3')->exists('responses/'.\auth::user()->id.'_'.$item->fillup->id.'.wav'))
+          @if(\Storage::disk('s3')->exists('responses/'.$test->id.'/'.\auth::user()->id.'_'.$item->fillup->id.'.wav'))
           <audio controls>
-              <source src="{{ \Storage::disk('s3')->url('responses/'.\auth::user()->id.'_'.$item->fillup->id.'.wav')}}" type="audio/ogg">
+              <source src="{{ \Storage::disk('s3')->url('responses/'.$test->id.'/'.\auth::user()->id.'_'.$item->fillup->id.'.wav')}}" type="audio/ogg">
             Your browser does not support the audio element.
             </audio>
           @endif
@@ -153,9 +153,9 @@
       @if($item['response']) {!! $item['response'] !!} 
         @else
           @if(isset($item['fillup']->id))
-          @if(\Storage::disk('s3')->exists('responses/'.\auth::user()->id.'_'.$item['fillup']->id.'.wav'))
+          @if(\Storage::disk('s3')->exists('responses/'.$test->id.'/'.\auth::user()->id.'_'.$item['fillup']->id.'.wav'))
             <audio controls>
-              <source src="{{ \Storage::disk('s3')->url('responses/'.\auth::user()->id.'_'.$item['fillup']->id.'.wav')}}" type="audio/ogg">
+              <source src="{{ \Storage::disk('s3')->url('responses/'.$test->id.'/'.\auth::user()->id.'_'.$item['fillup']->id.'.wav')}}" type="audio/ogg">
             Your browser does not support the audio element.
             </audio>
           @endif
