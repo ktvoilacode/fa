@@ -1671,8 +1671,8 @@ class AttemptController extends Controller
     $userid = $request->get('userid');
        if(isset($request->all()['audio'])){
                 $file      = $request->all()['audio'];
-                $filename  = $userid.'_'.$question.'.wav';
-                $path = Storage::disk('s3')->putFileAs('responses', $request->file('audio'),$filename);
+                $filename  = 'responses/'.$userid.'_'.$question.'.wav';
+                $path = Storage::disk('s3')->put($filename, $request->file('audio'),'public');
         }
         echo $path;
    }
