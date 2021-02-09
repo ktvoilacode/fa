@@ -53,6 +53,13 @@
                   <i class="fa fa-bars"></i> View Question Paper & Answers</button>
               </a>
               @endif
+
+              @if($result->first()->comment)
+               <a href="{{ request()->fullUrl()}}?duo_analysis=1">
+                <button class="btn btn-sm btn-success mt-3 ">
+                  <i class="fa fa-bars"></i> Duolingo Analysis</button>
+              </a>
+              @endif
                
             </h3>
 

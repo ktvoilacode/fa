@@ -1501,6 +1501,8 @@ class AttemptController extends Controller
           $view = 'duo_analysis';
 
 
+      if((!$user->id) || $user->id==0)
+        $user->id = $request->get('session_id');
 
       
       return view('appl.test.attempt.alerts.'.$view)
