@@ -66,6 +66,7 @@
       </td>
       <td>
         <div style="max-width: 200px">
+
         @if($item->response) {!! $item->response !!} 
         @else
         @if(isset($item->fillup->id))
@@ -77,6 +78,11 @@
           @endif
         @endif
         @endif
+
+        <div class="mt-4">
+
+          path: {{'responses/'.$test->id.'/'.$user->id.'_'.$item->fillup->id.'.wav'}}
+        </div>
       </div>
       </td>
 
