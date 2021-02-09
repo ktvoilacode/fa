@@ -54,11 +54,13 @@
               </a>
               @endif
 
+              @if(!is_array($result))
               @if($result->first()->comment)
                <a href="{{ request()->fullUrl()}}?duo_analysis=1">
                 <button class="btn btn-sm btn-success mt-3 ">
                   <i class="fa fa-bars"></i> Duolingo Analysis</button>
               </a>
+              @endif
               @endif
                
             </h3>
