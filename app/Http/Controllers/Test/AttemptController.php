@@ -1501,7 +1501,7 @@ class AttemptController extends Controller
           $view = 'duo_analysis';
 
 
-      if(($request->get('session_id'))
+      if($request->get('session_id'))
         $userid = $request->get('session_id');
       else
         $userid = $user->id;
