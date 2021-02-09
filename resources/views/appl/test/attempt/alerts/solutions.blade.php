@@ -62,7 +62,11 @@
               
               @if($test->testtype->name=='DUOLINGO')
                 <div class="">Score </div>
+                @if(!request()->get('session_id'))
                 <div class="display-4">{{ $user->duolingoRange($score) }}</div>
+                @else
+                <div class="display-4">-</div>
+                @endif
     
               @else
                 <div class="">Score</div>
@@ -139,7 +143,7 @@
        <form action="{{ url()->current() }}?evaluate=1&admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
         @include('appl.test.attempt.blocks.solutions')
 
-        
+
         @if(\auth::user())
           @if(\auth::user()->isAdmin())
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
