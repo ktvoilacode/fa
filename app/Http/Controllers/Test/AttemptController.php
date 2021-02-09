@@ -1671,10 +1671,10 @@ class AttemptController extends Controller
     $userid = $request->get('userid');
        if(isset($request->all()['audio'])){
                 $file      = $request->all()['audio'];
-                //$filename  = 'responses/'.$userid.'_'.$question.'.wav';
-                $name= $userid.'_'.$question.'.'.$file->getClientOriginalName();
-                $filename= 'responses/' . $name;
-                Storage::disk('s3')->put($filename, $request->file('audio'),'public');
+                $filename  = 'responses/'.$userid.'_'.$question.'.wav';
+                //$name= $userid.'_'.$question.'.'.$file->getClientOriginalName();
+               // $filename= 'responses/' . $name;
+                Storage::disk('s3')->put($filename, file_get_contents($file),'public');
                 echo 1;
                 dd();
         }
