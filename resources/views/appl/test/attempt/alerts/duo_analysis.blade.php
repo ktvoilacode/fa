@@ -78,7 +78,7 @@
 														</a>
 													</div>
 													<div class="my-lg-0 my-3">
-														<a href="#" class="btn  btn-info font-weight-bolder btn-lg stext-uppercase">Overall : 57.4 / 100</a>
+														<a href="#" class="btn  btn-info font-weight-bolder btn-lg stext-uppercase">Overall : {{$param_percent['score']}} / 100</a>
 													</div>
 												</div>
 												<!--end::Title-->
@@ -112,7 +112,7 @@
 												<div class="d-flex flex-column text-dark-75">
 													<span class="font-weight-bolder font-size-sm">Leximic Dextirity</span>
 													<span class="font-weight-bolder text-success font-size-h5">
-													<span id="ld" >36</span> / 100</span>
+													<span id="ld" >{{$param_percent['leximic-dextirity']}}</span> / 100</span>
 												</div>
 											</div>
 											<!--end::Item-->
@@ -124,7 +124,7 @@
 												<div class="d-flex flex-column text-dark-75">
 													<span class="font-weight-bolder font-size-sm">Grammatical proficiency</span>
 													<span class="font-weight-bolder text-success font-size-h5">
-													<span id="gp" >56 </span>/ 100</span>
+													<span id="gp" >{{$param_percent['grammatical-proficiency']}} </span>/ 100</span>
 												</div>
 											</div>
 											<!--end::Item-->
@@ -136,7 +136,7 @@
 												<div class="d-flex flex-column text-dark-75">
 													<span class="font-weight-bolder font-size-sm">Pronunciation</span>
 													<span class="font-weight-bolder text-success font-size-h5">
-													<span id="pr" >60 </span>/ 100</span>
+													<span id="pr" >{{$param_percent['pronunciation']}} </span>/ 100</span>
 												</div>
 											</div>
 											<!--end::Item-->
@@ -148,7 +148,7 @@
 												<div class="d-flex flex-column flex-lg-fill">
 													<span class="text-dark-75 font-weight-bolder font-size-sm">Fluency</span>
 													<span class="font-weight-bolder text-success font-size-h5">
-													<span id="fl" >70</span> / 100</span>
+													<span id="fl" >{{$param_percent['fluency']}}</span> / 100</span>
 												</div>
 											</div>
 											<!--end::Item-->
@@ -160,7 +160,7 @@
 												<div class="d-flex flex-column">
 													<span class="text-dark-75 font-weight-bolder font-size-sm">Understanding and completeness</span>
 													<span class="font-weight-bolder text-success font-size-h5">
-													<span id="uc" >65</span> / 100</span>
+													<span id="uc" >{{$param_percent['understanding-and-completeness']}}</span> / 100</span>
 												</div>
 											</div>
 											<!--end::Item-->
