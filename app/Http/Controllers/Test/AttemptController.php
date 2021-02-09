@@ -1393,6 +1393,7 @@ class AttemptController extends Controller
 
       $attempt = new Attempt();
       $marking = [];
+      $param_percent = [];
       // evaluated
       if($request->get('evaluate')){
         
