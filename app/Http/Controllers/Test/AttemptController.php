@@ -1672,9 +1672,11 @@ class AttemptController extends Controller
        if(isset($request->all()['audio'])){
                 $file      = $request->all()['audio'];
                 $filename  = 'responses/'.$userid.'_'.$question.'.wav';
-                $path = Storage::disk('s3')->put($filename, $request->file('audio'),'public');
+
+                Storage::disk('s3')->put($filename, $request->file('audio'),'public');
+                echo 1;
+                dd();
         }
-        echo $path;
    }
 
 
@@ -1693,8 +1695,9 @@ class AttemptController extends Controller
         $filename = 'webcam/'.$test.'/'.$name.'.jpg';
         
         $path = Storage::disk('s3')->put($filename, base64_decode($image),'public');
-        echo $path;
-        dd();
+        echo 1;
+                dd();
+       
             /*
         $file      = $request->all()['image'];
         $filename = 'image.'.$file->getClientOriginalExtension();
