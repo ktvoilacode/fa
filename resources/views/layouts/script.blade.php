@@ -1485,7 +1485,7 @@ if (navigator.mediaDevices.getUserMedia) {
       fd.append("userid",userid);
       fd.append("section",section);
       fd.append("question",question);
-      fd.append("audio",blob, "filename.ogg");
+      fd.append("audio",blob);
       xhr.open("POST",url,true);
       xhr.send(fd);
 
