@@ -79,10 +79,7 @@
         @endif
         @endif
 
-        <div class="mt-4">
-
-          path: {{'responses/'.$test->id.'/'.$userid.'_'.$item->fillup->id.'.wav'}}
-        </div>
+        
       </div>
       </td>
 
