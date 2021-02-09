@@ -1067,6 +1067,7 @@ class AttemptController extends Controller
           $view = 'solutions';
 
         $review = false;
+        $userid = \auth::user()->id;
 
         if($url)
           return redirect()->to($url."?status=1&reference=".$session_id."&test=".$this->test->id);
@@ -1076,6 +1077,7 @@ class AttemptController extends Controller
               ->with('section_score',$section_score)
               ->with('test',$test)
               ->with('band',$band)
+              ->with('userid',$userid)
               ->with('points',$points)
               ->with('tags',$tags)
               ->with('user',$user)
@@ -1083,6 +1085,8 @@ class AttemptController extends Controller
               ->with('admin',1)
               ->with('try',true)
               ->with('review',$review)
+              ->with('score_params',[])
+              ->with('param_percent',[])
               ->with('score',$score);
       }
 

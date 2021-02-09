@@ -182,20 +182,21 @@
       </td>
       
 
-      <td>
+      
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
          @if($test->testtype->name=='DUOLINGO')
-
+         <td>
           @foreach($score_params[$item['fillup']['layout']] as $param)
             @include('appl.test.attempt.blocks.evaluate')
           @endforeach
+          </td>
           @endif
           @endif
         @endif
       @endif
-    </td>
+    
 
 
     </tr>
@@ -204,8 +205,11 @@
   </tbody>
 </table>
 
+@if($test->testtype->name=='DUOLINGO')
 <div class="form-group mb-1 mt-4">
     <label for="exampleTextarea">Comments (add &lt;/br> for new lines)</label>
-    <textarea class="form-control" id="exampleTextarea" name="comments" rows="3">@if($result->first()->comment) {!! $result->first()->comment !!}@endif</textarea>
+    <textarea class="form-control" id="exampleTextarea" name="comments" rows="3">
+      @if(!is_array($result)) @if($result->first()->comment) {!! $result->first()->comment !!}@endif @endif</textarea>
    </div>
+   @endif
 </div>
