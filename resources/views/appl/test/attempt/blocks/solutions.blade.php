@@ -70,9 +70,9 @@
         @if($item->response) {!! $item->response !!} 
         @else
         @if(isset($item->fillup->id))
-          @if(\Storage::disk('s3')->exists('responses/'.$test->id.'/'.$user->id.'_'.$item->fillup->id.'.wav'))
+          @if(\Storage::disk('s3')->exists('responses/'.$test->id.'/'.$userid.'_'.$item->fillup->id.'.wav'))
           <audio controls>
-              <source src="{{ \Storage::disk('s3')->url('responses/'.$test->id.'/'.$user->id.'_'.$item->fillup->id.'.wav')}}" type="audio/ogg">
+              <source src="{{ \Storage::disk('s3')->url('responses/'.$test->id.'/'.$userid.'_'.$item->fillup->id.'.wav')}}" type="audio/ogg">
             Your browser does not support the audio element.
             </audio>
           @endif
@@ -81,7 +81,7 @@
 
         <div class="mt-4">
 
-          path: {{'responses/'.$test->id.'/'.$user->id.'_'.$item->fillup->id.'.wav'}}
+          path: {{'responses/'.$test->id.'/'.$userid.'_'.$item->fillup->id.'.wav'}}
         </div>
       </div>
       </td>
@@ -159,9 +159,9 @@
       @if($item['response']) {!! $item['response'] !!} 
         @else
           @if(isset($item['fillup']->id))
-          @if(\Storage::disk('s3')->exists('responses/'.$test->id.'/'.$user->id.'_'.$item['fillup']->id.'.wav'))
+          @if(\Storage::disk('s3')->exists('responses/'.$test->id.'/'.$userid.'_'.$item['fillup']->id.'.wav'))
             <audio controls>
-              <source src="{{ \Storage::disk('s3')->url('responses/'.$test->id.'/'.$user->id.'_'.$item['fillup']->id.'.wav')}}" type="audio/ogg">
+              <source src="{{ \Storage::disk('s3')->url('responses/'.$test->id.'/'.$userid.'_'.$item['fillup']->id.'.wav')}}" type="audio/ogg">
             Your browser does not support the audio element.
             </audio>
           @endif

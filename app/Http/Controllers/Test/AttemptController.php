@@ -1501,8 +1501,10 @@ class AttemptController extends Controller
           $view = 'duo_analysis';
 
 
-      if((!$user->id) || $user->id==0)
-        $user->id = $request->get('session_id');
+      if(($request->get('session_id'))
+        $userid = $request->get('session_id');
+      else
+        $userid = $user->id;
 
       
       return view('appl.test.attempt.alerts.'.$view)
@@ -1511,6 +1513,7 @@ class AttemptController extends Controller
               ->with('test',$test)
               ->with('band',$band)
               ->with('user',$user)
+              ->with('userid',$userid)
               ->with('try',1)
               ->with('points',$points)
               ->with('tags',$tags)
