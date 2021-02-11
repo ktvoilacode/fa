@@ -805,6 +805,7 @@ class AttemptController extends Controller
         }
       }
 
+
       foreach($test->fillup_order as $fillup){
           if($fillup->qno && $fillup->qno!=-1){
             $result[$fillup->qno]['id']=$fillup->id;
@@ -821,11 +822,13 @@ class AttemptController extends Controller
             $result[$fillup->qno]['status'] = 1;
           }
           
-        if($fillup->layout=='ielts_two_blank'){
+        if($fillup->layout=='ielts_two_blank' || $fillup->layout=='two_blank'){
             
             $fillup->answer= str_replace('[', '&[', $fillup->answer);
             $new_ans = delete_all_between('[',']',$fillup->answer);
             $result[$fillup->qno]['answer'] = $new_ans;
+
+
 
             $result[$fillup->qno]['two_blanks'] =1;
         }

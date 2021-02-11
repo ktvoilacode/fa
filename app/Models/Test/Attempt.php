@@ -129,22 +129,22 @@ class Attempt extends Model
             
             
 
-            if($q){
-                if(isset($q->tags))
-                foreach($q->tags as $tg){
-                    if(isset($at->accuracy)){
-                        if($at->accuracy==1){
-                            $data[$tg->name][$tg->value]['correct']++;
-                        } 
-                    }else{
-                        if($at['accuracy']==1)
-                             $data[$tg->name][$tg->value]['correct']++;
-                    }
+            // if($q){
+            //     if(isset($q->tags))
+            //     foreach($q->tags as $tg){
+            //         if(isset($at->accuracy)){
+            //             if($at->accuracy==1){
+            //                 $data[$tg->name][$tg->value]['correct']++;
+            //             } 
+            //         }else{
+            //             if($at['accuracy']==1)
+            //                  $data[$tg->name][$tg->value]['correct']++;
+            //         }
                     
-                    $data[$tg->name][$tg->value]['total']++;
+            //         $data[$tg->name][$tg->value]['total']++;
                     
-                }
-            }
+            //     }
+            // }
         }
 
         foreach($tags as $name => $t){

@@ -6,12 +6,13 @@
       <th scope="col" style="width:10%">Qno</th>
       <th scope="col" style="width:20%">Question</th>
       <th scope="col" style="width:20%">Your Response</th>
-      <th scope="col" style="width:10%">Score</th>
+      
       <th scope="col" style="width:10%">Result</th>
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
         @if($test->testtype->name=='DUOLINGO' )
+      <th scope="col" style="width:10%">Score</th>
       <th scope="col" style="width:30%">Evaluate</th>
       @endif
       @endif
@@ -83,9 +84,7 @@
       </div>
       </td>
 
-      <td>
-        {{ $item->score }}
-      </td>
+      
       <td>
       @if($item->status)
         @if($item->accuracy==1) 
@@ -107,6 +106,9 @@
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
          @if($test->testtype->name=='DUOLINGO')
+         <td>
+        {{ $item->score }}
+      </td>
          <td>
          @if($item['fillup']['layout'])
           @foreach($score_params[$item['fillup']['layout']] as $param)
@@ -164,11 +166,7 @@
           @endif
           @endif
         @endif</td>
-        <td>
-          @if(isset($item['score']))
-        {{ $item['score'] }}
-        @endif
-      </td>
+        
       <td>
         @if($item['status'])
           @if($item['accuracy']==1 || $item['accuracy']>1 ) 
@@ -187,6 +185,11 @@
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
          @if($test->testtype->name=='DUOLINGO')
+         <td>
+          @if(isset($item['score']))
+        {{ $item['score'] }}
+        @endif
+      </td>
          <td>
           @foreach($score_params[$item['fillup']['layout']] as $param)
             @include('appl.test.attempt.blocks.evaluate')
