@@ -858,7 +858,7 @@ class AttemptController extends Controller
       
       ksort($result);
 
-      
+
       $data = array();
       $date_time = new \DateTime();
       $i=0;
@@ -884,6 +884,8 @@ class AttemptController extends Controller
 
 
         $resp = $request->get($qno);
+
+
         if($resp){
 
           if(is_array($resp))
