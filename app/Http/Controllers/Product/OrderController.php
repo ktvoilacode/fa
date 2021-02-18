@@ -228,6 +228,8 @@ class OrderController extends Controller
 
             }else{
 
+
+
               if($request->get('coupon')=='FREE'){
                   if($product)
                   if($product->price !=0){
@@ -242,10 +244,17 @@ class OrderController extends Controller
                   } 
 
               }else{
+
+                
                 if($coupon->status==0){
                    $m = "Coupon Code Expired!";
                  return view('appl.product.order.checkout_coupon')->with('message',$m); 
+                }else if(\carbon\Carbon::parse($coupon->expiry)->lte(\carbon\Carbon::now())){
+                 $m = "Coupon Code Expired!";
+                 return view('appl.product.order.checkout_coupon')->with('message',$m); 
                 }
+
+                
                 
                 if($product){
                     if(!$coupon->products()->where('id',$product->id)->first()){

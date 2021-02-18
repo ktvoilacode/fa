@@ -133,6 +133,8 @@ class CouponController extends Controller
          
         if($coupon->status==0){
             abort('403','Coupon code expired');
+        }else if(\carbon\Carbon::parse($coupon->expiry)->lte(\carbon\Carbon::now())){
+                 abort('403','Coupon code expired');
         }
 
         $order = new Order();
