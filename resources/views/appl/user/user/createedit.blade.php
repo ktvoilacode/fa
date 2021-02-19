@@ -111,8 +111,9 @@
           <div class="form-group">
             <label for="formGroupExampleInput ">Enrolled</label>
             <select class="form-control" name="enrolled">
-              <option value="1" @if(isset($obj)) @if($obj->enrolled==1) selected @else selected @endif  @endif >YES</option>
-              <option value="0" @if(isset($obj)) @if($obj->enrolled===0) selected @endif @endif >NO</option>
+              <option value="0" @if(isset($obj)) @if($obj->enrolled===0) selected @elseif($obj->enrolled!=1) selected @else selected @endif selected @endif >NO</option>
+              <option value="1" @if(isset($obj)) @if($obj->enrolled==1) selected @endif  @endif >YES</option>
+              
             </select>
           </div>
 
@@ -131,7 +132,7 @@
           @if($product->status==1)
           <div class="col-12 col-md-4">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="products[]" value="{{$product->id}}" id="defaultCheck1" @if($obj->hasProduct($product->id))) checked @endif >
+            <input class="form-check-input" type="checkbox" name="products[]" value="{{$product->id}}" id="defaultCheck1"  @if($stub!='Create') @if($obj->hasProduct($product->id))) checked @endif @endif >
             <label class="form-check-label" for="defaultCheck1">
               {{ strip_tags($product->name) }} 
             </label>
@@ -158,7 +159,7 @@
           @if($test->status==1)
           <div class="col-12 col-md-4">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="tests[]" value="{{$test->id}}" id="defaultCheck1" @if($obj->hasTest($test->id))) checked @endif>
+            <input class="form-check-input" type="checkbox" name="tests[]" value="{{$test->id}}" id="defaultCheck1" @if($stub!='Create') @if($obj->hasTest($test->id))) checked @endif @endif>
             <label class="form-check-label" for="defaultCheck1">
               {{ strip_tags($test->name) }}
             </label>
