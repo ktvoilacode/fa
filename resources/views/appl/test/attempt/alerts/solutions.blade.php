@@ -47,7 +47,7 @@
                @endif
               @endif
 
-              @if($test->testtype->name=='LISTENING')
+              @if($test->testtype->name=='LISTENING' || $test->testtype->name=='READING')
               <a href="{{ route('test.answers',$test->slug)}}">
                 <button class="btn btn-sm btn-primary mt-3 ">
                   <i class="fa fa-bars"></i> View Question Paper & Answers</button>
@@ -154,9 +154,11 @@
 
 
         @if(\auth::user())
-          @if(\auth::user()->isAdmin())
+          @if(\auth::user()->isAdmin() )
+            @if( $test->testtype->name=='DUOLINGO' )
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn-primary btn-lg mt-4">Save</button>
+            @endif
           @endif
         @endif
         </form>

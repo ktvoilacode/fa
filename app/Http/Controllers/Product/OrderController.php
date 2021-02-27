@@ -255,6 +255,10 @@ class OrderController extends Controller
                 }
 
                 
+                if($coupon->enrolled==1 ){
+                    if(\auth::user()->enrolled!=1)
+                        abort('403','This coupon can only be used by enrolled students');
+                }
                 
                 if($product){
                     if(!$coupon->products()->where('id',$product->id)->first()){

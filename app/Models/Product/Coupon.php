@@ -13,6 +13,7 @@ class Coupon extends Model
         'status',
         'user_id',
         'unlimited',
+        'enrolled'
         // add all other fields
     ];
 

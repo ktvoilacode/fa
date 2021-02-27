@@ -137,6 +137,11 @@ class CouponController extends Controller
                  abort('403','Coupon code expired');
         }
 
+        if($coupon->enrolled==1 ){
+            if(\auth::user()->enrolled!=1)
+                abort('403','This coupon can only be used by enrolled students');
+        }
+
         $order = new Order();
         foreach($coupon->products as $p){
             $order->coupon($p->id,null,$coupon);

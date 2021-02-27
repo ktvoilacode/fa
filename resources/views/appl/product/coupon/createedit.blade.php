@@ -40,6 +40,22 @@
           >
       </div>
 
+       <div class="form-group">
+        <label for="formGroupExampleInput ">Unlimited</label>
+        <select class="form-control" name="unlimited">
+          <option value="0" @if(isset($obj)) @if($obj->unlimited==0) selected @endif @endif >NO</option>
+          <option value="1" @if(isset($obj)) @if($obj->unlimited==1) selected @endif @endif >YES</option>
+        </select>
+      </div>
+
+       <div class="form-group">
+        <label for="formGroupExampleInput ">Only for Enrolled</label>
+        <select class="form-control" name="enrolled">
+          <option value="0" @if(isset($obj)) @if($obj->enrolled==0) selected @endif @endif >NO</option>
+          <option value="1" @if(isset($obj)) @if($obj->enrolled==1) selected @endif @endif >YES</option>
+        </select>
+      </div>
+
       <div class="form-group">
         <label for="formGroupExampleInput">Products</label>
          <div class=" card p-3">
@@ -81,13 +97,7 @@
          </div>
       </div>
 
-      <div class="form-group">
-        <label for="formGroupExampleInput ">Unlimited</label>
-        <select class="form-control" name="unlimited">
-          <option value="0" @if(isset($obj)) @if($obj->unlimited==0) selected @endif @endif >NO</option>
-          <option value="1" @if(isset($obj)) @if($obj->unlimited==1) selected @endif @endif >YES</option>
-        </select>
-      </div>
+     
 
       @if($stub=='Update')
         <input type="hidden" name="_method" value="PUT">
