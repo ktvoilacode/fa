@@ -7,11 +7,13 @@
 </div>
 @else
 <div class="row question">
+  @if($f->label )
   <div class="col-12 col-md-4" id="{{$f->qno}}">
     <div class="card-text " ><b>{!! $f->label !!}</b>
     </div>
   </div>
-  <div class="col-12 col-md-8">
+  @endif
+  <div class="col-12 col-md">
     <div class="card-text">
     @if($f->layout == 'default' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
