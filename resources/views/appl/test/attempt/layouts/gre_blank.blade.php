@@ -13,7 +13,10 @@
   <div class="col-12 col-md-11">
     <div class="card-text"><div>
       @if($f->prefix ) <span class="f_prefix_{{$f->id}}">{!!$f->prefix !!}</span>  @endif 
-      @if($f->answer) <input type="text" class="fill input f_answer_{{$f->id}}" name="{{$f->qno}}" data-id="{{$f->qno}}" >
+      @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> 
+        @else
+        @if($f->answer) <input type="text" class="fill input f_answer_{{$f->id}}" name="{{$f->qno}}" data-id="{{$f->qno}}" >
+        @endif
       @endif
       @if($f->suffix )<span class="f_suffix_{{$f->id}}">{!!$f->suffix !!}</span>@endif
     </div>

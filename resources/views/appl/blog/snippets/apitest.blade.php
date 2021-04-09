@@ -1,5 +1,10 @@
-
+<link rel='stylesheet' href='{{ asset("css/try.css") }}'>
 <div class="test_container">
+
+@if($score)
+	<h1 class="border p-5 py-5">Your score is {{$score}} </h1>
+@endif
+
 
 <form id="ajaxtest" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post"> 
 @if($testtype->name=='GRAMMAR')
@@ -23,9 +28,10 @@
 		<input type="hidden" name="test_id" value="{{ $app->test->id }}">
 		<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
-		<input type="hidden" name="ajax" value="1">
-
+		<input type="hidden" name="apitest" value="1">
+		@if(!$score)
 		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
+		@endif
 	</div>
  </div>
 </div>
@@ -46,10 +52,12 @@
 	<input type="hidden" name="test_id" value="{{ $app->test->id }}">
 	<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
-	<input type="hidden" name="ajax" value="1">
+	<input type="hidden" name="apitest" value="1">
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
-	<button class="btn btn-success btn-lg ajaxtestsubmit " type="submit" >Submit</button>
+	@if(!$score)
+		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
+		@endif
 	</div>
 	</div>
 
@@ -62,16 +70,19 @@
 	<input type="hidden" name="test_id" value="{{ $app->test->id }}">
 	<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
-	<input type="hidden" name="ajax" value="1">
+	<input type="hidden" name="apitest" value="1">
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
-	<button class="btn btn-success btn-lg ajaxtestsubmit " type="submit" >Submit</button>
+	@if(!$score)
+		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
+		@endif
 	</div>
 </div>
 
 @endif
 </form>
 </div>
+
 
 <div class="result_container" style="display: none">
 <div class="border">

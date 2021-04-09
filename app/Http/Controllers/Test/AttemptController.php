@@ -43,7 +43,7 @@ class AttemptController extends Controller
             else{
               $this->test = Test::where('slug',request()->route('test'))->first();
 
-              $this->test->sections = $this->test->sections;
+                            $this->test->sections = $this->test->sections;
               $this->test->mcq_order = $this->test->mcq_order;
               $this->test->fillup_order = $this->test->fillup_order;
               $this->test->testtype = $this->test->testtype;
@@ -280,6 +280,84 @@ class AttemptController extends Controller
     return 1;
 
   }
+
+
+
+   /* Test Attempt Function */
+  public function api($slug,Request $request,$score=null){
+    $test = $this->test;
+    $product = $this->product;
+
+    $product_id = $test_id = null;
+
+    if($test){
+      $id = $test->id;
+      $test_id = $id;
+      $price = $test->price;
+    }
+    else{
+      $id = $product->id;
+      $product_id = $id;
+      $price = $product->price;
+    }
+    
+    
+    $user = User::where('id',1)->first();
+
+
+    /* Pre validation */
+    $this->precheck($request);
+
+
+
+    /* If Attempted show report */
+    
+    $attempt = null;
+  
+    (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
+
+    $pte = 0;
+    if(!$test->testtype)
+      abort('403','Test Type not defined');
+    else{
+      $testtype = strtolower($test->testtype->name);
+      if($test->category->name=='PTE' && ($testtype=='listening' || $testtype=='reading')){
+        $view =  'pte_'.strtolower($test->testtype->name);
+        $pte=1;
+      }
+      else
+      $view = strtolower($test->testtype->name);
+
+     
+
+    }
+
+    
+    if($score)
+      $answers = true;
+    else
+      $answers = false;
+   if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
+    return view('appl.blog.snippets.apitest')
+            ->with('player',true)
+            ->with('try',true)
+            ->with('grammar',true)
+            ->with('app',$this)
+            ->with('qcount',$qcount)
+            ->with('pte',$pte)
+            ->with('score',$score)
+            ->with('test',$test)
+            ->with('testtype',$test->testtype)
+            ->with('css',1)
+            ->with('product',$product)
+            ->with('user',$user)
+            ->with('timer',1)
+            ->with('answers',$answers)
+            ->with('time',$test->test_time);
+    
+
+  }
+
 
    /* Test Attempt Function */
   public function try($slug,Request $request){
@@ -744,6 +822,8 @@ class AttemptController extends Controller
       $result = array();
       $score =0;
       $test = $this->test;
+
+
       if(!isset($test->product))
       $product = Product::where('slug',$request->get('product'))->first();
       else
@@ -755,6 +835,8 @@ class AttemptController extends Controller
           $user->id = 0;
       }
 
+      $attempt = null;
+      if(!request()->get('apitest'))
       if($test->status==2 || $test->status==3)
         $attempt = Attempt::where('test_id',$this->test->id)->where('session_id',$session_id)->first();
       else  
@@ -1008,13 +1090,17 @@ class AttemptController extends Controller
         dd();
       }
 
+      if($request->get('apitest')){
+        if($score==0)
+          $score="-";
+          return $this->api($this->test->slug,$request,$score);
+      }
 
 
       if(!$request->get('admin'))
         Attempt::insert($data); 
       
 
-      
       /* for admin submit we wont store the result */
       if($request->get('admin')){
 
