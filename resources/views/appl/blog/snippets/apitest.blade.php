@@ -36,13 +36,12 @@
 	</div>
  </div>
 </div>
+
 @elseif($testtype->name=='LISTENING')
-
 	@if(file_exists(public_path().'/storage/'.$test->file) && $test->file)
-
-		@include('appl.test.attempt.blocks.audio')
-
-	@endif
+	
+                @include('appl.test.attempt.blocks.audio')
+    @endif
 
 	<div class="border">
 	@foreach($test->sections as $s=>$section)
