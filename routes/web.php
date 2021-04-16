@@ -11,6 +11,7 @@
 |
 */
 use App\Http\Middleware\Subdomain;
+use App\Http\Middleware\cors;
 
 /*Route::get('/', function () {
     return view('welcome');
@@ -120,9 +121,9 @@ Route::get('/test/','Test\TestController@public')->name('tests');
 Route::get('/test/{test}','Test\TestController@details')->name('test');
 Route::get('/test/{test}/instructions','Test\AttemptController@instructions')->name('test.instructions');
 Route::get('/test/{test}/try','Test\AttemptController@try')->name('test.try');
-Route::get('/apitest/{test}','Test\AttemptController@api')->name('apitest');
-Route::post('/apitest/{test}','Test\AttemptController@api')->name('apitest.post');
-Route::post('/apitestpost/{test}','Test\AttemptController@api')->name('apitest.post');
+Route::get('/apitest/{test}','Test\AttemptController@api')->name('apitest')->middleware('cors');
+Route::post('/apitest/{test}','Test\AttemptController@api')->name('apitest.post')->middleware('cors');
+Route::post('/apitestpost/{test}','Test\AttemptController@api')->name('apitest.post2')->middleware('cors');
 Route::post('/test/{test}/try','Test\AttemptController@store')->name('attempt.store');
 Route::post('/test/{test}/upload','Test\AttemptController@upload')->name('attempt.upload');
 Route::get('/test/{test}/delete','Test\AttemptController@file_delete')->name('attempt.delete');
