@@ -29,7 +29,7 @@
 		<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<input type="hidden" name="apitest" value="1">
-		@if(!$score)
+		@if(!$score && !request()->get('answers'))
 		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
 		@endif
 	</div>
@@ -55,9 +55,9 @@
 	<input type="hidden" name="apitest" value="1">
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
-	@if(!$score)
+	@if(!$score && !request()->get('answers'))
 		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
-		@endif
+	@endif
 	</div>
 	</div>
 
@@ -73,9 +73,9 @@
 	<input type="hidden" name="apitest" value="1">
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
-	@if(!$score)
+	@if(!$score && !request()->get('answers'))
 		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
-		@endif
+	@endif
 	</div>
 </div>
 
