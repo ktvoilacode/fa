@@ -1,5 +1,8 @@
 <link rel='stylesheet' href='{{ asset("css/try.css") }}'>
 <link rel='stylesheet' href='{{ asset("css/test.css") }}'>
+@if(file_exists(public_path().'/storage/'.$test->file) && $test->file)
+<link rel='stylesheet' href='{{ asset("css/player.css") }}'>
+@endif
 <div class="test_container">
 
 @if($score)
@@ -39,7 +42,7 @@
 
 @elseif($testtype->name=='LISTENING')
 	@if(file_exists(public_path().'/storage/'.$test->file) && $test->file)
-	
+
                 @include('appl.test.attempt.blocks.audio')
     @endif
 
