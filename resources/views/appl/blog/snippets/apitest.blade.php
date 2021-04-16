@@ -1,4 +1,5 @@
 <link rel='stylesheet' href='{{ asset("css/try.css") }}'>
+<link rel='stylesheet' href='{{ asset("css/test.css") }}'>
 <div class="test_container">
 
 @if($score)
@@ -91,3 +92,4 @@
 	</div>
 </div>
 </div>
+ @include('layouts.script')
