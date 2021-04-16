@@ -1093,7 +1093,9 @@ class AttemptController extends Controller
       if($request->get('apitest')){
         if($score==0)
           $score="-";
-          return $this->api($this->test->slug,$request,$score);
+         echo $score;
+         dd();
+          //return $this->api($this->test->slug,$request,$score);
       }
 
 
