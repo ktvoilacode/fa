@@ -11,7 +11,7 @@
 @endif
 
 
-<form id="ajaxtest" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post"> 
+<form id="ajaxtest" class="test form_{{$app->test->slug}}" action="{{route('attempt.store',$app->test->slug)}}" method="post"> 
 @if($testtype->name=='GRAMMAR')
 <div class="border">
  <div class="mb-3">
@@ -35,7 +35,7 @@
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<input type="hidden" name="apitest" value="1">
 		@if(!$score && !request()->get('answers'))
-		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
+		<button class="btn btn-success btn-lg ajaxtestsubmit " data-test="{{$app->test->slug}}" type="submit" >Submit</button>
 		@endif
 	</div>
  </div>
@@ -60,7 +60,7 @@
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
 	@if(!$score && !request()->get('answers'))
-		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
+		<button class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" type="submit" >Submit</button>
 	@endif
 	</div>
 	</div>
@@ -78,7 +78,7 @@
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
 	@if(!$score && !request()->get('answers'))
-		<button class="btn btn-success btn-lg ajaxtestsubmit" type="submit" >Submit</button>
+		<button class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" type="submit" >Submit</button>
 	@endif
 	</div>
 </div>
