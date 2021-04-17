@@ -826,6 +826,7 @@ class AttemptController extends Controller
       $score =0;
       $test = $this->test;
 
+      $total = 0;
 
       if(!isset($test->product))
       $product = Product::where('slug',$request->get('product'))->first();
@@ -878,6 +879,7 @@ class AttemptController extends Controller
           $result[$mcq->qno]['response']= '';
           $result[$mcq->qno]['accuracy']= 0;
           $result[$mcq->qno]['status'] = 1;
+          $total = $total + $result[$mcq->qno]['mark'];
         }
         // GRE numeric and fraction answer
         if(!strip_tags($mcq->answer)){
@@ -905,6 +907,7 @@ class AttemptController extends Controller
             $result[$fillup->qno]['accuracy']= 0;
             $result[$fillup->qno]['two_blanks'] =0;
             $result[$fillup->qno]['status'] = 1;
+            $total = $total + $result[$fillup->qno]['mark'];
           }
           
         if($fillup->layout=='ielts_two_blank' || $fillup->layout=='two_blank'){
@@ -1094,9 +1097,10 @@ class AttemptController extends Controller
       }
 
       if($request->get('apitest')){
-        if($score==0)
-          $score="-";
-         echo $score;
+        $apidata = ['score'=>'0','total'=>$total];
+        $apidata['score'] = $score;
+        
+         echo json_encode($apidata);
          dd();
           //return $this->api($this->test->slug,$request,$score);
       }
