@@ -35,7 +35,7 @@
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<input type="hidden" name="apitest" value="1">
 		@if(!$score && !request()->get('answers'))
-		<button class="btn btn-success btn-lg ajaxtestsubmit " data-test="{{$app->test->slug}}" type="submit" >Submit</button>
+		<div class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" >Submit</div>
 		@endif
 	</div>
  </div>
@@ -60,7 +60,7 @@
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
 	@if(!$score && !request()->get('answers'))
-		<button class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" type="submit" >Submit</button>
+		<div class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" >Submit</div>v
 	@endif
 	</div>
 	</div>
@@ -78,7 +78,7 @@
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
 	@if(!$score && !request()->get('answers'))
-		<button class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" type="submit" >Submit</button>
+		<div class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" >Submit</div>
 	@endif
 	</div>
 </div>
