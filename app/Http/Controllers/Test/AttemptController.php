@@ -342,7 +342,6 @@ class AttemptController extends Controller
       $answers = true;
    if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
     return view('appl.blog.snippets.apitest')
-            ->with('player',true)
             ->with('try',true)
             ->with('grammar',true)
             ->with('app',$this)
