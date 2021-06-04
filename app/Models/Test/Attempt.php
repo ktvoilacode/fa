@@ -288,10 +288,14 @@ class Attempt extends Model
         $param_score = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
         $param_percent = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
 
-
+        $review = false;
         foreach($result as $r){
             $data = json_decode($r->marking,true);
-           
+            
+            if(!$r->marking){
+                $review = true;
+                break;
+            }
             foreach($param_count as $p=>$v){
                 if(isset($data[$p])){
                     $param_score[$p] = $param_score[$p] +$data[$p];
@@ -311,7 +315,10 @@ class Attempt extends Model
 
         $score = round($score/5,2);
 
-        $param_percent['score'] = $score;
+        if($review)
+            $param_percent['score'] = 'Under Review';
+        else
+            $param_percent['score'] = $score;
         return $param_percent;
 
 

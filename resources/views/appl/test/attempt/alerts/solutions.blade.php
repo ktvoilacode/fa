@@ -54,13 +54,13 @@
               </a>
               @endif
 
+
               @if(!is_array($result))
-              @if($result->first()->comment)
-               <a href="{{ request()->fullUrl()}}?duo_analysis=1">
+               <a href="{{ request()->fullUrl()}}&duo_analysis=1">
                 <button class="btn btn-sm btn-success mt-3 ">
-                  <i class="fa fa-bars"></i> Duolingo Analysis</button>
+                  <i class="fa fa-bars"></i> Detailed Analysis</button>
               </a>
-              @endif
+           
               @endif
                
             </h3>
@@ -72,13 +72,17 @@
               @if($test->testtype->name=='DUOLINGO')
                 <div class="">Score </div>
                 @if(!request()->get('session_id'))
-                <div class="display-4">{{ $user->duolingoRange($score) }}</div>
+                  @if(is_numeric($score))
+                    <div class="display-4">{{ $user->duolingoRange($score) }}</div>
+                  @else
+                   <div class="h3 text-primary">{{ $user->duolingoRange($score) }}</div>
+                  @endif
                 @else
                 <div class="display-4">-</div>
                 @endif
     
               @else
-                <div class="">Score</div>
+                <div class="">Score </div>
 
                 @if(!$review)
                 <div class="display-4">{{ $score }} / {{ $test->marks}} </div>

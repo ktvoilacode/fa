@@ -87,13 +87,9 @@
 													<div class="d-flex flex-column flex-grow-1 pr-8">
 														<div class="d-flex flex-wrap mb-4">
 															<a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-															<i class="flaticon2-new-email mr-2 font-size-lg"></i>demo123@gmail.com</a>
-															<a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-															<i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>+91 9999999999</a>
+															<i class="flaticon2-new-email mr-2 font-size-lg"></i>{{$user->email}}</a>
 															
 														</div>
-														<span class="font-weight-bold text-dark-50">College: --</span>
-														<span class="font-weight-bold text-dark-50">Branch: --</span>
 													</div>
 												</div>
 												<!--end::Content-->

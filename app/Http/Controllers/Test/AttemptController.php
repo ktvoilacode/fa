@@ -37,8 +37,14 @@ class AttemptController extends Controller
 
             // update test from cache
             $filename = $this->cache_path.$this->app.'.'.request()->route('test').'.json'; 
+            if(!request()->get('refresh'))
+            $cache = Cache::get('test_'.request()->route('test'));
+            else
+              Cache::forget('test_'.request()->route('test'));
             if(file_exists($filename)){
               $this->test = json_decode(file_get_contents($filename));
+            }else if($cache){
+              $this->test = $cache;
             }
             else{
               $this->test = Test::where('slug',request()->route('test'))->first();
@@ -72,6 +78,10 @@ class AttemptController extends Controller
                   }
                       
               }
+              $test = $this->test;
+              Cache::remember('test_'.request()->route('test'),60, function() use($test){
+                return $test;
+              });
 
             }
 
@@ -1207,13 +1217,13 @@ class AttemptController extends Controller
       $sec = null;
       if(isset($test->sections)){
           foreach($test->sections as $section){
-
-            foreach($section->mcq_order as $mcq_order){
-
+            $mcqs = $section->mcq_order;
+            foreach($mcqs as $mcq_order){
                 $result[$mcq_order->qno] = $section->id;
                 $result_name[$mcq_order->qno] = $section->name;
             }
-            foreach($section->fillup_order as $fillup_order){
+            $fillups = $section->fillup_order;
+            foreach($fillups as $fillup_order){
               $result[$fillup_order->qno] = $section->id;
               $result_name[$fillup_order->qno] = $section->name;
             }
@@ -1507,6 +1517,7 @@ class AttemptController extends Controller
       }
 
       
+
 
      
 

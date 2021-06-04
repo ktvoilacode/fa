@@ -23,7 +23,7 @@
                 <div class="">Score Range</div>
                 <div class="display-4">{{ $test->duolingoRange($score) }}</div>
               @else
-                <div class="">Score</div>
+                <div class="">Score </div>
 
                 @if(!$review)
                 <div class="display-4">{{ $score }} / {{ $test->marks}} </div>

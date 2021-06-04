@@ -16,7 +16,7 @@ class Subdomain
     public function handle($request, Closure $next)
     {
         $domain = request()->getHost();
-        if( $domain!='prep.firstacademy.in' && $domain!='piofx.com' && $domain!='project.test' && $domain!='onlinelibrary.test' && $domain!= 'test.piofx.com' && $domain!= 'test.p24.in' ){
+        if( $domain!='prep.firstacademy.in' && $domain!='fa.test' && $domain!='project.test' && $domain!='onlinelibrary.test' && $domain!= 'test.piofx.com' && $domain!= 'test.p24.in' ){
              $filename = '../storage/app/cache/clients/'.$domain.'.json';
 
              if(file_exists($filename)){
