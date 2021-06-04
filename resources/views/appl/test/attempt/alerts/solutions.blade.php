@@ -54,13 +54,19 @@
               </a>
               @endif
 
-
+              @if($test->testtype->name=='DUOLINGO')
+              @if(is_numeric($score))
               @if(!is_array($result))
-               <a href="{{ request()->fullUrl()}}&duo_analysis=1">
+                @if(request()->get('user_id'))
+                  <a href="{{ request()->fullUrl()}}&duo_analysis=1">
+                @else
+                  <a href="{{ request()->fullUrl()}}?duo_analysis=1">
+                @endif
                 <button class="btn btn-sm btn-success mt-3 ">
                   <i class="fa fa-bars"></i> Detailed Analysis</button>
               </a>
-           
+              @endif
+              @endif
               @endif
                
             </h3>

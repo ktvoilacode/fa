@@ -1503,7 +1503,9 @@ class AttemptController extends Controller
       else
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
-
+      if(!count($result)){
+        abort('403','Test not attempted');
+      }
       $attempt = new Attempt();
       $marking = [];
       $param_percent = [];
