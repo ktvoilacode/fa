@@ -20,7 +20,7 @@
 
         <div class="row no-gutters {{$sno=1}}">
             <div class="col-12 col-md-6 leftblock" @if(!strip_tags(trim($test->sections[0]->instructions)))style="display: none;"@endif>
-                <div class="panel leftpanel p-4 " >
+                <div class="panel leftpanel p-2 p-md-4" >
                     <div class="0"></div>
                     @foreach($test->sections as $s=>$section)
                     @include('appl.test.attempt.blocks.section_reading_text')
@@ -37,7 +37,7 @@
 
             </div>
             <div class="col-12 col-md ">
-                <div id="a" class="panel rightpanel p-4 {{$sno}}" >
+                <div id="a" class="panel rightpanel p-2 p-md-4 {{$sno}}" >
                     <div id="c" class="content"> 
                     <div id="0"></div>
                     @foreach($test->sections as $s=>$section)
