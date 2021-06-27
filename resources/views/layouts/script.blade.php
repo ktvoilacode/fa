@@ -246,14 +246,39 @@ $(document).ready(function() {
     var bottom = $('.bottom-qno').height();
     var h = height-nav-70;
 
-    if(width<400){
-       $('.rightpanel').css('height',h/2);
+    // if(width<400){
+    //    $('.rightpanel').css('height',h/2);
+    //     $('.leftpanel').css('height',h/4);
+
+    // }
+    // else if(width<768){
+    //    $('.rightpanel').css('height',3*h/4);
+    //     $('.leftpanel').css('height',h/4);
+    // }
+    // else{
+    //      $('.panel').css('height',h);
+    // }
+
+     if(width<400){
+      if(height<900){
+        $('.rightpanel').css('height',h/2);
+        $('.leftpanel').css('height',h/2*0.9);
+      }else{
+        $('.rightpanel').css('height',h/2);
         $('.leftpanel').css('height',h/4);
+      }
+       
 
     }
-    else if(width<768){
-       $('.rightpanel').css('height',3*h/4);
+    else if(width<770){
+       if(height<900){
+        $('.rightpanel').css('height',h/2);
+        $('.leftpanel').css('height',h/2*0.9);
+      }else{
+        $('.rightpanel').css('height',h/2);
         $('.leftpanel').css('height',h/4);
+      }
+      
     }
     else{
          $('.panel').css('height',h);
