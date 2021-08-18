@@ -54,6 +54,7 @@
               </a>
               @endif
 
+             
               @if($test->testtype->name=='DUOLINGO')
               @if(is_numeric($score))
               @if(!is_array($result))

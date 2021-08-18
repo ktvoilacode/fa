@@ -242,18 +242,30 @@ class Attempt extends Model
 
         $json = [];
 
+        $co=1;
         foreach($request->all() as $key =>$value){
+            
           if(startsWithNumber($key))
           {
                 $exp = explode('_', $key);
                 $qno = $exp[0];
+               
                 $param = $exp[1];
                 $json[$qno][$param]=$value;
+
                
           }
+
+
         }
 
+
+         // if(count($json))
+         // dd($result[0]);
+        $counter=0;
         foreach($json as $qno =>$data){
+    
+
             $r = $result->where('qno',$qno)->first();
             $total = 0; $count = 0;
             foreach($data as $param=>$sc){
@@ -267,12 +279,17 @@ class Attempt extends Model
 
             if($qno==1)
                 $r->comment = $request->get('comments');
+
+            
             
             $r->marking = json_encode($data);
+            $counter++;
             $r->save();
         }
 
+
         
+
 
     }
 
@@ -289,12 +306,18 @@ class Attempt extends Model
         $param_percent = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
 
         $review = false;
+
+
         foreach($result as $r){
+
             $data = json_decode($r->marking,true);
-            
+
             if(!$r->marking){
                 $review = true;
+                
                 break;
+            }else{
+                
             }
             foreach($param_count as $p=>$v){
                 if(isset($data[$p])){
@@ -303,6 +326,7 @@ class Attempt extends Model
                 }
             }
         }
+
 
         $score = 0;
 

@@ -210,11 +210,13 @@
 						  </div>
 						 </div>
 						 <div class="card-body">
-						 	@for($i=0;$i<20;$i++)
+						 	<div class="row">
+						 	@for($i=0;$i<9;$i++)
 						 		@if(Storage::disk('s3')->exists('webcam/'.$test->id.'/'.$user->id.'_'.$test->id.'_'.$i.'.jpg'))
-						 			<img src="{{ Storage::disk('s3')->url('webcam/'.$test->id.'/'.$user->id.'_'.$test->id.'_'.$i.'.jpg')}}" class='rounded w-25' />
+						 			<div class="col-6 col-md-3"><img src="{{ Storage::disk('s3')->url('webcam/'.$test->id.'/'.$user->id.'_'.$test->id.'_'.$i.'.jpg')}}" class='rounded w-100 mb-3' /></div>
 						 		@endif
 						 	@endfor
+						 </div>
 						 </div>
 						</div>
 

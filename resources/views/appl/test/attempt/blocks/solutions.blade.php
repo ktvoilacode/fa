@@ -65,7 +65,7 @@
 
         @endif
       </td>
-      <td>
+      <td class="text-wrap text-break">
         <div style="max-width: 200px">
 
         @if($item->response) {!! $item->response !!} 
@@ -95,7 +95,7 @@
           <span class="text-danger"><i class="fa fa-times-circle"></i></span>
         @endif
       @else
-          <span class="text-info"><i class="fa fa-circle-o"></i> Under Review</span>
+          <span class="text-info"><i class="fa fa-circle-o"></i> Manual Evaluation</span>
 
       @endif
       </td>
@@ -180,7 +180,7 @@
       </td>
       
 
-      
+
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))

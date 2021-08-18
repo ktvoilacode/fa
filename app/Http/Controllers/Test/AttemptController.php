@@ -1557,10 +1557,13 @@ class AttemptController extends Controller
           $score = $score + $r->score;
       }
 
+
       if(strtoupper($test->category->name)=='DUOLINGO'){
         $param_percent = $attempt->scoreDuolingo($result);
         $score = $param_percent['score'];
       }
+
+
 
 
       if($request->get('json')){
@@ -1623,7 +1626,6 @@ class AttemptController extends Controller
       else
         $userid = $user->id;
 
-      
       return view('appl.test.attempt.alerts.'.$view)
               ->with('result',$result)
               ->with('section_score',$section_score)
