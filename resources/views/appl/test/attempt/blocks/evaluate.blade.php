@@ -1,5 +1,5 @@
 
-<div @if($item['status']) class="d-none" @endif>
+<div @if($item['status'] && !request()->get('all')) class="d-none" @endif>
 	<h6>{{ucfirst(str_replace('-',' ',$param))}}</h6>
 <div class="form-check form-check-inline">
   <input class="form-check-input" type="radio" name="{{$item->qno}}_{{$param}}" id="inlineRadio1" value="0" @if(isset($marking[$item->qno][$param]))@if($marking[$item->qno][$param]=="0") checked @elseif(!in_array($marking[$item->qno][$param],['1','2','3','4','5'])) checked @endif @else checked @endif>

@@ -21,14 +21,14 @@
             
             @elseif(request()->get('from'))
             <span class="badge badge-warning ">Range</span>
-            @elseif(request()->get('all'))
-            <span class="badge badge-warning ">ALL</span>
-            @else
+            @elseif(request()->get('five'))
             <span class="badge badge-warning ">Top 5</span>
+            @else
+            <span class="badge badge-warning ">ALL</span>
             @endif
             <a href="{{ route('test.analytics',$obj->id)}}?all=1" class="btn btn-success float-right">View All</a>
             <a href="{{ route('test.analytics',$obj->id)}}?today=1&all=1" class="btn btn-outline-success float-right mr-2">Today</a>
-            <a href="{{ route('test.analytics',$obj->id)}}" class="btn btn-outline-success float-right mr-2">Top 5</a>
+            <a href="{{ route('test.analytics',$obj->id)}}?five=1" class="btn btn-outline-success float-right mr-2">Top 5</a>
             </p>
          
 
@@ -177,7 +177,7 @@
       <td>{{ $s}}</td>
       @endif
     </tr>
-    @if($i==6 && !request()->get('all'))
+    @if($i==6 && request()->get('five'))
       @break
     @endif
     @endforeach
