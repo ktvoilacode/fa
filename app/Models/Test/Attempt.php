@@ -352,8 +352,8 @@ class Attempt extends Model
         if($review){
 
             $score = $s/$total * 160;
-            if($s<50)
-                $s = $s + 20;
+            if($score<50)
+                $score = $score + 20;
             $param_percent['score'] = round($score,2);
         }
         else
