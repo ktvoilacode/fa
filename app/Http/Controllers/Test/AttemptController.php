@@ -1564,6 +1564,7 @@ class AttemptController extends Controller
       }
 
 
+      
 
 
       if($request->get('json')){
