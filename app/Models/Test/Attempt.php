@@ -327,6 +327,16 @@ class Attempt extends Model
             }
         }
 
+        $total =0;
+        $s = 0;
+        if($review)
+        foreach($result as $r){
+            if($r->status==1){
+                $total++;
+                if($r->accuracy==1)
+                $s = $s+1;
+            }
+        }
 
         $score = 0;
 
@@ -339,8 +349,10 @@ class Attempt extends Model
 
         $score = round($score/5,2);
 
-        if($review)
-            $param_percent['score'] = 'Under Review';
+        if($review){
+            $score = $s/$total * 160;
+            $param_percent['score'] = round($score,2);
+        }
         else
             $param_percent['score'] = $score;
         return $param_percent;
