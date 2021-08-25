@@ -30,7 +30,7 @@
 		@endif
 	</div>
 	@endif
-	<div class="bg-white border-top p-4">
+	<div class="">
 		@if(count($app->test->mcq_order)!=0)
 		@include('appl.test.attempt.blocks.mcq_grammar')
 		@endif
@@ -58,7 +58,7 @@
                 @include('appl.test.attempt.blocks.audio')
     @endif
 
-	<div class="border">
+	<div class="@if(request()->get('layout')=='fa') border @endif">
 	@foreach($test->sections as $s=>$section)
 		@include('appl.test.attempt.blocks.section')
 	@endforeach
@@ -78,7 +78,7 @@
 	</div>
 
 @elseif($testtype->name=='ENGLISH')
-<div class="border ">
+<div class="@if(request()->get('layout')=='fa') border @endif">
 	@foreach($app->test->sections as $s=>$section)
 	    @include('appl.test.attempt.blocks.section_english')
 	@endforeach
