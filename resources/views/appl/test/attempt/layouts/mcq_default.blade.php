@@ -9,7 +9,17 @@
         {!! $m->a !!}
 
         @if($answers)  
-          @if($m->answer=='A') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @if(isset($result))
+            @if($result)
+              @if($m->answer=='A' && strtoupper(request()->get($m->qno))=='A')
+                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+              @elseif($m->answer!='A' && strtoupper(request()->get($m->qno))=='A')
+                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+              @endif
+            @endif
+          @else
+            @if($m->answer=='A') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @endif
         @endif
 
     </td>
@@ -26,8 +36,19 @@
         {!! $m->b !!}
 
         @if($answers)  
-          @if($m->answer=='B') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @if(isset($result))
+            @if($result)
+              @if($m->answer=='B' && strtoupper(request()->get($m->qno))=='B')
+                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+              @elseif($m->answer!='B' && strtoupper(request()->get($m->qno))=='B')
+                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+              @endif
+            @endif
+          @else
+            @if($m->answer=='B') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @endif
         @endif
+
 
     </td>
   </tr>
@@ -44,7 +65,17 @@
         {!! $m->c !!}
 
         @if($answers)  
-          @if($m->answer=='C') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @if(isset($result))
+            @if($result)
+              @if($m->answer=='C' && strtoupper(request()->get($m->qno))=='C')
+                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+              @elseif($m->answer!='C' && strtoupper(request()->get($m->qno))=='C')
+                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+              @endif
+            @endif
+          @else
+            @if($m->answer=='C') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @endif
         @endif
 
     </td>
@@ -61,7 +92,17 @@
         {!! $m->d !!}
 
         @if($answers)  
-          @if($m->answer=='D') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @if(isset($result))
+            @if($result)
+              @if($m->answer=='D' && strtoupper(request()->get($m->qno))=='D')
+                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+              @elseif($m->answer!='D' && strtoupper(request()->get($m->qno))=='D')
+                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+              @endif
+            @endif
+          @else
+            @if($m->answer=='D') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @endif
         @endif
     </td>
   </tr>
@@ -78,7 +119,17 @@
         {!! $m->e !!}
 
         @if($answers)  
-          @if($m->answer=='E') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @if(isset($result))
+            @if($result)
+              @if($m->answer=='E' && strtoupper(request()->get($m->qno))=='E')
+                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+              @elseif($m->answer!='E' && strtoupper(request()->get($m->qno))=='E')
+                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+              @endif
+            @endif
+          @else
+            @if($m->answer=='E') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+          @endif
         @endif
 
     </td>

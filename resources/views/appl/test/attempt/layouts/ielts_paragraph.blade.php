@@ -5,7 +5,20 @@
 
        @if($f->prefix ) {{$f->prefix }}  @endif 
 	     @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span>
-       @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> @else 
+       @if($answers) 
+         @if(isset($result))
+                  @if($result)
+                  <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" value="{{$result[$f->qno]['response']}}">
+                    @if($result[$f->qno]['accuracy'])
+                      <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                    @else
+                      <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                    @endif
+                  @endif
+              @else
+            <span class="badge badge-primary">{{$f->answer}}</span> 
+            @endif
+       @else 
           <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
             
         </span>
@@ -15,7 +28,20 @@
     @elseif($f->layout=='paragraph')
        @if($f->prefix ) {{$f->prefix }}  @endif 
        @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span>
-          @if($answers) <span class="badge badge-primary">{{$f->answer}}</span> @else 
+          @if($answers)
+            @if(isset($result))
+                  @if($result)
+                  <input type="text" class="fill input" name="{{$f->qno}}[]" data-id="{{$f->qno}}" value="{{$result[$f->qno]['response']}}">
+                    @if($result[$f->qno]['accuracy'])
+                      <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                    @else
+                      <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                    @endif
+                  @endif
+              @else
+            <span class="badge badge-primary">{{$f->answer}}</span> 
+            @endif
+         @else 
           <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
           
         </span>

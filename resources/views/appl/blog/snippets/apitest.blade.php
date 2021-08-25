@@ -2,8 +2,13 @@
 @if(file_exists(public_path().'/storage/'.$test->file) && $test->file)
 <link rel='stylesheet' href='{{ asset("css/player.css") }}'>
 @endif
+@if(request()->get('style_bootstrap'))
+<link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+@endif
+@if(request()->get('style_test'))
 <link rel='stylesheet' href='{{ asset("css/try.css") }}'>
 <link rel='stylesheet' href='{{ asset("css/test.css") }}'>
+@endif
 <div class="test_container">
 
 @if($score)

@@ -318,7 +318,12 @@ class AttemptController extends Controller
     /* Pre validation */
     $this->precheck($request);
 
+    $result=null;
+    if($request->get('evaluate')){
+      $result= $this->store($slug,$request);
 
+    
+    }
 
     /* If Attempted show report */
     
@@ -338,7 +343,6 @@ class AttemptController extends Controller
       else
       $view = strtolower($test->testtype->name);
 
-     
 
     }
 
@@ -356,6 +360,7 @@ class AttemptController extends Controller
             ->with('grammar',true)
             ->with('app',$this)
             ->with('qcount',$qcount)
+            ->with('result',$result)
             ->with('pte',$pte)
             ->with('score',$score)
             ->with('test',$test)
@@ -1099,6 +1104,10 @@ class AttemptController extends Controller
       }
 
       $this->section_score($data);
+
+      if($request->get('evaluate')){
+        return $result;
+      }
 
       if($request->get('ajax')){
         echo $score;
