@@ -1103,7 +1103,7 @@ class AttemptController extends Controller
 
       $this->section_score($data);
 
-      if($request->get('evaluate')){
+      if($request->get('evaluate') && !$request->get('test_score')){
         return $result;
       }
 
