@@ -18,14 +18,16 @@
 
 <form id="ajaxtest" class="test form_{{$app->test->slug}}" action="{{route('attempt.store',$app->test->slug)}}" method="post"> 
 @if($testtype->name=='GRAMMAR')
-<div class="border">
+<div class="@if(request()->get('layout')=='fa') border @endif">
  <div class="mb-3">
+ 	@if(request()->get('layout')=='fa')
 	<div class="part">
 		<h3><i class="fa fa-clone"></i> {{ $app->test->name}}</h3>
 		@if(strip_tags($app->test->description))
 		<p>{!! $app->test->description !!}</p>
 		@endif
 	</div>
+	@endif
 	<div class="bg-white border-top p-4">
 		@if(count($app->test->mcq_order)!=0)
 		@include('appl.test.attempt.blocks.mcq_grammar')
