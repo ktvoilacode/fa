@@ -2,9 +2,11 @@
 @if(file_exists(public_path().'/storage/'.$test->file) && $test->file)
 <link rel='stylesheet' href='{{ asset("css/player.css") }}'>
 @endif
+
 @if(request()->get('style_bootstrap'))
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 @endif
+
 @if(request()->get('style_test'))
 <link rel='stylesheet' href='{{ asset("css/try.css") }}'>
 <link rel='stylesheet' href='{{ asset("css/test.css") }}'>
@@ -40,8 +42,8 @@
 		<input type="hidden" name="test_id" value="{{ $app->test->id }}">
 		<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
-		<input type="hidden" name="apitest" value="1">
-	<input type="hidden" name="answer_button" value="@if(request()->get('answer_button')) 1 @else 0 @endif">
+		<input type="hidden" name="apitest" value="1"><input type="hidden" name="answer_button" class="answer_button" value="@if(request()->get('answer_button')) 1 @else 0 @endif">
+
 
 		@if(!$score && !request()->get('answers'))
 		<div class="btn btn-success btn-lg ajaxtestsubmit" data-test="{{$app->test->slug}}" >Submit</div>
@@ -65,8 +67,8 @@
 	<input type="hidden" name="test_id" value="{{ $app->test->id }}">
 	<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
-	<input type="hidden" name="apitest" value="1">
-	<input type="hidden" name="answer_button" value="@if(request()->get('answer_button')) 1 @else 0 @endif">
+	<input type="hidden" name="apitest" value="1"><input type="hidden" name="answer_button" class="answer_button" value="@if(request()->get('answer_button')) 1 @else 0 @endif">
+
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
 	@if(!$score && !request()->get('answers'))
@@ -85,7 +87,7 @@
 	<input type="hidden" name="user_id" value="@if(\auth::user()) {{ \auth::user()->id }}@endif ">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<input type="hidden" name="apitest" value="1">
-	<input type="hidden" name="answer_button" value="@if(request()->get('answer_button')) 1 @else 0 @endif">
+	<input type="hidden" name="answer_button" class="answer_button" value="@if(request()->get('answer_button')) 1 @else 0 @endif">
 
 	<div class="pr-4 pl-4 pb-4 pt-0">
 	@if(!$score && !request()->get('answers'))
