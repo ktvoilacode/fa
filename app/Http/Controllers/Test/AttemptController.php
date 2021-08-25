@@ -352,9 +352,27 @@ class AttemptController extends Controller
 
     if(request()->get('answers'))
       $answers = true;
-   if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
+   if($view == 'grammar' || $view =='english' || $view=='survey')
     return view('appl.blog.snippets.apitest')
             ->with('try',true)
+            ->with('grammar',true)
+            ->with('app',$this)
+            ->with('qcount',$qcount)
+            ->with('result',$result)
+            ->with('pte',$pte)
+            ->with('score',$score)
+            ->with('test',$test)
+            ->with('testtype',$test->testtype)
+            ->with('css',1)
+            ->with('product',$product)
+            ->with('user',$user)
+            ->with('timer',1)
+            ->with('answers',$answers)
+            ->with('time',$test->test_time);
+    else 
+      return view('appl.blog.snippets.apitest')
+            ->with('try',true)
+            ->with('player',true)
             ->with('grammar',true)
             ->with('app',$this)
             ->with('qcount',$qcount)
