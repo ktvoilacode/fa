@@ -12,9 +12,9 @@
           @if(isset($result))
             @if($result)
               @if($m->answer=='A' && strtoupper(request()->get($m->qno))=='A')
-                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                <span class="text-success"><i class="fa fa-check-circle"></i> </span>
               @elseif($m->answer!='A' && strtoupper(request()->get($m->qno))=='A')
-                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                <span class="text-danger"><i class="fa fa-times-circle"></i> </span>
               @endif
             @endif
           @else
@@ -39,9 +39,9 @@
           @if(isset($result))
             @if($result)
               @if($m->answer=='B' && strtoupper(request()->get($m->qno))=='B')
-                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                <span class="text-success"><i class="fa fa-check-circle"></i> </span>
               @elseif($m->answer!='B' && strtoupper(request()->get($m->qno))=='B')
-                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                <span class="text-danger"><i class="fa fa-times-circle"></i> </span>
               @endif
             @endif
           @else
@@ -68,9 +68,9 @@
           @if(isset($result))
             @if($result)
               @if($m->answer=='C' && strtoupper(request()->get($m->qno))=='C')
-                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                <span class="text-success"><i class="fa fa-check-circle"></i> </span>
               @elseif($m->answer!='C' && strtoupper(request()->get($m->qno))=='C')
-                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                <span class="text-danger"><i class="fa fa-times-circle"></i> </span>
               @endif
             @endif
           @else
@@ -95,9 +95,9 @@
           @if(isset($result))
             @if($result)
               @if($m->answer=='D' && strtoupper(request()->get($m->qno))=='D')
-                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                <span class="text-success"><i class="fa fa-check-circle"></i> </span>
               @elseif($m->answer!='D' && strtoupper(request()->get($m->qno))=='D')
-                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                <span class="text-danger"><i class="fa fa-times-circle"></i> </span>
               @endif
             @endif
           @else
@@ -122,9 +122,9 @@
           @if(isset($result))
             @if($result)
               @if($m->answer=='E' && strtoupper(request()->get($m->qno))=='E')
-                <span class="text-success"><i class="fa fa-check-circle"></i> correct</span>
+                <span class="text-success"><i class="fa fa-check-circle"></i> </span>
               @elseif($m->answer!='E' && strtoupper(request()->get($m->qno))=='E')
-                <span class="text-danger"><i class="fa fa-times-circle"></i> incorrect</span>
+                <span class="text-danger"><i class="fa fa-times-circle"></i> </span>
               @endif
             @endif
           @else

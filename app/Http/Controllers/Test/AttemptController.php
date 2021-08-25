@@ -321,8 +321,6 @@ class AttemptController extends Controller
     $result=null;
     if($request->get('evaluate')){
       $result= $this->store($slug,$request);
-
-    
     }
 
     /* If Attempted show report */
