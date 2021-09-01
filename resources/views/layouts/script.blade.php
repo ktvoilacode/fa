@@ -327,7 +327,7 @@ $(document).ready(function() {
             }
 
             $('.section-number').html($id);
-            for($k=1;$k<10;$k++){
+            for($k=1;$k<20;$k++){
 
               
               if(!$('.r'+$k).length)
