@@ -8,6 +8,7 @@ use App\Models\Product\Product as Obj;
 use App\Models\Test\Group;
 use App\Models\Test\Test;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -41,7 +42,9 @@ class ProductController extends Controller
 
             $objs = $obj->orderBy('created_at','desc')
                         ->get();  
-            file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
+
+            Cache::forever($filename,$objs);
+            //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
             
             foreach($objs as $obj){ 
                 $filename = $obj->slug.'.json';
@@ -79,7 +82,8 @@ class ProductController extends Controller
                         $obj->groups->tests->testtype = $test->testtype;
                     }
                 }
-                file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
+                Cache::forever($filepath,$obj);
+                //file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
             }
            
             flash('Product Pages Cache Updated')->success();
@@ -113,20 +117,23 @@ class ProductController extends Controller
         $filename = 'index.'.$this->app.'.'.$this->module.'.json';
         $filepath = $this->cache_path.$filename;
 
-        if(file_exists($filename) && !$search)
+          
+        $objs = Cache::get($filepath);
+        if(!$objs && !$search)
         {
-            $objs = json_decode(file_get_contents($filename));
+            $objs = $obj->where('name','LIKE',"%{$item}%")
+                    ->orderBy('created_at','desc')
+                    ->get(); 
+            Cache::forever($filepath,$objs);  
         }elseif($search){
             $objs = $obj->where('name','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
                     ->get(); 
         }
-        else{
-            $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->orderBy('created_at','desc')
-                    ->get(); 
-            file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
-        }
+        // else{
+        //        abort('404','cache file not found');
+        //     //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
+        // }
 
         $view = $search ? 'public_list': 'public';
 
@@ -268,12 +275,8 @@ class ProductController extends Controller
         $filepath = $this->cache_path.$filename;
 
         
-        if(Storage::disk('cache')->exists('product/'.$filename))
-        {
-            $obj = json_decode(file_get_contents($filepath));
-
-           
-        }else{
+        $obj = Cache::get($filepath);
+        if(!$obj){
             $obj = Obj::where('slug',$slug)->first();  
             if(!$obj)
                 abort(404);
@@ -294,8 +297,7 @@ class ProductController extends Controller
             }else{
                 $obj->related_tests = null;
             }
-
-            file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
+            Cache::forever($filepath,$obj);   
         }
 
         if(\auth::user())
