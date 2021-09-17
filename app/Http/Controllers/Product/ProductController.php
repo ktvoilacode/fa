@@ -275,18 +275,33 @@ class ProductController extends Controller
         $filepath = $this->cache_path.$filename;
 
         
+
         $obj = Cache::get($filepath);
+
+        if(request()->get('l1'))
+        {
+            dd($obj);
+        }
+
         if(!$obj){
             $obj = Obj::where('slug',$slug)->first();  
             if(!$obj)
                 abort(404);
             
+            if(request()->get('l4'))
+            {
+                dd($obj);
+            }
             $obj->groups = $obj->groups;
             foreach($obj->groups as $m=>$group){
                 $obj->groups->tests = $group->tests;
                 foreach($obj->groups->tests as $test){
                     $obj->groups->tests->testtype = $test->testtype;
                 }
+            }
+            if(request()->get('l3'))
+            {
+                dd($obj);
             }
             $test_ids = $obj->tests->pluck('id')->toArray();
             if(isset($obj->tests[0])){
@@ -297,6 +312,13 @@ class ProductController extends Controller
             }else{
                 $obj->related_tests = null;
             }
+
+
+            if(request()->get('l2'))
+            {
+                dd($obj);
+            }
+
             Cache::forever($filepath,$obj);   
         }
 

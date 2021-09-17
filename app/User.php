@@ -224,11 +224,21 @@ class User extends Authenticatable
     }
 
     public function attempt($id){
-        $attempt = Attempt::where('test_id',$id)->where('user_id',$this->id)->first();
-        if($attempt){
+        $allattempts = Cache::remember('tests_'.$this->id,5,function(){
+            return Attempt::where('user_id',$this->id)->get()->groupBy('test_id');
+        });
+        $keys = array_keys($allattempts->toArray());
+
+        if(in_array($id,$keys)){
             return true;
-        }else
-            return false;
+        }
+        return false;
+
+        // $attempt = Attempt::where('test_id',$id)->where('user_id',$this->id)->first();
+        // if($attempt){
+        //     return true;
+        // }else
+        //     return false;
         
     }
 
