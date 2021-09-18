@@ -274,6 +274,10 @@ class ProductController extends Controller
         $filename = $slug.'.json';
         $filepath = $this->cache_path.$filename;
 
+        if(request()->get('refresh'))
+            {
+                Cache::forget($filepath);
+            }
         
 
         $obj = Cache::get($filepath);
@@ -288,10 +292,7 @@ class ProductController extends Controller
             if(!$obj)
                 abort(404);
             
-            if(request()->get('l4'))
-            {
-                dd($obj);
-            }
+            
             $obj->groups = $obj->groups;
             foreach($obj->groups as $m=>$group){
                 $obj->groups->tests = $group->tests;
@@ -299,10 +300,7 @@ class ProductController extends Controller
                     $obj->groups->tests->testtype = $test->testtype;
                 }
             }
-            if(request()->get('l3'))
-            {
-                dd($obj);
-            }
+            
             $test_ids = $obj->tests->pluck('id')->toArray();
             if(isset($obj->tests[0])){
                 $test_ids_all = $obj->tests[0]->category->tests->pluck('id')->toArray();
@@ -313,11 +311,6 @@ class ProductController extends Controller
                 $obj->related_tests = null;
             }
 
-
-            if(request()->get('l2'))
-            {
-                dd($obj);
-            }
 
             Cache::forever($filepath,$obj);   
         }
