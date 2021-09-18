@@ -14,9 +14,7 @@ mb-3 test_block" style="@if($k>2)display:none;@endif">
       @if($test->price==0)
       <span class="badge badge-warning">FREE</span>
       @endif
-      @can('update',$obj)
-      <a href="{{ route('test.edit',$test->id) }}" class="h5" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-    @endcan</h4>
+     </h4>
 
     @if($test->marks)
     <div class="">{{$test->marks}} Questions 

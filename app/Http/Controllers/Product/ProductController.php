@@ -311,9 +311,10 @@ class ProductController extends Controller
                 $obj->related_tests = null;
             }
 
-
             Cache::forever($filepath,$obj);   
         }
+
+        //dd($obj->tests->first());
 
         if(\auth::user())
             $obj->order = \auth::user()->orders()
