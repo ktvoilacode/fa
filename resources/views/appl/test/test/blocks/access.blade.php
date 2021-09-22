@@ -4,7 +4,13 @@
         <div class="border p-3 rounded mb-3">
           <i class="fa fa-times-circle text-danger"></i> Your service is expired  on <span class="text-secondary">{{ date('d-m-Y',strtotime($order->expiry)) }}</span>
         </div>
-        @include('appl.test.test.buy')
+        @if($obj->price !=0)
+          @include('appl.test.test.buy')
+        @else
+          <a href="{{ route('test.instructions',$obj->slug) }}?grantaccess=1">
+            <button class="btn btn-lg btn-success" type="button">Access Now</button>
+          </a>
+        @endif
       @else
         <div class="border p-3 rounded mb-3">
           <i class="fa fa-check-circle text-success"></i> Your service is activated <span class="text-secondary">{{ $order->created_at->diffForHumans()}}</span>
