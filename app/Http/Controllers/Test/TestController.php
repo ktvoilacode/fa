@@ -14,6 +14,7 @@ use App\Models\Test\Category;
 use App\Models\Test\Group;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class TestController extends Controller
 {
@@ -29,7 +30,12 @@ class TestController extends Controller
 
      /* The public view page for test */
    public function details($slug,Request $request){
-        $obj = Obj::where('slug',$slug)->first();
+        //load from cache, else from database
+        $obj = Cache::get('test_'.$slug);
+        if(!$obj){
+            $obj = Obj::where('slug',$slug)->first();
+            Cache::forever('test_'.$slug,$obj);
+        }
 
         if(!$obj)
             abort('404');
@@ -59,7 +65,8 @@ class TestController extends Controller
 
         if($request->get('refresh')){
             foreach($objs as $obj)
-                $this->cache_refresh($obj->id);
+                //$this->cache_refresh($obj->id);
+            $this->cache_refresh2($obj->id);
             flash('cache is updated!')->success();
         }
 
@@ -147,6 +154,48 @@ class TestController extends Controller
                 ->with('obj',$obj)
                 ->with('categories',$categories)
                 ->with('app',$this);
+    }
+
+     public function cache_refresh2($id){
+        $obj= Obj::where('id',$id)->first();
+
+        $test = Obj::where('id',$id)->first();
+        $test->updated_at = \Carbon\Carbon::now();
+        $test->sections = $obj->sections;
+
+        $test->mcq_order = $obj->mcq_order;
+        $test->fillup_order = $obj->fillup_order;
+        $test->testtype = $obj->testtype;
+        $test->category = $obj->category;
+
+
+        $test->qcount =0;
+        foreach($obj->sections as $i=>$section){ 
+            $ids = $section->id ;
+            $obj->sections[$i]->mcq_order =$section->mcq_order;
+            $obj->sections[$i]->fillup_order =$section->fillup_order;
+            $obj->sections->$ids = $section->extracts;
+            foreach($obj->sections->$ids as $m=>$extract){
+                $obj->sections->$ids->mcq =$extract->mcq_order;
+                $obj->sections->$ids->fillup=$extract->fillup_order;
+            }
+                
+        }
+
+        foreach($test->mcq_order as $q){
+            if($q->qno)
+              if($q->qno!=-1)
+                  $test->qcount++;
+          }
+          foreach($test->fillup_order as $q){
+            if($q->qno)
+              if($q->qno!=-1)
+                  $test->qcount++;
+          }
+
+        Cache::forever('test_'.$id,$test);
+        Cache::forever('test_'.$slug,$test);
+ 
     }
 
     public function cache_refresh($id){
@@ -306,11 +355,17 @@ class TestController extends Controller
 
 
 
-        $filename = $this->cache_path.$this->app.'.'.$obj->slug.'.json'; 
-        if(file_exists($filename)){
-            $json = json_decode(file_get_contents($filename)); 
-            $obj->cache_updated_at = $json->updated_at;
+        // $filename = $this->cache_path.$this->app.'.'.$obj->slug.'.json'; 
+        // if(file_exists($filename)){
+        //     $json = json_decode(file_get_contents($filename)); 
+        //     $obj->cache_updated_at = $json->updated_at;
+        // }
+        $cache_data = Cache::get('test_'.$id); 
+        if($cache_data){
+            $obj->cache_updated_at = $cache_data->updated_at;
         }
+
+        //dd($cache_data);
 
         $app = $this;
         $app->test= $obj;
@@ -364,7 +419,7 @@ class TestController extends Controller
     }
 
     
-    public function cache($id)
+    public function cacheold($id)
     {
         $obj= Obj::where('id',$id)->first();
         $this->authorize('update', $obj);
@@ -434,6 +489,76 @@ class TestController extends Controller
         return redirect()->route($this->module.'.show',$id);
     }
 
+    public function cache($id)
+    {
+        $obj= Obj::where('id',$id)->first();
+        $this->authorize('update', $obj);
+
+        /* update in cache folder */
+        $cache_data = Cache::get('test_'.$id); 
+
+        if($cache_data)
+            flash('cache is updated!')->success();
+        else
+            flash('cache is created!')->success();
+
+        $test = Obj::where('id',$id)->first();
+        $test->updated_at = \Carbon\Carbon::now();
+        $test->sections = $obj->sections;
+
+        $test->mcq_order = $obj->mcq_order;
+        $test->fillup_order = $obj->fillup_order;
+
+        foreach($obj->mcq_order as $e => $f){
+            if($f->extract)
+                $obj->mcq_order[$e]->extract = $f->extract;
+        }
+        foreach($obj->fillup_order as $e => $f){
+            if($f->extract)
+                $obj->fillup_order[$e]->extract = $f->extract;
+        }
+
+        $test->testtype = $obj->testtype;
+        $test->category = $obj->category;
+
+        $test->qcount =0;
+        foreach($obj->sections as $i=>$section){ 
+            $ids = $section->id ;
+            $obj->sections[$i]->mcq_order =$section->mcq_order;
+            $obj->sections[$i]->fillup_order =$section->fillup_order;
+
+            foreach($obj->sections[$i]->mcq_order as $e => $f){
+                if($f->extract)
+                    $obj->sections[$i]->mcq_order[$e]->extract = $f->extract;
+            }
+            foreach($obj->sections[$i]->fillup_order as $e => $f){
+                if($f->extract)
+                    $obj->sections[$i]->fillup_order[$e]->extract = $f->extract;
+            }
+
+            $obj->sections->$ids = $section->extracts;
+            foreach($obj->sections->$ids as $m=>$extract){
+                $obj->sections->$ids->mcq =$extract->mcq_order;
+                $obj->sections->$ids->fillup=$extract->fillup_order;
+            }
+                
+        }
+
+        foreach($test->mcq_order as $q){
+            if($q->qno)
+              if($q->qno!=-1)
+                  $test->qcount++;
+        }
+        foreach($test->fillup_order as $q){
+            if($q->qno)
+              if($q->qno!=-1)
+                  $test->qcount++;
+        }
+ 
+        Cache::forever('test_'.$id,$test);
+        Cache::forever('test_'.$test->slug,$test);
+        return redirect()->route($this->module.'.show',$id);
+    }
 
     public function duplicate($id)
     {
@@ -846,6 +971,10 @@ class TestController extends Controller
         else{
             flash('cache file not found!')->error();
         }
+
+        Cache::delete('test_'.$id);
+        Cache::delete('test_'.$obj->slug);
+        
 
         return redirect()->route($this->module.'.show',$id);
     }

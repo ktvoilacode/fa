@@ -38,9 +38,10 @@ class AttemptController extends Controller
             // update test from cache
             $filename = $this->cache_path.$this->app.'.'.request()->route('test').'.json'; 
             if(!request()->get('refresh'))
-            $cache = Cache::get('test_'.request()->route('test'));
+              $cache = Cache::get('test_'.request()->route('test'));
             else
               Cache::forget('test_'.request()->route('test'));
+
             if(file_exists($filename)){
               $this->test = json_decode(file_get_contents($filename));
             }else if($cache){
@@ -48,8 +49,7 @@ class AttemptController extends Controller
             }
             else{
               $this->test = Test::where('slug',request()->route('test'))->first();
-
-                            $this->test->sections = $this->test->sections;
+              $this->test->sections = $this->test->sections;
               $this->test->mcq_order = $this->test->mcq_order;
               $this->test->fillup_order = $this->test->fillup_order;
               $this->test->testtype = $this->test->testtype;

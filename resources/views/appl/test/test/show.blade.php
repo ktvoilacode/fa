@@ -155,7 +155,7 @@
           <div class="mb-3 h3 "><b class="text-white"><i class="fa fa-forumbee"></i> Cache</b></div>
           
               
-            @if(file_exists('../storage/app/cache/test/test.'.$obj->slug.'.json'))
+            @if(isset($obj->cache_updated_at))
         <p> Awesome ! your test is cached.<br>
         <small>Updated:  {{\Carbon\Carbon::parse($obj->cache_updated_at)->diffForHumans() }}</small></p>
         <a href="{{ route('test.cache',$obj->id)}}" class="btn btn-primary">
