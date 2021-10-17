@@ -34,6 +34,28 @@ class AdminController extends Controller
        
         $data['writing']= Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
 
+        /* duolingo data */
+        $data['duolingo_tests'] = Obj::whereIn('type_id',[9])->where('price','!=',0)->get();
+        $test_ids2 = $data['duolingo_tests']->pluck('id')->toArray();
+        $data2= Attempt::whereIn('test_id',$test_ids2)->where('status',0)->whereNotNull('user_id')->with('user')->orderBy('created_at','desc')->get();
+
+      
+        $dat=[];
+        foreach($data2 as $a){
+            if($a->user_id){
+                $dat[$a->test_id][$a->user_id] = $a->user;
+                $d2[$a->test_id.'_'.$a->user_id] = $a;  
+            }
+            
+           
+        }
+        $data['duolingo_count']=0;
+        foreach($dat as $d){
+            $data['duolingo_count'] +=count($d);
+        }
+        $data['duolingo'] = $d2;
+
+
         $attempts = Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
 
        

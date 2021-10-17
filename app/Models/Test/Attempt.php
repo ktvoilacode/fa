@@ -283,6 +283,7 @@ class Attempt extends Model
             
             
             $r->marking = json_encode($data);
+            $r->status = 1;
             $counter++;
             $r->save();
         }

@@ -46,6 +46,25 @@ class FileController extends Controller
                     ->whereIn('test_id',$tests)
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
+        }elseif($request->get('type')=='duolingo'){
+            $tests = Test::whereIn('type_id',[9])->where('price','!=',0)->pluck('id');
+
+
+            $items = $obj2
+                    ->whereIn('test_id',$tests)
+                    ->whereNotNull('user_id')
+                    ->where('status',0)
+                    ->orderBy('created_at','desc')->get();
+       
+            foreach($items as $a){
+                if($a->user_id)
+                $d[$a->test_id.'_'.$a->user_id] = $a->id;
+            }
+            $objs = $obj
+                    ->whereIn('id',$d)
+                    ->where('status',0)
+                    ->orderBy('created_at','desc')
+                    ->paginate(config('global.no_of_records'));
         }else if($request->get('type')=='writing'){
             if(\auth::user()->admin==4)
             {

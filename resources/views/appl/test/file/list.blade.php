@@ -22,7 +22,11 @@
                   </a>
                 </td>
                 <td>
+                  @if(request()->get('type')=='duolingo')
+                  <a href="{{ route('test.analysis',$obj->test->slug)}}?user_id={{$obj->user_id}}&admin=1">
+                  @else
                   <a href=" {{ route($app->module.'.show',$obj->id) }} ">
+                  @endif
                   {{ $obj->user->name}} - {{ $obj->test->name }} - Response
                   </a>
                 </td>

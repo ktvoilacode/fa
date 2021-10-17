@@ -41,6 +41,27 @@
                 @endif  
             </div>
 
+            <div class="text-light rounded p-4 mb-4" style="background: #e64b3c;">
+                <h3 class="mb-0"><i class="fa fa-twitter"></i> Duolingo  <Span class="float-right ">{{ $data['duolingo_count'] }}</Span></h3>
+                @if($data['duolingo_count'])
+                <hr class="{{$counter=0}}">
+                @foreach($data['duolingo'] as $k=>$w)
+                @if(isset($w->user))
+                <div class="mb-2 {{$counter = $counter +1}}">
+                    <a href="{{ route('test.analysis',$w->test->slug)}}?user_id={{$w->user_id}}&admin=1"  class="text-white">
+                    <i class="fa fa-angle-right"></i> {{$w->user->name}} </a><span class="float-right " style="color:#f7776b">{{ $w->created_at->diffForHumans()}}</span>
+                <br><small><span>{{$w->test->name}}</span></small>
+                </div>
+                @endif
+                @if($counter==3)
+                    @break
+                @endif
+                @endforeach
+
+                <a href="{{ route('file.index')}}?type=duolingo"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
+                @endif  
+            </div>
+
              <div class=" text-light rounded p-4 mb-4" style="background-color: #55a95f">
                 <h3 class="mb-0"><i class="fa fa-envelope-o"></i> Forms  </h3>
                 @if($data['form']->count())
