@@ -59,7 +59,7 @@ class AdminController extends Controller
 
         $attempts = Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
 
-        $data['duo_orders'] = Order::where('product_id',43)->get();
+        $data['duo_orders'] = Order::where('product_id',43)->orderBy('created_at')->get();
 
 
 

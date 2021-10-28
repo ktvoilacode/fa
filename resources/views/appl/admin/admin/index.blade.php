@@ -49,7 +49,13 @@
                 @if(isset($w->user))
                 <div class="mb-1 {{$counter = $counter +1}}">
                     <a href="{{ route('order.show',$w->id)}}"  class="text-white">
-                    {{$w->user->name}} </a><span class="float-right " style="color:#a9867a">{{ $w->created_at->diffForHumans()}}</span>
+                    {{$w->user->name}}
+                        @if(!$w->status)
+                            <span class="text-warning"><i class="fa fa-times-circle"></i></span>
+                        @else
+                        <span class="text-success"><i class="fa fa-check-circle"></i></span>
+                        @endif
+                    </a><span class="float-right " style="color:#a9867a">{{ $w->created_at->diffForHumans()}}</span>
                 
                 </div>
                 @endif
