@@ -41,6 +41,27 @@
                 @endif  
             </div>
 
+            <div class="text-light rounded p-4 mb-4" style="background: #795548;">
+                <h3 class="mb-0"><i class="fa fa-twitter"></i> Duo Orders  <Span class="float-right ">{{ count($data['duo_orders']) }}</Span></h3>
+                @if(count($data['duo_orders']))
+                <hr class="{{$counter=0}}">
+                @foreach($data['duo_orders'] as $k=>$w)
+                @if(isset($w->user))
+                <div class="mb-1 {{$counter = $counter +1}}">
+                    <a href="{{ route('order.show',$w->id)}}"  class="text-white">
+                    {{$w->user->name}} </a><span class="float-right " style="color:#a9867a">{{ $w->created_at->diffForHumans()}}</span>
+                
+                </div>
+                @endif
+                @if($counter==3)
+                    @break
+                @endif
+                @endforeach
+
+                <a href="{{ route('order.index')}}?product_id=43"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
+                @endif  
+            </div>
+
             <div class="text-light rounded p-4 mb-4" style="background: #e64b3c;">
                 <h3 class="mb-0"><i class="fa fa-twitter"></i> Duolingo  <Span class="float-right ">{{ $data['duolingo_count'] }}</Span></h3>
                 @if($data['duolingo_count'])

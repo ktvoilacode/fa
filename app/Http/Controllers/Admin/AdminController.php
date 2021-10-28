@@ -10,6 +10,7 @@ use App\Models\Test\Writing;
 use App\Models\Admin\Admin;
 use App\Models\Admin\Form;
 use App\Models\Product\Coupon;
+use App\Models\Product\Order;
 
 use App\Mail\contactmessage;
 use App\Mail\ErrorReport;
@@ -57,6 +58,10 @@ class AdminController extends Controller
 
 
         $attempts = Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
+
+        $data['duo_orders'] = Order::where('product_id',43)->get();
+
+
 
        
         

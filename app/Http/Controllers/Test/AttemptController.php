@@ -35,6 +35,7 @@ class AttemptController extends Controller
         $this->cache_path_product   =   '../storage/app/cache/product/';
         if(request()->route('test')){
 
+            $cache=null;
             // update test from cache
             $filename = $this->cache_path.$this->app.'.'.request()->route('test').'.json'; 
             if(!request()->get('refresh'))
@@ -628,6 +629,7 @@ class AttemptController extends Controller
    /* Test View Function - Here you cannot attempt test */
   public function view($slug,Request $request){
 
+
       $current_uri = request()->segments();
 
       if($current_uri[2]=='answers'){
@@ -648,6 +650,7 @@ class AttemptController extends Controller
 
       $product = Product::first();
     
+
       (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
 
 

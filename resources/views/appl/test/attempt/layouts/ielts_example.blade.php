@@ -10,8 +10,16 @@
   <div class="col-12 col-md">
 
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
+
       @if($f->answer) 
+      @if($f->layout=='two_blank' || $f->layout=='ielts_two_blank')
+        <input type="text" class="fill input" value="{{ strtok($f->answer, '[') }}" @if(strlen($f->answer)>20) style="width:300px" @endif disabled >
+        <?php echo get_string_between($f->answer,'[',']') ?>
+        <input type="text" class="fill input" value="{{ substr($f->answer, strpos($f->answer, ']') + 1) }}" @if(strlen($f->answer)>20) style="width:300px" @endif disabled >
+        
+      @else
       <input type="text" class="fill input mb-0"  value="{{$f->answer}}" @if(strlen($f->answer)>20) style="width:300px" @endif disabled>
+      @endif
       @endif
       @if($f->suffix ){!! $f->suffix !!}@endif
     

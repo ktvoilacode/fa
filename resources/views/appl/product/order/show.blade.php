@@ -39,7 +39,8 @@
             <div class="col-md-8">
               <a href="{{ route('user.show',$obj->user->id) }}">
                 {{ $obj->user->name }}
-              </a>
+              </a><br>
+              {{ $obj->user->phone }}
             </div>
           </div>
           <div class="row mb-2">
