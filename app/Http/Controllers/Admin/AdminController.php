@@ -29,7 +29,8 @@ class AdminController extends Controller
     public function index(Obj $obj)
     {
         $this->authorize('view', $obj);
-        $data['users'] = User::orderBy('id','desc')->get();
+        $data['ucount'] =User::count();
+        $data['users'] =User::limit(3)->orderBy('id','desc')->get();
         /* writing data */
         $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->toArray();
        

@@ -8,7 +8,7 @@
         @if(\auth::user()->admin!=4)
         <div class="col-12 col-md-4 col-lg-4">
             <div class="bg-primary text-light  rounded p-4 mb-4">
-                <h3><i class="fa fa-user"></i> Users <Span class="float-right">{{$data['users']->count()}}</Span></h3>
+                <h3><i class="fa fa-user"></i> Users <Span class="float-right">{{$data['ucount']}}</Span></h3>
                 <hr>
                 @foreach($data['users'] as $k=>$user)
                 <div class="mb-2"><a href="{{ route('user.show',$user->id) }}" class="text-white">{{$user->name}}</a>
