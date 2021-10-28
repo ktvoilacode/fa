@@ -67,7 +67,7 @@
                 <a href="{{ route('order.index')}}?product_id=43"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
                 @endif  
             </div>
-
+<!--
             <div class="text-light rounded p-4 mb-4" style="background: #e64b3c;">
                 <h3 class="mb-0"><i class="fa fa-twitter"></i> Duolingo  <Span class="float-right ">{{ $data['duolingo_count'] }}</Span></h3>
                 @if($data['duolingo_count'])
@@ -88,7 +88,7 @@
                 <a href="{{ route('file.index')}}?type=duolingo"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
                 @endif  
             </div>
-
+-->
              <div class=" text-light rounded p-4 mb-4" style="background-color: #55a95f">
                 <h3 class="mb-0"><i class="fa fa-envelope-o"></i> Forms  </h3>
                 @if($data['form']->count())
