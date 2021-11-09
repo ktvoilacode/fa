@@ -77,3 +77,38 @@
   </div>
 </div>
 @endif
+
+@if($m->e )
+<div class="row">
+    <div class="col-3 col-md-3 col-lg-2">
+      <div class="op">
+        @if(!$answers) 
+        <input class
+        ='input' type="radio" name="{{$m->qno}}"  data-id="{{$m->qno}}" value="E"/> 
+        @endif
+        <span class="mt-2">E</span></div>
+    </div>
+    <div class="col-9 col-md-9 col-lg-10">
+      <div class="option">{!! $m->e !!} @if($answers)  
+          @if($m->answer=='E') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+        @endif</div>
+  </div>
+</div>
+@endif
+@if($m->f )
+<div class="row">
+    <div class="col-3 col-md-3 col-lg-2">
+      <div class="op">
+        @if(!$answers) 
+        <input class
+        ='input' type="radio" name="{{$m->qno}}"  data-id="{{$m->qno}}" value="F"/> 
+        @endif
+        <span class="mt-2">F</span></div>
+    </div>
+    <div class="col-9 col-md-9 col-lg-10">
+      <div class="option">{!! $m->f !!} @if($answers)  
+          @if($m->answer=='F') <span class="text-primary"><i class="fa fa-check-circle"></i> Answer</span> @endif
+        @endif</div>
+  </div>
+</div>
+@endif

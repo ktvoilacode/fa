@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Form as Obj;
 use App\Models\Test\Test;
 use App\Mail\RequestForm;
+use App\Mail\NotifyContact;
 
 use Illuminate\Support\Facades\Mail;
 
@@ -290,9 +291,14 @@ class FormController extends Controller
                 $request->merge(['college' => ' ']);
             }
 
-
             
-            $obj = $obj->update($request->all()); 
+            
+            $obj->update($request->all()); 
+            
+            if($request->get('status')==2){
+                Mail::to($obj->email)->send(new  NotifyContact($obj));
+                $request->merge(['status',1]);
+            }
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
         }

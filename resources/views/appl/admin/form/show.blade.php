@@ -125,6 +125,8 @@
                   <span class="badge badge-warning">Open</span>
                   @elseif($obj->status==1)
                   <span class="badge badge-primary">Closed</span>
+                  @elseif($obj->status==2)
+                  <span class="badge badge-primary">Closed + Notified User</span>
                   @endif
             </div>
           </div>
