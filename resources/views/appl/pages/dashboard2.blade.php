@@ -4,7 +4,7 @@
 @section('keywords', 'IELTS Practice Test, OET Practice Online, OET Online Training, Vocabulary for IELTS, Vocabulary for OET')
 @section('content')
 
-@if( \auth::user()->activation_token!=1 || \auth::user()->sms_token!=1)
+@if( \auth::user()->activation_token!=1 )
 <div class="rounded p-4 mb-4" style="background: #caf7dd; border:1px solid #39c072;"><h4 class="">Validate your account</h4>
 <p>Your account has not been validated yet. You are only a few steps away from complete access to our platform.</p>
 <a href="{{ route('activation')}}">

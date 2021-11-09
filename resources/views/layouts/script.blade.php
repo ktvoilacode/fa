@@ -33,7 +33,7 @@ $(document).ready(function() {
 <script type="application/javascript" src="{{asset('js/script.js?new=11')}}"></script>  
 <script type="application/javascript" src="{{asset('js/summernote/summernote-bs4.js')}}"></script>    
 <script type="application/javascript" src="{{asset('js/jquery.form.js')}}"></script> 
-<script type="application/javascript" src="{{asset('js/global.js?new=4')}}"></script>  
+<script type="application/javascript" src="{{asset('js/global.js?new=5')}}"></script>  
 
 <script type="text/javascript"
          src="{{asset('jquery-ui/jquery-ui.min.js')}}">
@@ -1756,6 +1756,102 @@ $(function(){
 @endif
 
 
+<script>
+$(document).ready(function() {
+    $("#show_hide_password a").on('click', function(event) {
+        event.preventDefault();
+        if($('#show_hide_password input').attr("type") == "text"){
+            $('#show_hide_password input').attr('type', 'password');
+            $('#show_hide_password i').addClass( "fa-eye-slash" );
+            $('#show_hide_password i').removeClass( "fa-eye" );
+        }else if($('#show_hide_password input').attr("type") == "password"){
+            $('#show_hide_password input').attr('type', 'text');
+            $('#show_hide_password i').removeClass( "fa-eye-slash" );
+            $('#show_hide_password i').addClass( "fa-eye" );
+        }
+    });
+});
+
+
+$(document).on('click', '.register_api2', function(e){
+      e.preventDefault();
+
+      $('.spinner-border').show();
+      $('.alert').hide();
+      //console.log("register api");
+
+      $name = $('input[name="name"]').val();
+      $email = $('input[name="email"]').val();
+      $phone = $('input[name="phone"]').val();
+      $password = $('input[name="password"]').val();
+      $repassword = $('input[name="repassword"]').val();
+      $_token = $('input[name="_token"]').val();
+
+      $error =0;
+      console.log('register api clicked');
+      
+      if($name.length==0)
+      {
+        $('.alert-message').html("Kindly enter your name");
+        $('.alert').show();
+        $error =1;
+      }
+
+      if($email.length==0)
+      {
+        $('.alert-message').html("Kindly enter your email");
+        $('.alert').show();
+        $error =1;
+      }
+
+      if($phone.length==0)
+      {
+        $('.alert-message').html("Kindly enter the phone number");
+        $('.alert').show();
+        $error =1;
+      }
+
+      if($password!=$repassword)
+      {
+        $('.alert-message').html("Password and confirm password mismatch");
+        $('.alert').show();
+        $error =1;
+      }
+
+      if($password.length<8){
+         $('.alert-message').html("Password cannot be less than 8 characters");
+         $('.alert').show();
+         $error =1;
+      }
+
+      if(!$error){
+        $url = $(this).data('url');
+        $.ajax({
+          type : 'post',
+          url : $url,
+          data:{'name':$name,'email':$email,'phone':$phone,'password':$password,'_token':$_token},
+          success:function(data){
+            $('.spinner-border').hide();
+            d = JSON.parse(data);
+            if(d.error){
+              $('.alert-message').html(d.message);
+              $('.alert').show();
+            }else{
+              // $('.register_form').hide();
+              // $('.otp_activation').show();
+              console.log('here');
+              $('.loginmodal').modal('hide');
+              setTimeout("location.reload(true);", 1);
+            }
+            
+          }
+        });
+      }else{
+        $('.spinner-border').hide();
+      }
+      
+  });
+</script>
 
 
 

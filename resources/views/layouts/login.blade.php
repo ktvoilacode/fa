@@ -29,5 +29,6 @@
   <body class="py-5 text-center">
        @yield('content')
   </body>
+  @include('layouts.script')
 </html>
 

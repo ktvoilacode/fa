@@ -114,7 +114,8 @@
       $_token = $('input[name="_token"]').val();
 
       $error =0;
-
+      console.log('register api clicked');
+      
       if($name.length==0)
       {
         $('.alert-message').html("Kindly enter your name");
@@ -162,8 +163,11 @@
               $('.alert-message').html(d.message);
               $('.alert').show();
             }else{
-              $('.register_form').hide();
-              $('.otp_activation').show();
+              // $('.register_form').hide();
+              // $('.otp_activation').show();
+              console.log('here');
+              $('.loginmodal').modal('toggle');
+              setTimeout("location.reload(true);", 1);
             }
             
           }

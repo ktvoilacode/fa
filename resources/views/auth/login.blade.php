@@ -44,7 +44,18 @@
     @enderror
     <label for="inputPassword" class="sr-only">Password</label>
 
-    <input id="password" type="password" class="form-control p-3 @error('password') is-invalid @enderror" name="password" placeholder="Password" required autocomplete="current-password">
+   
+
+     <div class="form-group">
+    <div class="input-group" id="show_hide_password">
+      <input class="form-control" type="password"  name="password" placeholder="Password" required autocomplete="current-password">
+      <div class="input-group-append">
+      <div class="input-group-text">
+        <a href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+      </div>
+  </div>
+    </div>
+  </div>
 
     @error('password')
     <span class="invalid-feedback" role="alert">

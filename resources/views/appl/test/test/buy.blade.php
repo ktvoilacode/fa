@@ -1,6 +1,6 @@
 
 @auth
-	@if(\auth::user()->sms_token==1)
+	@if(1)
 	<a href="{{ route('product.checkout',$obj->slug) }}">
 		<button class="btn btn-lg btn-success mt-3">Buy Now</button>
 	</a>
@@ -14,7 +14,7 @@
 
 @auth
 
-	@if(\auth::user()->sms_token==1)
+	@if(1)
 	<a href="{{ route('product.checkout-access',$obj->slug) }}">
 	<button class="btn btn-lg btn-outline-primary mt-3">Access Code</button>
 	</a>

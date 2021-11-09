@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Mail\EmailActivation;
+use Illuminate\Support\Facades\Cache;
 
 use App\Mail\usercreate;
 use Illuminate\Support\Facades\Mail;
@@ -19,8 +20,10 @@ class VerifyController extends Controller
      */
     public function activation(Request $request)
     {
+        
     	$user = \auth::user();
-
+        Cache::forget('id-' . $user->id);
+        Cache::forget('user_'.$user->id);
 
     	/* update phone number */
     	if($request->get('type')=='update_phone'){

@@ -17,7 +17,8 @@
   <div class="form-group">
     <label for="exampleInputEmail1">Phone</label>
     <input type="phone" class="form-control" id="phone"  name="phone" placeholder="Enter phone number">
-     <small id="emailHelp" class="form-text text-muted">OTP will be sent to this number. Kindly enter phone number with international calling extension (eg: For india +918888888888) </small>
+    <!--
+     <small id="emailHelp" class="form-text text-muted">OTP will be sent to this number. Kindly enter phone number with international calling extension (eg: For india +918888888888) </small>-->
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
@@ -29,7 +30,7 @@
   </div>
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   
-  <button type="button" id="register_api" class="btn btn-primary register_api" data-url="{{ route('apiregister')}}">Submit</button>
+  <button type="button" id="register_api" class="btn btn-primary register_api2" data-url="{{ route('apiregister')}}">Submit</button>
    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
   <div class="spinner-border spinner-border-sm float-right" role="status" style="display:none">
   <span class="sr-only">Loading...</span>

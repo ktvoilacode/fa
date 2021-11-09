@@ -14,7 +14,8 @@
 
     <h1>Register</h1>
     <hr>
-    <div class="bg-light border rounded p-3 mb-3"><small class="text-left"> Note that verification of email or phone number is mandatory to attempt the free or premium tests. So kindly ensure that you enter the correct details.</small></div>
+    <!--
+    <div class="bg-light border rounded p-3 mb-3"><small class="text-left"> Note that verification of email or phone number is mandatory to attempt the free or premium tests. So kindly ensure that you enter the correct details.</small></div> -->
     <div class="form-group row">
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -55,7 +56,7 @@
                 <strong>{{ $message }}</strong>
             </span>
         @enderror
-        <small class="text-md-right col-md-12 mt-2 text-primary">Kindly enter phone number with international calling extension <br>(eg: For india +918888888888) </small>
+       <!-- <small class="text-md-right col-md-12 mt-2 text-primary">Kindly enter phone number with international calling extension <br>(eg: For india +918888888888) </small>-->
     </div>
     <div class="form-group row">
         <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
