@@ -39,7 +39,7 @@
               <div class="input-group-prepend ">
                 <div class="input-group-text"><i class="fa fa-search"></i></div>
               </div>
-              <input class="form-control mr-sm-3" id="search" name="item" autocomplete="off" type="search" placeholder="Search" aria-label="Search" 
+              <input class="form-control mr-sm-3"  name="item" autocomplete="off" type="search" placeholder="Search" aria-label="Search" 
               value="{{Request::get('item')?Request::get('item'):'' }}">
             </div>
             
