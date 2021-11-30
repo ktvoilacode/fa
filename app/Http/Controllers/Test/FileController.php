@@ -66,6 +66,7 @@ class FileController extends Controller
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
         }else if($request->get('type')=='writing'){
+
             if(\auth::user()->admin==4)
             {
                 $tests = [];
@@ -76,13 +77,23 @@ class FileController extends Controller
             else{
                 $tests = Test::whereIn('type_id',[3])->pluck('id');
                  if($item){
-                        $objs = $obj2->whereHas('user', function ($query) use ($item){
-                            $query->where('name', 'like', '%'.$item.'%');
-                        })
-                        ->with(['user' => function($query) use ($item){
-                            $query->where('name', 'like', '%'.$item.'%');
-                        }])->orderBy('created_at','desc')
+
+                        $uids = User::where('name','like','%'.$item.'%')->pluck('id')->toArray();
+
+                     
+                        $objs = $obj2->whereIn('user_id',$uids)
+                        ->with('user')
+                        ->orderBy('created_at','desc')
                         ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
+
+
+                        // $objs = $obj2->whereHas('user', function ($query) use ($item){
+                        //     $query->where('name', 'like', '%'.$item.'%');
+                        // })
+                        // ->with(['user' => function($query) use ($item){
+                        //     $query->where('name', 'like', '%'.$item.'%');
+                        // }])->orderBy('created_at','desc')
+                        // ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
                         
                     }else{
                         $objs = $obj2
@@ -100,13 +111,24 @@ class FileController extends Controller
 
                     
         }else{
+
             $tests = Test::whereIn('type_id',[3,4])->pluck('id');
-            $objs = $obj->where('response','LIKE',"%{$item}%")
-                    ->whereIn('test_id',$tests)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));
+            $uids = User::where('name','like','%'.$item.'%')->pluck('id')->toArray();
+
+                     
+                        $objs = $obj->whereIn('user_id',$uids)
+                        ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
+
+
+           // // $objs = $obj->where('response','LIKE',"%{$item}%")
+           //          ->whereIn('test_id',$tests)
+           //          ->orderBy('created_at','desc')
+           //          ->paginate(config('global.no_of_records'));
         }
            
+
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
