@@ -73,6 +73,7 @@ class FileController extends Controller
                 $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
                 $objs = Obj2::whereIn('id',$attempt_ids)->paginate(config('global.no_of_records'));
 
+
             }
             else{
                 $tests = Test::whereIn('type_id',[3])->pluck('id');
@@ -98,10 +99,15 @@ class FileController extends Controller
                     }else{
                         $objs = $obj2
                     ->whereIn('test_id',$tests)
+                    ->with('user')
+                    ->with('test')
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
-                  
+
+                    
+                    
                     }
+
             }
 
             //$tests = Test::whereIn('type_id',[3])->pluck('id');
@@ -128,6 +134,7 @@ class FileController extends Controller
            //          ->paginate(config('global.no_of_records'));
         }
            
+
 
         $view = $search ? 'list': 'index';
 
