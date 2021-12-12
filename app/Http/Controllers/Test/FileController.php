@@ -15,6 +15,8 @@ use App\Mail\reviewnotify;
 use Illuminate\Support\Facades\Mail;
 use PDF;
 
+use Illuminate\Support\Facades\Cache;
+
 class FileController extends Controller
 {
     /*
@@ -35,6 +37,10 @@ class FileController extends Controller
     {
 
 
+        if($request->get('refresh'))
+        {
+            Cache::forget('files_'); 
+        }
         $this->authorize('view', $obj);
 
         $search = $request->search;
@@ -97,14 +103,16 @@ class FileController extends Controller
                         // ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
                         
                     }else{
-                        $objs = $obj2
+                        $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
+                            return  $obj2
                     ->whereIn('test_id',$tests)
                     ->with('user')
                     ->with('test')
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
+                    });
 
-                    
+
                     
                     }
 
