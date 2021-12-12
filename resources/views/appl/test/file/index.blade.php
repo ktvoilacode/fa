@@ -25,6 +25,7 @@
             -  Writing
           @endif
            </a>
+           <a href="{{ route('file.index')}}?refresh=1&writing=1" class="text-dark"><i class="fa fa-retweet"></i> Refresh Cache</a> 
 
           <form class="form-inline" method="GET" action="{{ route($app->module.'.index') }}">
 
