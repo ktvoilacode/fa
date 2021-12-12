@@ -202,7 +202,7 @@ Route::get('/blog/*', function(){
 /* Blog Routes */
 Route::post('/blog/tooltip', 'Blog\BlogController@tooltip')->name('tooltip');
 Route::get('/blog/tooltip', 'Blog\BlogController@tooltip')->name('tooltip');
-//Route::resource('/blog', 'Blog\BlogController');
+Route::resource('/blog', 'Blog\BlogController');
 
 Route::resource('/admin/label', 'Blog\LabelController')->middleware('auth');
 Route::resource('/admin/collection', 'Blog\CollectionController')->middleware('auth');
