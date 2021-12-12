@@ -11,13 +11,12 @@ use App\Models\Admin\Admin;
 use App\Models\Admin\Form;
 use App\Models\Product\Coupon;
 use App\Models\Product\Order;
-
 use App\Mail\contactmessage;
 use App\Mail\ErrorReport;
-
 use Illuminate\Support\Facades\Mail;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
@@ -29,12 +28,25 @@ class AdminController extends Controller
     public function index(Obj $obj)
     {
         $this->authorize('view', $obj);
-        $data['ucount'] =User::count();
-        $data['users'] =User::limit(3)->orderBy('id','desc')->get();
+
+        if(request()->get('refresh')){
+            Cache::forget('tot_users');
+            Cache::forget('latest_users');
+            Cache::forget('wri_users');
+            Cache::forget('att_users');
+        }
+        $data['ucount'] =Cache::remember('tot_users', 240, function(){ 
+            return User::count();
+        });
+        $data['users'] =Cache::remember('latest_users', 240, function(){
+            return User::limit(3)->orderBy('id','desc')->get();
+        });
         /* writing data */
         $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->toArray();
        
-        $data['writing']= Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
+        $data['writing']= Cache::remember('wri_users', 240, function() use ($test_ids) {
+            return Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
+        });
 
         /* duolingo data */
         $data['duolingo_tests'] = [];//Obj::whereIn('type_id',[9])->where('price','!=',0)->get();
@@ -58,7 +70,9 @@ class AdminController extends Controller
         $data['duolingo'] = $d2;
 
 
-        $attempts = Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
+        $attempts = Cache::remember('att_users', 240, function(){
+            return Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
+        });
 
         $data['duo_orders'] = Order::where('product_id',43)->orderBy('created_at','desc')->get();
 
