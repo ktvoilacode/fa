@@ -44,6 +44,7 @@ class FileController extends Controller
         $this->authorize('view', $obj);
 
         $search = $request->search;
+        $users = [];
 
         $item = $request->item;
         if($request->get('type')=='speaking'){
@@ -82,10 +83,11 @@ class FileController extends Controller
 
             }
             else{
-                $tests = Test::whereIn('type_id',[3])->pluck('id');
+                
                  if($item){
 
-                        $uids = User::where('name','like','%'.$item.'%')->pluck('id')->toArray();
+                        $users = User::where('name','like','%'.$item.'%')->get();
+                        $uids = $users->pluck('id')->toArray();
 
                      
                         $objs = $obj2->whereIn('user_id',$uids)
@@ -103,10 +105,13 @@ class FileController extends Controller
                         // ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
                         
                     }else{
+                        if(!Cache::get('files_'))
+                        $tests = Test::whereIn('type_id',[3])->pluck('id');
+                        else
+                            $tests = [];
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
                             return  $obj2
                     ->whereIn('test_id',$tests)
-                    ->with('user')
                     ->with('test')
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
@@ -127,11 +132,11 @@ class FileController extends Controller
         }else{
 
             $tests = Test::whereIn('type_id',[3,4])->pluck('id');
-            $uids = User::where('name','like','%'.$item.'%')->pluck('id')->toArray();
+            $users = User::where('name','like','%'.$item.'%')->get();
+            $uids = $users->pluck('id')->toArray();
 
                      
-                        $objs = $obj->whereIn('user_id',$uids)
-                        ->with('user')
+            $objs = $obj->whereIn('user_id',$uids)
                         ->orderBy('created_at','desc')
                         ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
 
@@ -149,6 +154,7 @@ class FileController extends Controller
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
                 ->with('obj',$obj)
+                ->with('users',$users)
                 ->with('app',$this);
     }
 
