@@ -72,7 +72,7 @@ class FileController extends Controller
                     ->where('status',0)
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
-        }else if($request->get('type')=='writing'){
+        }else if($request->get('type')=='writing' || $request->get('writing')==1){
 
             if(\auth::user()->admin==4)
             {
