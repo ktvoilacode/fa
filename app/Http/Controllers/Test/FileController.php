@@ -78,7 +78,7 @@ class FileController extends Controller
             {
                 $tests = [];
                 $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
-                $objs = Obj2::whereIn('id',$attempt_ids)->paginate(config('global.no_of_records'));
+                $objs = Obj2::whereIn('id',$attempt_ids)->paginate(10);
 
 
             }
@@ -93,7 +93,7 @@ class FileController extends Controller
                         $objs = $obj2->whereIn('user_id',$uids)
                         ->with('user')
                         ->orderBy('created_at','desc')
-                        ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
+                        ->whereIn('test_id',$tests)->paginate(10);
 
 
                         // $objs = $obj2->whereHas('user', function ($query) use ($item){
@@ -112,9 +112,8 @@ class FileController extends Controller
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
                             return  $obj2
                     ->whereIn('test_id',$tests)
-                    ->with('test')
                     ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));
+                    ->paginate(10);
                     });
 
 
@@ -138,7 +137,7 @@ class FileController extends Controller
                      
             $objs = $obj->whereIn('user_id',$uids)
                         ->orderBy('created_at','desc')
-                        ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
+                        ->whereIn('test_id',$tests)->paginate(10);
 
 
            // // $objs = $obj->where('response','LIKE',"%{$item}%")
