@@ -39,7 +39,7 @@ class FileController extends Controller
 
         if($request->get('refresh'))
         {
-            Cache::forget('files_'); 
+            Cache::forget('files_');
         }
         $this->authorize('view', $obj);
 
@@ -62,7 +62,7 @@ class FileController extends Controller
                     ->whereNotNull('user_id')
                     ->where('status',0)
                     ->orderBy('created_at','desc')->get();
-       
+
             foreach($items as $a){
                 if($a->user_id)
                 $d[$a->test_id.'_'.$a->user_id] = $a->id;
@@ -83,13 +83,13 @@ class FileController extends Controller
 
             }
             else{
-                
+
                  if($item){
 
                         $users = User::where('name','like','%'.$item.'%')->get();
                         $uids = $users->pluck('id')->toArray();
 
-                     
+
                         $objs = $obj2->whereIn('user_id',$uids)
                         ->with('user')
                         ->orderBy('created_at','desc')
@@ -103,38 +103,44 @@ class FileController extends Controller
                         //     $query->where('name', 'like', '%'.$item.'%');
                         // }])->orderBy('created_at','desc')
                         // ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
-                        
+
                     }else{
                         if(!Cache::get('files_'))
                         $tests = Test::whereIn('type_id',[3])->pluck('id');
                         else
                             $tests = [];
+                        if(!$request->get('page'))
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
-                            return  $obj2
-                    ->whereIn('test_id',$tests)
-                    ->orderBy('created_at','desc')
-                    ->paginate(10);
-                    });
+                              return  $obj2->whereIn('test_id',$tests)
+                                      ->orderBy('created_at','desc')
+                                      ->paginate(10);
+                                    });
+                        else {
+                          $tests = Test::whereIn('type_id',[3])->pluck('id');
+                          $objs= $obj2->whereIn('test_id',$tests)
+                                  ->orderBy('created_at','desc')
+                                  ->paginate(10);
+                        }
 
 
-                    
+
                     }
 
             }
 
             //$tests = Test::whereIn('type_id',[3])->pluck('id');
-            
-            
-                   
 
-                    
+
+
+
+
         }else{
 
             $tests = Test::whereIn('type_id',[3,4])->pluck('id');
             $users = User::where('name','like','%'.$item.'%')->get();
             $uids = $users->pluck('id')->toArray();
 
-                     
+
             $objs = $obj->whereIn('user_id',$uids)
                         ->orderBy('created_at','desc')
                         ->whereIn('test_id',$tests)->paginate(10);
@@ -145,7 +151,7 @@ class FileController extends Controller
            //          ->orderBy('created_at','desc')
            //          ->paginate(config('global.no_of_records'));
         }
-           
+
 
 
         $view = $search ? 'list': 'index';
@@ -204,13 +210,13 @@ class FileController extends Controller
             }else{
                 return view('appl.'.$this->app.'.'.$this->module.'.show')
                         ->with('obj',$obj)->with('app',$this)->with('player',false);
-            }  
+            }
         }else{
             return view('appl.'.$this->app.'.'.$this->module.'.show_write')
                         ->with('obj',$obj)->with('app',$this)
                         ->with('player',false)->with('writing',$writing);
         }
-            
+
     }
 
 
@@ -227,7 +233,7 @@ class FileController extends Controller
         $test = $obj->test;
         $user = $obj->user;
         $name ='response_'.$test->slug.'_'.str_replace(' ', '',$user->name);
-        
+
         $info = pathinfo(Storage::url($obj->response));
 
         if(isset($info['extension'])){
@@ -248,8 +254,8 @@ class FileController extends Controller
                 return response()->download(public_path($obj->id.'.docx'));
             }
             else{
-               
-            }  
+
+            }
         }else{
                 if($request->get('pdf')){
                 // expert feedback document
@@ -268,14 +274,14 @@ class FileController extends Controller
                 return response()->download('../storage/app/public/response/'.$name.'.docx');
                 }
                 else{
-                    
+
                     $file = 'response/'.$name.'.pdf';
                     $pdf = PDF::loadView('appl.test.file.pdf2',compact('obj'));
-                    $pdf->save('../storage/app/public/response/'.$name.'.pdf'); 
-                    //user response file (audio or doc)  
+                    $pdf->save('../storage/app/public/response/'.$name.'.pdf');
+                    //user response file (audio or doc)
                 }
         }
-        
+
         if($obj)
             return response()->download('../storage/app/public/'.$file);
         else
@@ -296,15 +302,15 @@ class FileController extends Controller
          $section->addText('Test Date: '.date("F j, Y, g:i a",strtotime($obj->created_at)));
         $section->addText('');
         $section->addLine(['weight' => 1, 'width' => 450, 'height' => 0]);
-       
 
-        
+
+
 
         $data =[];
 
         if($obj->test->description){
-            
-            
+
+
             $section->addText('Question'.' ', $styleFont);
 
             $text = str_replace('</p>', '', $obj->test->description);
@@ -324,12 +330,12 @@ class FileController extends Controller
 
             //if images
             preg_match_all('/<img[^>]*?\s+src\s*=\s*"([^"]+)"[^>]*?>/i', $obj->test->description, $matches);
-        
+
             foreach($matches[1] as $src){
-            $section->addImage($src,array('width' => "250")); 
-            $section->addText('');  
+            $section->addImage($src,array('width' => "250"));
+            $section->addText('');
             }
-            
+
 
             $section->addText('');
             $section->addLine(['weight' => 1, 'width' => 450, 'height' => 0]);
@@ -351,17 +357,17 @@ class FileController extends Controller
             }
 
             preg_match_all('/<img[^>]*?\s+src\s*=\s*"([^"]+)"[^>]*?>/i', $obj->response, $matches2);
-        
+
             foreach($matches2[1] as $src){
-            $section->addImage($src,array('width' => "250"));  
-            $section->addText(''); 
+            $section->addImage($src,array('width' => "250"));
+            $section->addText('');
             }
 
 
         }else{
 
             $section->addText('');
-            
+
 
 
             $text = str_replace('</p>', '', $obj->response);
@@ -369,7 +375,7 @@ class FileController extends Controller
 
 
             foreach($array as $a){
-                
+
                 $t = strip_tags($a);
                 $t = str_replace('&nbsp;', ' ', $t);
 
@@ -379,26 +385,26 @@ class FileController extends Controller
                     $section->addText('');
                     preg_match_all('/<img[^>]*?\s+src\s*=\s*"([^"]+)"[^>]*?>/i', $a, $matches2);
                     foreach($matches2[1] as $src){
-                    $section->addImage($src,array('width' => "250"));  
-                    $section->addText(''); 
+                    $section->addImage($src,array('width' => "250"));
+                    $section->addText('');
                     }
                 }else if($t=="Question"){
-                   $section->addText($t.' ', $styleFont); 
+                   $section->addText($t.' ', $styleFont);
                    $section->addText('');
                 }else{
                     $section->addLine(['weight' => 1, 'width' => 450, 'height' => 0]);
                     $section->addText('');
-                    $section->addText($t.' ', $styleFont); 
+                    $section->addText($t.' ', $styleFont);
                     $section->addText('');
                 }
             }
 
-            
 
-            
-            
+
+
+
         }
-                
+
         $section->addText('');
         $section->addText('');
         $section->addText('');
@@ -411,14 +417,14 @@ class FileController extends Controller
 for exams like the GRE, PTE, OET, and IELTS for almost two decades. With
 University of Cambridge certified trainers, you can be assured of the highest
 levels of training.');
-        
+
 
         return $phpWord;
-        
+
 
     }
 
-    
+
 
     /**
      * Notify User with Email
@@ -515,7 +521,7 @@ levels of training.');
 
             $writing->save();
 
-            
+
             flash('Faculty Assigned')->success();
             return redirect()->route($this->module.'.show',$id);
         }
@@ -553,7 +559,7 @@ levels of training.');
                 $file      = $request->all()['file'];
                 $extension = $file->getClientOriginalExtension();
 
-              
+
                 if($extension!='pdf')
                     return abort('403','Only PDF Doc allowed');
 
@@ -572,7 +578,7 @@ levels of training.');
 
 
             $obj->save();
-            
+
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
         }
@@ -599,7 +605,7 @@ levels of training.');
         // remove file
         if(Storage::disk('public')->exists($obj->file))
             Storage::disk('public')->delete($obj->file);
-        
+
         $obj->delete();
 
         flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
