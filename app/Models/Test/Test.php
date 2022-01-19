@@ -28,6 +28,7 @@ class Test extends Model
         'type_id',
         'validity',
         'level',
+        'settings'
         // add all other fields
     ];
 

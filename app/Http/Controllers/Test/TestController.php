@@ -318,6 +318,19 @@ class TestController extends Controller
             /* merge the updated data in request */
             $request->merge(['description' => $text]);
 
+            //update datetime
+             $settings = [];
+            if($request->activation)
+                $settings['activation'] = \carbon\carbon::parse($request->activation)->format('Y-m-d H:i:s');
+            else
+                $settings['activation'] = null;
+            if($request->deactivation)
+                $settings['deactivation'] = \carbon\carbon::parse($request->deactivation)->format('Y-m-d H:i:s');
+            else
+                $settings['deactivation'] = null;
+
+            $request->merge(['settings' => json_encode($settings)]);
+
             if($request->get('details')){
                 $user = \auth::user();
                 /* upload images if any */
@@ -994,6 +1007,7 @@ class TestController extends Controller
         $types = Type::all();
         $categories = Category::where('status',1)->get();
         $groups = Group::where('status',1)->orderBy('id','desc')->get();
+        $settings = json_decode($obj->settings);
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
@@ -1002,6 +1016,7 @@ class TestController extends Controller
                 ->with('editor',true)
                 ->with('types',$types)
                 ->with('categories',$categories)
+                ->with('settings',$settings)
                 ->with('groups',$groups)
                 ->with('app',$this);
         else
@@ -1043,6 +1058,19 @@ class TestController extends Controller
                     Storage::disk('public')->delete($obj->image);
                 redirect()->route($this->module.'.show',[$id]);
             }
+
+            //update datetime
+            $settings = [];
+            if($request->activation)
+                $settings['activation'] = \carbon\carbon::parse($request->activation)->format('Y-m-d H:i:s');
+            else
+                $settings['activation'] = null;
+            if($request->deactivation)
+                $settings['deactivation'] = \carbon\carbon::parse($request->deactivation)->format('Y-m-d H:i:s');
+            else
+                $settings['deactivation'] = null;
+
+            $request->merge(['settings' => json_encode($settings)]);
 
             /* If image is given upload and store path */
             if(isset($request->all()['image_'])){

@@ -2062,6 +2062,28 @@ $('#datetimepicker').datetimepicker({value: {{date("Y")}}+'/'+{{date("m")}}+'/'+
 </script>
 @endif
 
+@if(isset($jqueryui))
+
+ <script type="text/javascript"
+         src="{{asset('jquery-ui/jquery-ui.min.js')}}">
+  </script>
+<script src="{{ asset('js/datetime/jquery-ui-timepicker-addon.min.js')}}"></script>
+<script src="{{ asset('js/datetime/jquery-ui-sliderAccess.js')}}"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({dateFormat: 'yy-mm-dd'});
+    $('#datetimepicker').datetimepicker({
+      dateFormat:'yy-mm-dd',
+      timeFormat: 'HH:mm:ss',
+    });
+    $('#datetimepicker2').datetimepicker({
+      dateFormat:'yy-mm-dd',
+      timeFormat: 'HH:mm:ss',
+    });
+  } );
+  </script>
+@endif
+
 @if(isset($front))
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
 <script type="text/javascript">

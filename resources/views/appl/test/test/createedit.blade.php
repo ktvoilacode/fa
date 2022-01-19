@@ -228,6 +228,37 @@
             </select>
           </div>
         </div>
+
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Activation</label>
+            <input type="text" id="datetimepicker"  class="form-control" name="activation" id="formGroupExampleInput"  
+                @if($stub=='Create')
+                value="{{ (old('activation')) ? old('activation') : '' }}"
+                @else
+                  @if(isset( $settings->activation))
+                    value = "{{ $settings->activation }}"
+                  @endif
+                @endif
+              >
+          </div>
+        </div>
+
+          <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">De-activation</label>
+            <input type="text" id="datetimepicker2" class="form-control" name="deactivation" id="formGroupExampleInput"  
+                @if($stub=='Create')
+                value="{{ (old('deactivation')) ? old('deactivation') : '' }}"
+                @else
+                  @if(isset( $settings->deactivation))
+                    value = "{{ $settings->deactivation }}"
+                  @endif
+                @endif
+              >
+          </div>
+        </div>
+
       </div>
 
       
