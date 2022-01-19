@@ -37,11 +37,36 @@ class TestController extends Controller
             Cache::forever('test_'.$slug,$obj);
         }
 
+        $settings = json_decode($obj->settings);
+
+        
+
+        $active = 1;
+        if(isset($settings->activation))
+        {   
+            $auto_activation  = \carbon\carbon::parse($settings->activation);
+            $auto_deactivation  = \carbon\carbon::parse($settings->deactivation);
+
+            $active = 0;
+            if($auto_activation->lt(\carbon\carbon::now()) && $auto_deactivation->gt(\carbon\carbon::now())){
+               $active = 1;
+            }
+        }else{
+
+        }
+
+
         if(!$obj)
             abort('404');
         
+        if($active)
         return view('appl.test.test.details')
                 ->with('test',$obj)
+                ->with('obj',$obj);
+        else
+             return view('appl.test.test.inactive')
+                ->with('exam',$obj)
+                ->with('settings',$settings)
                 ->with('obj',$obj);
 
    }
@@ -100,6 +125,9 @@ class TestController extends Controller
         $type = $request->type;
         $category_id = null;
         $categories = Category::where('status',1)->get();
+
+        
+
         if($category)
         {
             $cate = Category::where('slug',$category)->first();
@@ -1106,11 +1134,15 @@ class TestController extends Controller
                 $request->merge(['details' => $text]);
             }
 
+            Cache::forget('test_'.$obj->slug);
+
             if(isset($request->all()['file_'])){
             $obj = $obj->update($request->all()); 
             }else{
               $obj = $obj->update($request->except(['file']));  
             }
+
+            
 
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
