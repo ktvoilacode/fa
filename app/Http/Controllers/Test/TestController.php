@@ -357,6 +357,11 @@ class TestController extends Controller
             else
                 $settings['deactivation'] = null;
 
+            $settings['noreport'] = 0;
+            if($request->noreport){
+                $settings['noreport'] = 1;
+            }
+            
             $request->merge(['settings' => json_encode($settings)]);
 
             if($request->get('details')){
@@ -1097,6 +1102,11 @@ class TestController extends Controller
                 $settings['deactivation'] = \carbon\carbon::parse($request->deactivation)->format('Y-m-d H:i:s');
             else
                 $settings['deactivation'] = null;
+
+            $settings['noreport'] = 0;
+            if($request->noreport){
+                $settings['noreport'] = 1;
+            }
 
             $request->merge(['settings' => json_encode($settings)]);
 

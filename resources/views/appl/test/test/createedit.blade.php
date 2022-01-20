@@ -244,7 +244,7 @@
           </div>
         </div>
 
-          <div class="col-12 col-md-3">
+        <div class="col-12 col-md-3">
           <div class="form-group">
             <label for="formGroupExampleInput ">De-activation</label>
             <input type="text" id="datetimepicker2" class="form-control" name="deactivation" id="formGroupExampleInput"  
@@ -256,6 +256,17 @@
                   @endif
                 @endif
               >
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Report</label>
+            <select class="form-control" name="noreport">
+              <option value="0" @if(isset($settings->noreport)) @if($settings->noreport==0) selected @endif @endif >Show responses & answers (default)</option>
+              <option value="2" @if(isset($settings->noreport)) @if($settings->noreport==1) selected @endif @endif >only score</option>
+              <option value="1" @if(isset($settings->noreport)) @if($settings->noreport==1) selected @endif @endif >no-report</option>
+            </select>
           </div>
         </div>
 
