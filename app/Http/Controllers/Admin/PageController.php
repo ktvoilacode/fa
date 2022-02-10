@@ -144,6 +144,7 @@ class PageController extends Controller
 
         if(is_numeric($slug) && strlen($slug)==4){
             $this->name = $slug;
+            return redirect('https://firstacademy.in/blog', 301); 
             return app('App\Http\Controllers\Blog\CollectionController')->year($slug);
             //app()->call('App\Http\Controllers\Blog\CollectionController@year',[$slug]);
         }
@@ -203,6 +204,7 @@ class PageController extends Controller
             $this->app = 'blog';
             $this->module = 'blog';
             
+            return redirect('https://firstacademy.in/blog', 301); 
 
          }else{
           $obj->description = 'First Academy is the best coaching center for IELTS, GRE, TOEFL, PTE, OET, SAT,  and other international exams in Hyderabad.';
