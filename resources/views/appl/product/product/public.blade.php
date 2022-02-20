@@ -23,7 +23,7 @@
 
     @foreach($ptags as $tg=>$pt)
     <a href="{{ route('product.public') }}?tag={{  $tg}}" class="list-group-item list-group-item-action list-group-item-info @if(request()->get('tag')==$tg)active @endif">
-      {{ $tg }}
+      {{ strtoupper($tg) }}
     </a>
     @endforeach
     
