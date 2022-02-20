@@ -448,8 +448,13 @@ class ProductController extends Controller
             $settings = [];
             $settings['tags'] = $request->get('tags');
             $request->merge(['settings' => json_encode($settings)]);
+            
+            //refresh cache
+            $filename = 'index.'.$this->app.'.'.$this->module.'.json';
+            $filepath = $this->cache_path.$filename;
+            Cache::forget($filepath);
 
-
+            Cache::forget('ptags');
             $tests = $request->get('tests');
             if($tests){
                 $obj->tests()->detach();
@@ -500,7 +505,7 @@ class ProductController extends Controller
                         ->get(); 
            // file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
             
-                        Cache::forget('ptags');
+
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
         }
