@@ -500,7 +500,7 @@ class ProductController extends Controller
                         ->get(); 
            // file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
             
-
+                        Cache::forget('ptags');
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
         }
