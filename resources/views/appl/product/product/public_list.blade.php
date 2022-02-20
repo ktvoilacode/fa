@@ -1,7 +1,7 @@
 @if(count($objs)!=0)
 @foreach($objs as $obj)
 @if($obj->status)
-<div class="col-6 col-md-4 col-lg-2">
+<div class="col-6 col-md-4 col-lg-3">
   <a href="{{ route('product.view',$obj->slug)}}" class="nostyle">
   <div class="p-3 hover-bg mb-3 ">
     <div class="card-body text-center">

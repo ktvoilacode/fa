@@ -36,7 +36,7 @@
         </div>
 
          <div class="col-6 col-md-4 col-lg-2">
-          <a href="{{ route('product.view','ielts-mock-test') }}" class="nostyle">
+          <a href="{{ route('product.view','ielts-mock-test-gt') }}" class="nostyle">
           <div class="p-3 hover-bg">
               <div class="card-body text-center p-2">
                 <img src="{{ asset('images/general/fa4.jpg')}}" class="w-75" alt="IELTS Mock Test"/>

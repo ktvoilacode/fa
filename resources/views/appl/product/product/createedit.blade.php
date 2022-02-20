@@ -52,6 +52,17 @@
       </div>
 
       <div class="form-group">
+        <label for="formGroupExampleInput ">Tags (seperated by commas)</label>
+        <input type="text" class="form-control" name="tags" id="formGroupExampleInput" placeholder="Enter the price" 
+            @if($stub=='Create')
+            value="{{ (old('tags')) ? old('tags') : '' }}"
+            @else
+            value = "@if(isset($settings->tags)) {{ $settings->tags }} @endif"
+            @endif
+          >
+      </div>
+
+      <div class="form-group">
         <label for="formGroupExampleInput ">Validity (months)</label>
         <input type="text" class="form-control" name="validity" id="formGroupExampleInput"  
             @if($stub=='Create')

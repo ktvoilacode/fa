@@ -53,6 +53,10 @@
             <div class="col-md-4"><b>Validity</b></div>
             <div class="col-md-8">{{ $obj->validity }} months</div>
           </div>
+           <div class="row mb-2">
+            <div class="col-md-4"><b>Tags</b></div>
+            <div class="col-md-8">@if(isset($settings->tags)) {{ $settings->tags }} @else - @endif</div>
+          </div>
           <div class="row mb-2">
             <div class="col-md-4"><b>Image</b></div>
             <div class="col-md-8">

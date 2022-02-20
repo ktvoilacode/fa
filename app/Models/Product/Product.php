@@ -17,6 +17,7 @@ class Product extends Model
         'validity',
         'price',
         'status',
+        'settings',
         // add all other fields
     ];
 

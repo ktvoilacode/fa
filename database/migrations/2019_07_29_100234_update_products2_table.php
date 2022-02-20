@@ -16,6 +16,7 @@ class UpdateProducts2Table extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->string('image')->nullable();
             $table->longText('details')->nullable();
+            $table->longText('settings')->nullable();
         });
     }
 

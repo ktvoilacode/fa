@@ -111,22 +111,34 @@ class ProductController extends Controller
     {
 
         $search = $request->search;
+        $tag = $request->tag; 
         $item = $request->item;
         
         //cache file
         $filename = 'index.'.$this->app.'.'.$this->module.'.json';
         $filepath = $this->cache_path.$filename;
 
+        if($request->get('refresh')){
+            Cache::forget($filepath);
+            Cache::forget('ptags');
+        }
           
         $objs = Cache::get($filepath);
+        
+        
         if(!$objs && !$search)
         {
-            $objs = $obj->where('name','LIKE',"%{$item}%")
+            $objs = $obj->where('name','LIKE',"%{$item}%")->orWhere('settings','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
                     ->get(); 
             Cache::forever($filepath,$objs);  
         }elseif($search){
             $objs = $obj->where('name','LIKE',"%{$item}%")
+                    ->orWhere('settings','LIKE',"%{$item}%")
+                    ->orderBy('created_at','desc')
+                    ->get(); 
+        }elseif($tag){
+             $objs = $obj->where('settings','LIKE',"%{$tag}%")
                     ->orderBy('created_at','desc')
                     ->get(); 
         }
@@ -135,11 +147,36 @@ class ProductController extends Controller
         //     //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
         // }
 
+        $ptags = Cache::get('ptags');
+        if(!$ptags){
+            $ptags = [];
+            foreach($objs as $obj){
+                $settings = json_decode($obj->settings);
+                if(isset($settings->tags))
+                {
+                    $pieces = explode(',',$settings->tags);
+                   
+                    foreach($pieces as $k=>$p){
+                        if(isset($ptags[$p]))
+                            $ptags[$p]++;
+                        else
+                        $ptags[$p] = 1;
+                        
+                    }
+                    
+                }
+                
+            }
+            Cache::forever('ptags',$ptags);
+        }
+
+
         $view = $search ? 'public_list': 'public';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
                 ->with('obj',$obj)
+                ->with('ptags',$ptags)
                 ->with('app',$this);
     }
 
@@ -254,9 +291,10 @@ class ProductController extends Controller
     {
         $obj = Obj::where('id',$id)->first();
         $this->authorize('view', $obj);
+        $settings = json_decode($obj->settings);
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')
-                    ->with('obj',$obj)->with('app',$this);
+                    ->with('obj',$obj)->with('app',$this)->with('settings',$settings);
         else
             abort(404);
     }
@@ -344,6 +382,7 @@ class ProductController extends Controller
         $this->authorize('update', $obj);
         $groups  = Group::where('status',1)->get();
         $tests  = Test::where('status',1)->get();
+        $settings = json_decode($obj->settings);
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
@@ -352,6 +391,7 @@ class ProductController extends Controller
                 ->with('editor',true)
                 ->with('groups',$groups)
                  ->with('tests',$tests)
+                 ->with('settings',$settings)
                 ->with('app',$this);
         else
             abort(404);
@@ -404,6 +444,12 @@ class ProductController extends Controller
             }
 
 
+            //tags
+            $settings = [];
+            $settings['tags'] = $request->get('tags');
+            $request->merge(['settings' => json_encode($settings)]);
+
+
             $tests = $request->get('tests');
             if($tests){
                 $obj->tests()->detach();
@@ -445,14 +491,14 @@ class ProductController extends Controller
             }
                 
 
-            file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
+            //file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
 
             /* update in cache folder main file */
             $filename = 'index.'.$this->app.'.'.$this->module.'.json';
             $filepath = $this->cache_path.$filename;
             $objs = $obj->orderBy('created_at','desc')
                         ->get(); 
-            file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
+           // file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
             
 
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
