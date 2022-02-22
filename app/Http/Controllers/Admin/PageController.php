@@ -135,6 +135,7 @@ class PageController extends Controller
      */
     public function show($slug,$s1=null,$s2=null)
     {
+
         if($s2){
           $slug = $slug.'/'.$s1.'/'.$s2;
         }
@@ -142,6 +143,8 @@ class PageController extends Controller
         $filename = $slug.'.json';
         $filepath = $this->cache_path.$filename;
 
+
+       
         if(is_numeric($slug) && strlen($slug)==4){
             $this->name = $slug;
             return redirect('https://firstacademy.in/blog', 301); 
@@ -159,6 +162,8 @@ class PageController extends Controller
           $filename = $slug.'.json';
           $filepath = $this->cache_path.$filename;
         }
+
+
 
         if(Storage::disk('cache')->exists('pages/'.$filename))
         {
@@ -182,6 +187,7 @@ class PageController extends Controller
 
             if(!$obj){
                  $obj = Blog::where('slug',$slug)->first();
+                 return redirect('https://firstacademy.in/'.$slug, 301); 
             }
         }
 
@@ -190,6 +196,8 @@ class PageController extends Controller
 
         $try=null;$player =null;
         $categories = null;$dates=null;$test=null;$testtype=null;
+
+       
         if(!isset($obj->description)){
           if(isset($obj->meta_title)){
 
@@ -204,7 +212,7 @@ class PageController extends Controller
             $this->app = 'blog';
             $this->module = 'blog';
             
-            return redirect('https://firstacademy.in/blog', 301); 
+             return redirect('https://firstacademy.in/'.$slug, 301); 
 
          }else{
           $obj->description = 'First Academy is the best coaching center for IELTS, GRE, TOEFL, PTE, OET, SAT,  and other international exams in Hyderabad.';
