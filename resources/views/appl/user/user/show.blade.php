@@ -142,9 +142,11 @@
               <div class="col-md-4"><b>Referral</b></div>
               <div class="col-md-8">
                 @if($obj->user_id)
+                @if(isset($obj->referral($obj->user_id)->name))
                 <a href="{{route('user.show',$obj->user_id)}}">
                     {{ $obj->referral($obj->user_id)->name }}
                 </a>
+                @endif
                 @endif
               </div>
             </div>
