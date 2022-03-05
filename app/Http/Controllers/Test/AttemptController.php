@@ -86,7 +86,7 @@ class AttemptController extends Controller
 
             }
 
-
+            $request = request();
             if(!request()->is('admin/*')){
               //update product from cache
               $product_slug = request()->get('product');
