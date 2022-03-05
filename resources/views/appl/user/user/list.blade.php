@@ -34,7 +34,9 @@
                 </td>
                 <td>
                   @if($obj->user_id)
+                  @if(isset(obj->referral($obj->user_id)->name))
                     <span class="badge badge-success">{{ $obj->referral($obj->user_id)->name }}</span>
+                  @endif
                   @else
                     <span class="badge badge-primary"> None</span>
                   @endif
