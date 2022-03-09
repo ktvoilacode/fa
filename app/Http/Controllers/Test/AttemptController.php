@@ -57,6 +57,8 @@ class AttemptController extends Controller
               $this->test->category = $this->test->category;
               //load test and all the extra data
               $this->test->qcount = 0;
+
+
               if(!$this->test->qcount){
                   foreach($this->test->mcq_order as $q){
                         if($q->qno)
@@ -84,6 +86,22 @@ class AttemptController extends Controller
                 return $test;
               });
 
+            }
+
+            if(!$this->test->qcount){
+               if(!$this->test->qcount){
+                  foreach($this->test->mcq_order as $q){
+                        if($q->qno)
+                          if($q->qno!=-1)
+                          $this->test->qcount++;
+                  }
+                  foreach($this->test->fillup_order as $q){
+                        if($q->qno)
+                          if($q->qno!=-1)
+                          $this->test->qcount++;
+                  }
+                
+              }
             }
 
             $request = request();
@@ -509,6 +527,7 @@ class AttemptController extends Controller
 
 
     (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
+
 
     $pte = 0;
     if(!$test->testtype)
