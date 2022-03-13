@@ -16,27 +16,7 @@
     Get started for FREE
     </div>
 
-    @guest
-    <a href="{{ route('register')}}">
-    <button class="btn btn-success btn-orange btn-lg">Register Now</button>
-    </a>
-    <a href="{{ route('login')}}">
-    <button class="btn btn-primary btn-yellow btn-lg">Login</button>
-    </a>
-    @else
-    <a href="{{ route('home')}}">
-    <button class="btn btn-success btn-orange btn-lg">Open Dashboard</button>
-    </a>
-    <a href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                    <button class="btn btn-primary btn-yellow btn-lg ">Logout</button>
-                    </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-    @endguest
+    
    <div class="p-4"></div>
      </div>
         <div class="col-12 col-md-4">

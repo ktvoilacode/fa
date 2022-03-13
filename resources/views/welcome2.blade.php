@@ -20,27 +20,7 @@
     </div>
 
 
-    @guest
-    <a href="{{ route('register')}}">
-    <button class="btn btn-success btn-orange btn-lg">Register Now</button>
-    </a>
-    <a href="{{ route('login')}}">
-    <button class="btn btn-primary btn-yellow btn-lg">Login</button>
-    </a>
-    @else
-    <a href="{{ route('home')}}">
-    <button class="btn btn-success btn-orange btn-lg">Open Dashboard</button>
-    </a>
-    <a href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                    <button class="btn btn-primary btn-yellow btn-lg ">Logout</button>
-                    </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-    @endguest
+    
 
     <div class="p-5"></div>
     <div class="h4  mb-3" style="color:#a1d5e8">Explore our <a href="{{ route('tests')}}">
