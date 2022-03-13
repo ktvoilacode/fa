@@ -453,18 +453,15 @@ class AttemptController extends Controller
 
       
     }
-
-    if(!\auth::user()){
-    if($test->status==3 && $request->get('id')){
-        $session_id = $request->get('source').'_'.$request->get('id');
-        $user = new User;
-        $user->email = $request->get('source').'_'.$request->get('id');
-        $user->username = $request->get('username');
-        $user->name = $request->get('name');
-        $user->id = $request->get('username');
-    }else
-      $user = null;
-    }
+    $user = null;
+    if($test->status==3 && $request->get('id') && $request->get('username')){
+          $session_id = $request->get('source').'_'.$request->get('id');
+          $user = new User;
+          $user->email = $request->get('source').'_'.$request->get('id');
+          $user->username = $request->get('username');
+          $user->name = $request->get('name');
+          $user->id = $request->get('username');
+      }
 
 
     if($test->status==3 && $request->get('id')){
@@ -493,7 +490,7 @@ class AttemptController extends Controller
     }
 
 
-    
+
 
 
     /* Pre validation */
@@ -511,6 +508,9 @@ class AttemptController extends Controller
     else
       $attempt = null;
 
+  
+   
+
     if($attempt){
       $testtype=  strtolower($test->testtype->name);
       if($testtype=='listening' || $testtype == 'reading')
@@ -520,8 +520,10 @@ class AttemptController extends Controller
         else
          return redirect()->route('test.analysis',['test'=>$this->test->slug]); 
       }else{
+        $u = $url."?status=0&reference=".$session_id."&test=".$this->test->id;
+
         if($test->status==3)
-          return redirect()->to($url."?status=0&reference=".$session_id."&test=".$this->test->id);
+          return redirect()->to($u);
       }
     }
 
@@ -1612,7 +1614,11 @@ class AttemptController extends Controller
 
 
       
-
+      if($request->get('deletescore')){
+        Attempt::where('test_id',$test->id)->where('session_id',$session_id)->delete();
+        dd('');
+        exit();
+      }
 
       if($request->get('json')){
         echo json_encode(['score'=>$score]);
@@ -1667,6 +1673,9 @@ class AttemptController extends Controller
 
       if($request->get('duo_analysis'))
           $view = 'duo_analysis';
+
+      if($request->get('analysis'))
+        $view = 'solutions_api';
 
 
       if($request->get('session_id'))
