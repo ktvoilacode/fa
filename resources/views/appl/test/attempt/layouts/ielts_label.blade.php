@@ -15,6 +15,7 @@
   @endif
   <div class="col-12 col-md">
     <div class="card-text">
+      
     @if($f->layout == 'default' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
       @if($f->answer) <span class="badge badge-warning h2">{{$f->qno}}</span> @if($answers) 
