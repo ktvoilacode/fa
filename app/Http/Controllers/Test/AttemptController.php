@@ -1620,10 +1620,7 @@ class AttemptController extends Controller
         exit();
       }
 
-      if($request->get('json')){
-        echo json_encode(['score'=>$score]);
-        exit();
-      }
+
 
       $band =0;
       $points =0;
@@ -1651,7 +1648,15 @@ class AttemptController extends Controller
           }
         }
 
-
+      if($request->get('json')){
+       
+        if($request->get('total')){
+          echo json_encode(['total'=>$test->marks]);
+        }else{
+           echo json_encode(['score'=>$score]);
+        }
+        exit();
+      }
 
      $tags = null;//Attempt::tags($result);
      $secs = null;//$this->graph($tags);
@@ -1674,8 +1679,9 @@ class AttemptController extends Controller
       if($request->get('duo_analysis'))
           $view = 'duo_analysis';
 
-      if($request->get('analysis'))
+      if($request->get('analysis')){
         $view = 'solutions_api';
+      }
 
 
       if($request->get('session_id'))

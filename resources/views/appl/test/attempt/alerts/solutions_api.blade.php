@@ -1,12 +1,19 @@
+@extends('layouts.clean')
+@section('title', $test->name.' - Report')
+@section('description', 'Result page of Test')
+@section('keywords', 'result page of test, first academy')
+@section('content')
 
-<div class="">
+
+<div class="container my-5">
   <div class="row">
     <div class="col-12">
       <div class="bg-white p-4 border">
         <div class="row">
           <div class="col-12 col-md-6">
             <h3 class="text-center text-md-left mb-md-4 mt-2  p-4">
-              <i class="fa fa-bar-chart"></i> {{ $test->name}} - Report
+              <i class="fa fa-bar-chart"></i> {{ $test->name}} - Report <br>
+              <a href="{{ request()->get('url')}}" class="my-3 h5"><i class="fa fa-angle-left"></i> back to report</a>
             </h3>
 
           </div>
@@ -91,4 +98,4 @@
     </div>
   </div>
 </div>
-
+@endsection
