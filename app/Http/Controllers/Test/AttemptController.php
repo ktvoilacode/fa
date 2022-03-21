@@ -550,6 +550,8 @@ class AttemptController extends Controller
 
         $test_ids = Test::where('type_id',3)->get()->pluck('id');
         
+        $wattempt =[];
+        if($user)
         $wattempt = Attempt::whereIn('test_id',$test_ids)->where('user_id',$user->id)->orderBy('created_at','desc')->limit(2)->get();
 
         $wcount =0;
