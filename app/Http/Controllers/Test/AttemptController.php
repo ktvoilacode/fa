@@ -431,6 +431,7 @@ class AttemptController extends Controller
       $price = $product->price;
     }
     
+    $user = null;
     if(\auth::user()){
       $user = \auth::user();
       
@@ -453,7 +454,7 @@ class AttemptController extends Controller
 
       
     }
-    $user = null;
+    
     if($test->status==3 && $request->get('id') && $request->get('username')){
           $session_id = $request->get('source').'_'.$request->get('id');
           $user = new User;
@@ -530,6 +531,7 @@ class AttemptController extends Controller
 
     (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
 
+   
 
     $pte = 0;
     if(!$test->testtype)
