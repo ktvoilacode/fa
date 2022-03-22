@@ -1,4 +1,10 @@
 <div class="row question ">
+  @if($f->label )
+  <div class="col-12 col-md-4" id="{{$f->qno}}">
+    <div class="card-text " ><b>{!! $f->label !!}</b>
+    </div>
+  </div>
+  @endif
   <div class="col-12 col-md-1" id="{{$f->qno}}">
     <div class="card-text mb-3" ><span class="badge badge-warning h2">{{$f->qno}}</span>
     </div>
