@@ -5,19 +5,21 @@
 @section('content')
 
 
-<div class="container my-5">
+<div class="@if(!request()->get('source')) container my-5 @endif">
   <div class="row">
     <div class="col-12">
       <div class="bg-white p-4 border">
         <div class="row">
           <div class="col-12 col-md-6">
+            @if(!request()->get('source'))
             <h3 class="text-center text-md-left mb-md-4 mt-2  p-4">
               <i class="fa fa-bar-chart"></i> {{ $test->name}} - Report <br>
               <a href="{{ request()->get('url')}}" class="my-3 h5"><i class="fa fa-angle-left"></i> back to report</a>
             </h3>
+            @endif
 
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-6 mb-3">
              <div class="text-center  mt-3 mb-3 mt-md-0 mb-md-0 float-md-right border bg-light p-3 rounded ">
               
               @if($test->testtype->name=='DUOLINGO')

@@ -509,24 +509,28 @@ class AttemptController extends Controller
     else
       $attempt = null;
 
-  
+    if($attempt && $session_id && $test->status==3){
+      $u = $url."?status=0&reference=".$session_id."&test=".$this->test->id;
+
+        if($test->status==3)
+          return redirect()->to($u);
+    }
    
 
     if($attempt){
       $testtype=  strtolower($test->testtype->name);
-      if($testtype=='listening' || $testtype == 'reading')
+      if($testtype=='listening' || $testtype == 'reading' )
       {
+
         if($product)
         return redirect()->route('test.analysis',['test'=>$this->test->slug,'product'=>$product->slug]);
         else
          return redirect()->route('test.analysis',['test'=>$this->test->slug]); 
       }else{
-        $u = $url."?status=0&reference=".$session_id."&test=".$this->test->id;
-
-        if($test->status==3)
-          return redirect()->to($u);
+        
       }
     }
+
 
 
     (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
@@ -1528,6 +1532,7 @@ class AttemptController extends Controller
 
    /* Function to display the analysis of the test */
    public function analysis($slug,Request $request){
+
       $test = Test::where('slug',$slug)->first();
 
       $open = $request->get('open');
@@ -1550,6 +1555,7 @@ class AttemptController extends Controller
         else
           $session_id = $request->session()->getID();
       }
+
 
       if($user)
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('user_id',$user->id)->get();
@@ -1690,6 +1696,9 @@ class AttemptController extends Controller
 
       if($request->get('session_id'))
         $userid = $request->get('session_id');
+      else if($request->get('source')){
+        $userid = $request->get('source').'_'.$request->get('id');
+      }
       else
         $userid = $user->id;
 
