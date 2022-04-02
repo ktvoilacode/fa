@@ -590,7 +590,6 @@ class AttemptController extends Controller
             ->with('player',true)
             ->with('try',true)
             ->with('grammar',true)
-             ->with('reading',0)
             ->with('app',$this)
             ->with('qcount',$qcount)
             ->with('pte',$pte)
