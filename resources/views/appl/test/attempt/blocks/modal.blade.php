@@ -92,7 +92,12 @@
         </button>
       </div>
       <div class="modal-body">
-        The following test will be submitted. The action is permanent and it cannot be reverted.
+        <p>Select the below checkbox to confirm your test submission</p>
+       
+        
+        <div class="p-3 rounded bg-warning">
+       <input type="checkbox" name="accept" class="accept" id="c1" /> &nbsp;<b><label class="form-check-label" for="c1">I Confirm</label> </b>
+     </div>
       </div>
       <div class="modal-footer">
         <input type="hidden" name="name" value="{{ request()->get('name') }}">
