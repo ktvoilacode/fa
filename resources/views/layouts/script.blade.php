@@ -1616,6 +1616,7 @@ function visualize(stream) {
 });
 </script>
 
+@if(!$reading)
 <script>
 $(function(){
 
@@ -1752,6 +1753,7 @@ $(function(){
 
  });
 </script>
+@endif
 
 @endif
 
@@ -2082,6 +2084,22 @@ $('#datetimepicker').datetimepicker({value: {{date("Y")}}+'/'+{{date("m")}}+'/'+
     });
   } );
   </script>
+@endif
+
+@if(isset($try))
+<script type="text/javascript">
+$(document).ready(function() {
+ $('#test').submit(function() {
+              if ($('input[name=accept]:checkbox').is(':checked')) {
+
+              } else {
+                  alert('Select the checkbox "I confirm" to  submit the test.');
+                  return false;
+              }
+        });
+
+});
+</script>
 @endif
 
 @if(isset($front))

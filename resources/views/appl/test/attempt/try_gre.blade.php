@@ -16,7 +16,7 @@
 @endguest
 
 <div class="container " style="padding-left:0px;padding-right:0px;">
-    <form id="test" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post">  
+    <form id="test" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post" id="write">  
    @if(isset($view))
             <input type="hidden" name="admin" value="1">
             @endif

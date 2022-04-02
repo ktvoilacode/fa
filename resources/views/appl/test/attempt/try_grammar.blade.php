@@ -16,7 +16,7 @@
 @endguest
 
 <div class="container" style="padding-left:0px;padding-right:0px;">
-    <form id="test" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post">  
+    <form id="test" class="test" action="{{route('attempt.store',$app->test->slug)}}" method="post" id="write">  
 
     <div class="row p-0 m-0">
         <div class="col-12 col-md-8 col-lg-8">

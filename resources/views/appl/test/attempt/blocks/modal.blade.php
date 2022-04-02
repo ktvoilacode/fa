@@ -39,7 +39,11 @@
         </button>
       </div>
       <div class="modal-body">
-        The following test will be submitted.
+        <p>Select the below checkbox to confirm your test submission</p>
+       
+        <div class="p-3 rounded bg-warning">
+       <input type="checkbox" name="accept" class="accept" id="c1" /> &nbsp;<b><label class="form-check-label" for="c1">I Confirm</label> </b>
+     </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -62,7 +66,12 @@
         </button>
       </div>
       <div class="modal-body">
-        The following test will be submitted.
+        <p>Select the below checkbox to confirm your test submission</p>
+       
+        
+        <div class="p-3 rounded bg-warning">
+       <input type="checkbox" name="accept" class="accept" id="c1" /> &nbsp;<b><label class="form-check-label" for="c1">I Confirm</label> </b>
+     </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
