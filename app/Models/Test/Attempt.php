@@ -351,7 +351,7 @@ class Attempt extends Model
         $score = round($score/5,2);
 
         if($review){
-            if($total)
+            if($total!=0)
                 $score = $s/$total * 160;
             else
                 $score=0;
