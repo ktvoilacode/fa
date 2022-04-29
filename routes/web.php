@@ -173,7 +173,12 @@ Route::get('/couponcode/code','Product\CouponController@use')->name('coupon.use'
 
 /* Pages */
 
-Route::get('/contact', function(){ return view('appl.pages.contact');})->name('contact');
+Route::get('/contact', function(){ 
+    $a = rand(1,9);
+    $b = rand(1,9);
+    request()->session()->put('result', $a+$b);
+    return view('appl.pages.contact')->with('a',$a)->with('b',$b);
+})->name('contact');
 Route::get('/frame', function(){ return view('appl.pages.terms');})->name('terms');
 Route::get('/downloads', function(){ return view('appl.pages.downloads');})->name('downloads');
 

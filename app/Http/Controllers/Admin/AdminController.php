@@ -137,6 +137,15 @@ class AdminController extends Controller
 
     public function contact(Request $r){
         
+        $result = request()->session()->get('result');
+        $res = $r->get('result');
+
+        if($res !=$result)
+        {
+            flash('Math operation invalid. Kindly retry!')->error();
+            return redirect()->back()->withInput();;
+        }
+
         $f = new Form();
         $f->name = $r->name;
         $f->email = $r->email;

@@ -7,6 +7,7 @@
 <div class="bg-white">
 <div class="card-body p-4 ">
 
+
 <div class="row">
 	<div class="col-12 col-md-7 ">
 		<iframe class="w-100 mb-4" height="200" frameborder="0" style="border:0"
@@ -43,6 +44,7 @@ Email: madhapur@firstacademy.in<br>
 
 	<div class="col-12 col-md-5">
 		<div class="bg-light border p-4">
+      @include('flash::message')
 			<h1> Write to us</h1>
 			<form  method="post" action="{{route('admin.contact')}}">
 				<div class="form-group">
@@ -60,6 +62,11 @@ Email: madhapur@firstacademy.in<br>
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Message</label>
     <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="7"></textarea>
+  </div>
+  <div class="form-group border p-3 bg-white">
+    <label for="exampleInputEmail1">Solve this:</label>
+    <h4>{{$a}} + {{$b}} = </h4>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="result" placeholder="Enter the result" >
   </div>
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <button type="submit" class="btn btn-primary">Submit</button>
