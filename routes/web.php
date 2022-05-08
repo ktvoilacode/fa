@@ -178,7 +178,7 @@ Route::get('/contact', function(){
     $b = rand(1,9);
     request()->session()->put('result', $a+$b);
     return view('appl.pages.contact')->with('a',$a)->with('b',$b);
-})->name('contact');
+})->name('admin.contact');
 Route::get('/frame', function(){ return view('appl.pages.terms');})->name('terms');
 Route::get('/downloads', function(){ return view('appl.pages.downloads');})->name('downloads');
 
