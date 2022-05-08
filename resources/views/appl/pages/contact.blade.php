@@ -9,7 +9,7 @@
 
 
 <div class="row">
-	<div class="col-12 col-md-7 ">
+	<div class="col-12 col-md ">
 		<iframe class="w-100 mb-4" height="200" frameborder="0" style="border:0"
 src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJx7TARMmQyzsR8BKHnJbVVh4&key=AIzaSyCdRZQkwLoQV_3BtOBWfJA93Thke_iza8Y" allowfullscreen></iframe>
 
@@ -42,7 +42,7 @@ Email: madhapur@firstacademy.in<br>
 </div>
 	</div>
 
-	<div class="col-12 col-md-5">
+	<div class="col-12 col-md-5 d-none">
 		<div class="bg-light border p-4">
       @include('flash::message')
 			<h1> Write to us</h1>
