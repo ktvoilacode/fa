@@ -55,7 +55,7 @@ Route::post('webcamimage','Test\AttemptController@saveImage')->name('image.save'
 /* Admin Routes */
 Route::get('/admin', 'Admin\AdminController@index')->name('admin')->middleware('auth');
 Route::get('/admin/analytics', 'Admin\AdminController@analytics')->name('admin.analytics')->middleware('auth');
-Route::post('/admin/contact', 'Admin\AdminController@contact')->name('admin.contact');
+//Route::post('/admin/contact', 'Admin\AdminController@contact')->name('admin.contact');
 Route::post('/admin/notify', 'Admin\AdminController@notify')->name('admin.notify');
 Route::post('/ajax/form','Admin\FormController@ajaxx')->name('form.a');
 
