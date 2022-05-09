@@ -140,6 +140,8 @@ class AdminController extends Controller
         $result = request()->session()->get('result');
         $res = $r->get('result');
 
+        return redirect()->back()->withInput();;
+
         if($res !=$result)
         {
             flash('Math operation invalid. Kindly retry!')->error();
