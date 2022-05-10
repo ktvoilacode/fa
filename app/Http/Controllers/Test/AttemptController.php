@@ -37,7 +37,7 @@ class AttemptController extends Controller
 
             $cache=null;
             // update test from cache
-            $filename = $this->cache_path.$this->app.'.'.request()->route('test').'.json'; 
+            $filename = $this->cache_path.$this->app.'.'.request()->route('test').'.json2'; 
             if(!request()->get('refresh'))
               $cache = Cache::get('test_'.request()->route('test'));
             else
