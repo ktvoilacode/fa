@@ -135,6 +135,7 @@ class AdminController extends Controller
     }
 
 
+
     public function contact(Request $r){
         
         $result = request()->session()->get('result');
