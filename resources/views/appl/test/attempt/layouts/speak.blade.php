@@ -6,6 +6,8 @@
 <div class="pt-3 pb-5 text-center duo-heading"><b> Describe aloud the image below</b></div>
 @elseif($f->label ) <div class="pt-3 pb-5 text-center duo-heading"><b>Record yourself saying the statement below:</b></div> @elseif($f->prefix)
 <div class="pt-3 pb-5 text-center duo-heading"><b>Speak for atleast 30 seconds to the below question</b></div>
+@elseif($f->suffix)
+<div class="pt-3 pb-5 text-center duo-heading"><b>Speak the answer to the question</b></div>
 @endif
 
 <div style="max-width: 600px;margin: 0px auto;">
@@ -30,6 +32,9 @@
 @elseif($f->label ) <div class="h5 mt-3">{{$f->label }}</div> 
 @elseif($f->prefix)
 <div class="border rounded p-3 mt-3">{!! $f->prefix !!}</div> 
+
+@elseif($f->suffix)
+<div class="border rounded p-3 mt-3">{!! $f->suffix!!}</div> 
 
 @endif 
 </div>
