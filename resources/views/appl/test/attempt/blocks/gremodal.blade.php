@@ -18,6 +18,12 @@
      </div>
       </div>
       <div class="modal-footer">
+           <input type="hidden" name="name" value="{{ request()->get('name') }}">
+        <input type="hidden" name="username" value="{{ request()->get('username') }}">
+        <input type="hidden" name="id" value="{{ request()->get('id') }}">
+        <input type="hidden" name="uri" value="{{ request()->get('uri') }}">
+        <input type="hidden" name="source" value="{{ request()->get('source') }}">
+        <input type="hidden" name="private" value="{{ request()->get('private') }}">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" id="submit_btn" class="btn btn-success">Confirm Submission</button>
       </div>

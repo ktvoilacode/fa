@@ -191,9 +191,11 @@
         @endif
       </td>
          <td>
+          @if(isset($score_params[$item['fillup']['layout']]))
           @foreach($score_params[$item['fillup']['layout']] as $param)
             @include('appl.test.attempt.blocks.evaluate')
           @endforeach
+          @endif
           </td>
           @endif
           @endif

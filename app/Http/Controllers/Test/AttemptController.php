@@ -595,6 +595,7 @@ class AttemptController extends Controller
             ->with('pte',$pte)
             ->with('test',$test)
             ->with('product',$product)
+            ->with('reading',0)
             ->with('user',$user)
             ->with('timer',1)
             ->with('answers',$answers)
@@ -717,6 +718,7 @@ class AttemptController extends Controller
             ->with('grammar',true)
             ->with('app',$this)
             ->with('qcount',$qcount)
+            ->with('reading',0)
             ->with('user',$user)
             ->with('test',$test)
             ->with('pte',$pte)
@@ -733,6 +735,7 @@ class AttemptController extends Controller
             ->with('gre',true)
             ->with('app',$this)
             ->with('user',$user)
+            ->with('reading',0)
             ->with('qcount',$qcount)
             ->with('test',$test)
             ->with('product',$product)
@@ -764,6 +767,7 @@ class AttemptController extends Controller
                   ->with('product',$product)
                   ->with('user',$user)
                   ->with('attempt',$attempt)
+                  ->with('reading',0)
                   ->with('view',true)
                   ->with('answers',$answers)
                   ->with('editor',true);
@@ -779,6 +783,7 @@ class AttemptController extends Controller
                   ->with('user',$user)
                   ->with('timer',$user)
                   ->with('time',$test->test_time)
+                  ->with('reading',0)
                   ->with('view',true)
                   ->with('editor',true)
                   ->with('answers',$answers)
@@ -930,7 +935,7 @@ class AttemptController extends Controller
       }
 
 
-
+      
 
       foreach($test->mcq_order as $mcq){
 
