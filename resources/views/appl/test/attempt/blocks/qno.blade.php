@@ -8,14 +8,25 @@
 	@endif
 	@endif
 </h5>
-<div class="row no-gutters">
-@for($i=1;$i <= $qcount; $i++ ) 
-<div class="col-2 col-md-3 col-lg-2">
-<div class="box pr-2 pb-2 text-center">
-<div class="sno s{{$i}}" data-id="{{$i}}">{{$i}}</div>
-</div>
-</div>
-@endfor
+<div class="row no-gutters ">
+@if($sidebox)
+	@foreach($qno as $j=>$q) 
+	<div class="col-2 col-md-3 col-lg-3">
+	<div class="box pr-2 pb-2 text-center">
+		<div class="sno s{{$j}}" data-id="{{$j}}">{{str_replace(' ','',$q)}} </div>
+	</div>
+	</div>
+	@endforeach
+@else
+	@for($i=1;$i <= $qcount; $i++ ) 
+	<div class="col-2 col-md-3 col-lg-2">
+	<div class="box pr-2 pb-2 text-center">
+		<div class="sno s{{$i}}" data-id="{{$i}}">{{$i}} </div>
+	</div>
+	</div>
+	@endfor
+@endif
+
 </div>
 <div class="mt-3">
 	<span class="answered-spot"><i class="fa fa-circle "></i> </span>Answered &nbsp;<span class="unanswered"> <i class="fa fa-circle "></i> </span>Unanswered
@@ -44,13 +55,24 @@
 </h5>
 <div class="qdata mt-4">
 <div class="row no-gutters" style="max-height:150px;overflow: scroll">
-@for($i=1;$i <= $qcount; $i++ ) 
-<div class="col-2">
-<div class="box pr-2 pb-2 text-center">
-<div class="sno s{{$i}}" data-id="{{$i}}">{{$i}}</div>
-</div>
-</div>
-@endfor
+@if($sidebox)
+	@foreach($qno as $j=>$q) 
+	<div class="col-2 col-md-3 col-lg-3">
+	<div class="box pr-2 pb-2 text-center">
+		<div class="sno s{{$j}}" data-id="{{$j}}">{{str_replace(' ','',$q)}} </div>
+	</div>
+	</div>
+	@endforeach
+@else
+	@for($i=1;$i <= $qcount; $i++ ) 
+	<div class="col-2 col-md-3 col-lg-2">
+	<div class="box pr-2 pb-2 text-center">
+		<div class="sno s{{$i}}" data-id="{{$i}}">{{$i}} </div>
+	</div>
+	</div>
+	@endfor
+@endif
+
 </div>
 
 

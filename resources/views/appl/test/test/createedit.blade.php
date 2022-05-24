@@ -270,6 +270,17 @@
           </div>
         </div>
 
+          <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Sidebox</label>
+            <select class="form-control" name="sidebox">
+              <option value="0" @if(isset($settings->sidebox)) @if($settings->sidebox==0) selected @endif @endif >Sequence Number (default)</option>
+              
+              <option value="1" @if(isset($settings->sidebox)) @if($settings->sidebox==1) selected @endif @endif >Question Number</option>
+            </select>
+          </div>
+        </div>
+
       </div>
 
       

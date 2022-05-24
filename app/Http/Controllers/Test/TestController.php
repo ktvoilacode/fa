@@ -361,6 +361,11 @@ class TestController extends Controller
             if($request->noreport){
                 $settings['noreport'] = 1;
             }
+
+            $settings['sidebox'] = 0;
+            if($request->sidebox){
+                $settings['sidebox'] = 1;
+            }
             
             $request->merge(['settings' => json_encode($settings)]);
 
@@ -1106,6 +1111,11 @@ class TestController extends Controller
             $settings['noreport'] = 0;
             if($request->noreport){
                 $settings['noreport'] = 1;
+            }
+
+            $settings['sidebox'] = 0;
+            if($request->sidebox){
+                $settings['sidebox'] = 1;
             }
 
             $request->merge(['settings' => json_encode($settings)]);

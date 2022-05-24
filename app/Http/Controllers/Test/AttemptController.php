@@ -583,6 +583,60 @@ class AttemptController extends Controller
 
     }
 
+    $test->set  = json_decode($test->settings);
+
+     $qno = [];
+      $h=0;
+      $sidebox=0;
+     
+
+      if(isset($test->set->sidebox))
+      {
+          if($test->set->sidebox){
+            foreach($test->sections as $s=>$section){
+              foreach($section->extracts as $k=>$extract ){
+                foreach($extract->mcq_order as $k=>$m){
+                  if($m->qno){
+
+                  $g = str_replace(' ','',$m->qno);
+                  $g =str_replace('-','',$g);
+                   $qno[$g] = $m->qno;
+                  }
+                 
+                }
+                foreach($extract->fillup_order as $f){
+                  if($f->qno){
+                    $g = str_replace(' ','',$f->qno);
+                    $g =str_replace('-','',$g);
+                    $qno[$g] = $f->qno;
+                  }
+                  
+                }
+              }
+            }
+            $sidebox =1;
+          }
+      }
+
+      if(!$sidebox){
+         foreach($test->sections as $s=>$section){
+          foreach($section->extracts as $k=>$extract ){
+
+            foreach($extract->mcq_order as $k=>$m){
+              $h++;
+              if($m->qno){
+                $qno[$h] = $h;
+              }
+            }
+            foreach($extract->fillup_order as $f){
+              $h++;
+              if($f->qno)
+                $qno[$h] = $h;
+            }
+          }
+        }
+      }
+
 
     $answers = false;
    if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
@@ -594,6 +648,8 @@ class AttemptController extends Controller
             ->with('qcount',$qcount)
             ->with('pte',$pte)
             ->with('test',$test)
+            ->with('qno',$qno)
+            ->with('sidebox',$sidebox)
             ->with('product',$product)
             ->with('user',$user)
             ->with('timer',1)
@@ -612,6 +668,8 @@ class AttemptController extends Controller
             ->with('user',$user)
             ->with('answers',$answers)
             ->with('timer',1)
+            ->with('qno',$qno)
+            ->with('sidebox',$sidebox)
             ->with('time',$test->test_time);
    else if($view =='reading'){
     return view('appl.test.attempt.try_'.$view)
@@ -622,6 +680,8 @@ class AttemptController extends Controller
         ->with('test',$test)
         ->with('product',$product)
         ->with('reading',1)
+        ->with('qno',$qno)
+        ->with('sidebox',$sidebox)
         ->with('user',$user)
         ->with('timer',1)
         ->with('answers',$answers)
@@ -636,6 +696,8 @@ class AttemptController extends Controller
                    ->with('reading',0)
                   ->with('view',true)
                   ->with('try',true)
+                  ->with('qno',$qno)
+                  ->with('sidebox',$sidebox)
                   ->with('answers',$answers)
                   ->with('editor',true);
       }
@@ -651,6 +713,8 @@ class AttemptController extends Controller
                    ->with('reading',0)
                   ->with('timer',$user)
                   ->with('user',$user)
+                  ->with('qno',$qno)
+                  ->with('sidebox',$sidebox)
                   ->with('time',$test->test_time)
                   ->with('editor',true)
                   ->with('answers',$answers)
@@ -709,7 +773,60 @@ class AttemptController extends Controller
       else
         $attempt = null;
 
-  
+      $test->set  = json_decode($test->settings);
+
+      $qno = [];
+      $h=0;
+      $sidebox=0;
+     
+
+      if(isset($test->set->sidebox))
+      {
+          if($test->set->sidebox){
+            foreach($test->sections as $s=>$section){
+              foreach($section->extracts as $k=>$extract ){
+                foreach($extract->mcq_order as $k=>$m){
+                  if($m->qno){
+
+                  $g = str_replace(' ','',$m->qno);
+                  $g =str_replace('-','',$g);
+                   $qno[$g] = $m->qno;
+                  }
+                 
+                }
+                foreach($extract->fillup_order as $f){
+                  if($f->qno){
+                    $g = str_replace(' ','',$f->qno);
+                    $g =str_replace('-','',$g);
+                    $qno[$g] = $f->qno;
+                  }
+                  
+                }
+              }
+            }
+            $sidebox =1;
+          }
+      }
+
+      if(!$sidebox){
+         foreach($test->sections as $s=>$section){
+          foreach($section->extracts as $k=>$extract ){
+
+            foreach($extract->mcq_order as $k=>$m){
+              $h++;
+              if($m->qno){
+                $qno[$h] = $h;
+              }
+            }
+            foreach($extract->fillup_order as $f){
+              $h++;
+              if($f->qno)
+                $qno[$h] = $h;
+            }
+          }
+        }
+      }
+
     if($view == 'listening' || $view == 'grammar' || $view =='english' )
     return view('appl.test.attempt.try_'.$view)
             ->with('player',true)
@@ -720,6 +837,8 @@ class AttemptController extends Controller
             ->with('user',$user)
             ->with('test',$test)
             ->with('pte',$pte)
+            ->with('qno',$qno)
+            ->with('sidebox',$sidebox)
             ->with('product',$product)
             ->with('timer',$user)
             ->with('view',true)
@@ -735,6 +854,8 @@ class AttemptController extends Controller
             ->with('user',$user)
             ->with('reading',0)
             ->with('qcount',$qcount)
+            ->with('qno',$qno)
+            ->with('sidebox',$sidebox)
             ->with('test',$test)
             ->with('product',$product)
             ->with('timer',$user)
@@ -752,6 +873,8 @@ class AttemptController extends Controller
                 ->with('test',$test)
                 ->with('user',$user)
                 ->with('pte',$pte)
+                ->with('qno',$qno)
+                ->with('sidebox',$sidebox)
                 ->with('product',$product)
                 ->with('reading',1)
                 ->with('view',true)
@@ -766,6 +889,8 @@ class AttemptController extends Controller
                   ->with('user',$user)
                   ->with('attempt',$attempt)
                   ->with('reading',0)
+                  ->with('qno',$qno)
+                  ->with('sidebox',$sidebox)
                   ->with('view',true)
                   ->with('answers',$answers)
                   ->with('editor',true);
@@ -780,6 +905,8 @@ class AttemptController extends Controller
                   ->with('attempt',$attempt)
                   ->with('user',$user)
                   ->with('timer',$user)
+                  ->with('qno',$qno)
+                  ->with('sidebox',$sidebox)
                   ->with('time',$test->test_time)
                   ->with('reading',0)
                   ->with('view',true)

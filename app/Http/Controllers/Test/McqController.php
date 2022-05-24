@@ -76,11 +76,16 @@ class McqController extends Controller
         $obj = new Obj();
         $this->authorize('create', $obj);
 
+        $this->qno =1;
+        $this->sno = 1;
         /* add the serial number */
         if(Obj::orderBy('id','desc')->where('test_id',$this->test->id)->first()){
             $m = Obj::orderBy('id','desc')->where('test_id',$this->test->id)->first();
-            $this->qno = $m->qno +1;
-            $this->sno = $m->sno+1;
+            if(is_numeric($m->qno)){
+                 $this->qno = $m->qno +1;
+                $this->sno = $m->sno+1;
+            }
+           
         }
         else{
             $this->qno =1;
