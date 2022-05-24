@@ -34,7 +34,7 @@
         @endif
        @else <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
       @endif
-      @if($f->suffix ){{$f->suffix }}@endif
+      @if($f->suffix ){!!$f->suffix !!}@endif
     @elseif($f->layout == 'ielts_label' ||  !$f->layout)
       @if($f->prefix ) {!! $f->prefix !!}  @endif 
       @if($f->answer) <span class="badge badge-warning h2">{{$f->qno}}</span>
@@ -56,7 +56,7 @@
        @else <input type="text" class="fill input" name="{{$f->qno}}" data-id="{{$f->qno}}" > @endif
       
       @endif
-      @if($f->suffix ){{$f->suffix }}@endif
+      @if($f->suffix ){!! $f->suffix !!}@endif
 
     @elseif($f->layout=='ielts_two_blank')
       <span class="badge badge-warning h2">{{$f->qno}}</span>
