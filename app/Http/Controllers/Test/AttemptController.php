@@ -1140,8 +1140,9 @@ class AttemptController extends Controller
 
 
 
-      
+        
       ksort($result);
+
 
 
       $data = array();
@@ -1305,7 +1306,6 @@ class AttemptController extends Controller
          dd();
           //return $this->api($this->test->slug,$request,$score);
       }
-
 
       if(!$request->get('admin'))
         Attempt::insert($data); 

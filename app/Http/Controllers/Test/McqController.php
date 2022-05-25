@@ -130,9 +130,10 @@ class McqController extends Controller
                 $answer = implode(', ', $answers);
                 /* merge the updated data in request */
                 $request->merge(['answer'=>$answer]);
+
             }
             
-
+            $request->merge(['qno'=>str_replace(" ","",$request->qno)]);
             /* create a new entry */
             $obj = $obj->create($request->except(['tags']));
 
@@ -275,6 +276,7 @@ class McqController extends Controller
                     $request->merge([$item=>'']);
             }
             
+            $request->merge(['qno'=>str_replace(" ","",$request->qno)]);
             // for multi answer
             $answers = $request->get('answers');
             if($answers){
