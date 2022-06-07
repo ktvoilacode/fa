@@ -5,7 +5,12 @@
 @elseif(\Storage::disk('public')->exists('extracts/'.$f->id.'_q_300.jpg')) 
 <div class="pt-3 pb-5 text-center duo-heading"><b> Describe aloud the image below</b></div>
 @elseif($f->label ) <div class="pt-3 pb-5 text-center duo-heading"><b>Record yourself saying the statement below:</b></div> @elseif($f->prefix)
-<div class="pt-3 pb-5 text-center duo-heading"><b>Speak for atleast 30 seconds to the below question</b></div>
+	@if($f->suffix)
+	<div class="pt-3 pb-5 text-center duo-heading"><b>{{$f->suffix}}</b></div>
+	@else
+	<div class="pt-3 pb-5 text-center duo-heading"><b>Speak for atleast 30 seconds to the below question</b></div>
+	@endif
+
 @elseif($f->suffix)
 <div class="pt-3 pb-5 text-center duo-heading"><b>Speak the answer to the question</b></div>
 @endif

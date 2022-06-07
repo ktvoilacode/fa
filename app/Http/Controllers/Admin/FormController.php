@@ -296,6 +296,13 @@ class FormController extends Controller
             $obj->update($request->all()); 
             
             if($request->get('status')==2){
+                $pieces = explode('TEST -',strip_tags($obj->description));
+                //dd($pieces);
+                if(isset($pieces[1]))
+                {
+                    $obj->test_name = trim($pieces[1]);
+                }
+
                 Mail::to($obj->email)->send(new  NotifyContact($obj));
                 $request->merge(['status',1]);
             }
