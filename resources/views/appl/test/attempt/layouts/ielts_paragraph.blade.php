@@ -3,7 +3,7 @@
 
   	@if($f->layout == 'default' ||  !$f->layout )
 
-       @if($f->prefix ) {{$f->prefix }}  @endif 
+       @if($f->prefix ) {!!$f->prefix !!}  @endif 
 	     @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span>
        @if($answers) 
          @if(isset($result))
@@ -26,7 +26,7 @@
 	     @endif
 	     @if($f->suffix ){{$f->suffix }}@endif
     @elseif($f->layout=='paragraph')
-       @if($f->prefix ) {{$f->prefix }}  @endif 
+       @if($f->prefix ) {!! $f->prefix  !!}  @endif 
        @if($f->answer) <span style="display:inline-block;"><span class="badge badge-warning h2">{{$f->qno}}</span>
           @if($answers)
             @if(isset($result))
