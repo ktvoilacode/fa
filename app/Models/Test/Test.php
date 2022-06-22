@@ -119,7 +119,13 @@ class Test extends Model
 
     public function attemptcount(){
         $attempt = new Attempt();
-        return count($attempt->where('test_id',$this->id)->get()->groupBy('user_id')); 
+        $att = $attempt->where('test_id',$this->id)->get();
+        $a = $att->groupBy('session_id');
+
+        $b = $att->where('session_id',null)->groupBy('user_id');
+       
+        $count = count($a) + count($b);
+        return $count; 
     }
 
     public function sessionAttempt(){
