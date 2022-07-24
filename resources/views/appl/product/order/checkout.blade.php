@@ -57,6 +57,12 @@
  <input class="form-check-input amount" type="hidden" name="txn_amount" value="{{ $product->price }}">
 <input class="form-check-input product" type="hidden" name="product_id"  value="{{ $product->id }}">
 
+<input class="form-check-input" type="hidden" name="details" value="{{ request()->get('details')}}">
+
+@if(request()->get('test_id'))
+<input class="form-check-input" type="hidden" name="test_id" value="{{ request()->get('test_id')}}">
+@endif
+
 <button class="btn btn-lg btn-primary" type="submit">Next</button>
 
 @else
@@ -115,6 +121,7 @@
 <input class="form-check-input product" type="hidden" name="test_id"  value="{{ $test->id }}">
 @endif
 </div>
+<input class="form-check-input amount" type="hidden" name="details" value="{{ request()->get('details')}}">
 <button class="btn btn-sm btn-outline-light" type="submit">Submit</button>
 
 </div>    

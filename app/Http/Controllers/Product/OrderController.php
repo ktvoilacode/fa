@@ -179,8 +179,13 @@ class OrderController extends Controller
               $order->product_id = $request->get('product_id');
               $order->test_id = $request->get('test_id');
 
+              if($request->get('details')){
+                $order->details = $request->get('details');
+              }else{
+                $order->details = '';
+              }
+
               
-               //dd($order);
               $order->save();
               $order->payment_status = 'Pending';
 

@@ -31,7 +31,7 @@
                 @if($data['writing']->count())
                 <hr>
                 @foreach($data['writing'] as $k=>$w)
-                <div class="mb-2"><a href="{{ route('file.show',$w->id) }}" class="text-white">{{$w->user->name}} </a><span class="float-right " style="color:#888f94">{{ $w->created_at->diffForHumans()}}</span></div>
+                <div class="mb-2"><a href="{{ route('file.show',$w->id) }}" class="text-white">{{$w->user->name}} @if($w->premium)<span class="badge badge-primary">pro</span>@endif</a><span class="float-right " style="color:#888f94">{{ $w->created_at->diffForHumans()}}</span></div>
                 @if($k==2)
                     @break
                 @endif

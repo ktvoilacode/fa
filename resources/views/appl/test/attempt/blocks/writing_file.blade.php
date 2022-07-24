@@ -16,6 +16,14 @@
 	@endif
 	
 
+	<div class="alert alert-warning alert-important mb-4 " role="alert">
+  	<h4 class="mb-0">Do you want a quick evaluation? </h4>
+  	<p> Try our premium evaluation to get the scores within 24 hours</p> 
+  	<a href="{{ route('product.checkout','writing-evaluation')}}?details=Quick Evaluation of test - {{$test->name}} for {{\auth::user()->name}} ({{\auth::user()->id}})&test_id={{$test->id}}" class="btn btn-success"><strike>Rs.250</strike> &nbsp;Rs.150</a>&nbsp;&nbsp; 25% OFF (Limited period offer)
+
+  	<a href="{{ route('myorders') }}" class="float-right">My Transactions</a>
+	</div>
+
 	<h4 class="mb-3 text-primary">Your Response </h4>
 	<div class="bg-light border rounded p-3 mb-3">
 	{!! $attempt->response !!}

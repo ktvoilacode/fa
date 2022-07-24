@@ -45,8 +45,19 @@ class AdminController extends Controller
         $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->toArray();
        
         $data['writing']= Cache::remember('wri_users', 240, function() use ($test_ids) {
-            return Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
+
+            $d = Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
+            foreach($d as $k=>$m){
+              
+                $o = Order::where('test_id',$m->test_id)->where('product_id',3)->first();
+                if($o)
+                    $d[$k]->premium = 1;
+                else
+                    $d[$k]->premium =0;
+            }
+            return $d;
         });
+
 
         /* duolingo data */
         $data['duolingo_tests'] = [];//Obj::whereIn('type_id',[9])->where('price','!=',0)->get();

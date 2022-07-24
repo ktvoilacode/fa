@@ -19,6 +19,7 @@ class Order extends Model
         'bank_txn_id',
         'bank_name',
         'txn_amount',
+        'details',
         'expiry',
         'status',
         // add all other fields

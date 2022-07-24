@@ -26,13 +26,13 @@
       <div class="modal-body">
         <ul>
           <li>Tasks once submitted cannot be changed.</li>
-          <li>Evaluation will take a mininum of two working days.</li>
-          <li> Any task with plagiarism shall not be evaluated but will count as a task.</li>
-          <li>One to One sessions for writing will only be based on any one task submitted here.</li>
-          <li>Scores are indicative and for the training purpose only.</li> 
+          <li>Evaluation will take at least <span class="badge badge-warning">&nbsp;2&nbsp;</span> working days.</li>
+          <li> Tasks with plagiarism shall <u>not</u> be evaluated but will count as a task.</li>
+          <li>One-to-One sessions for writing will be based on any <span class="badge badge-warning">&nbsp;1&nbsp;</span> task submitted here. </li>
+          <li>Scores are indicative and are purely for training purposes.</li> 
         </ul>
         <div class="p-3 rounded bg-warning">
-       <input type="checkbox" name="accept" class="accept" > &nbsp;<b>I accept </b></input>
+       <input type="checkbox" name="accept" class="accept" > &nbsp;<b>I/We accept the terms</b></input>
      </div>
       </div>
       <div class="modal-footer">
