@@ -3,7 +3,7 @@
 <div class="rounded p-4 mb-4" style="">
 	@if($attempt->answer)
 	<div class="alert alert-success alert-important mb-4 border border-success">
-	<h5>Your Evaluation Is Ready!  </h5>
+	<h5>Your evaluation is ready!  </h5>
 	<a href="{{ route('test.review',$test->slug)}}?product=@if($product){{$product->slug}}@endif">
 	<button type="button" class="btn btn-bg btn-success">View Expert Review</button>
 	</a>
@@ -16,6 +16,7 @@
 	@endif
 	
 
+	@if(!\auth::user()->check_order(\auth::user()->id,$test->id) && !$attempt->answer)
 	<div class="alert alert-warning alert-important mb-4 " role="alert">
   	<h4 class="mb-0">Do you want a quick evaluation? </h4>
   	<p> Try our premium evaluation to get the scores within 24 hours</p> 
@@ -23,6 +24,11 @@
 
   	<a href="{{ route('myorders') }}" class="float-right">My Transactions</a>
 	</div>
+	@elseif(\auth::user()->check_order(\auth::user()->id,$test->id)) 
+	<div class="alert alert-warning alert-important mb-4 " role="alert">
+		Premium evaluation is enabled!
+	</div>
+	@endif
 
 	<h4 class="mb-3 text-primary">Your Response </h4>
 	<div class="bg-light border rounded p-3 mb-3">

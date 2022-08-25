@@ -134,8 +134,6 @@ class AttemptController extends Controller
         else
           $user = null;
 
-
-
         $test = $this->test;
         $product = $this->product;
 
@@ -146,7 +144,6 @@ class AttemptController extends Controller
           $product_id = $id;
           $validity = $product->validity;
           $price = $test->price;
-
         }
         else{
           $id = $test->id;
@@ -159,11 +156,8 @@ class AttemptController extends Controller
           $price=0;
 
         if($test->status==2){
-
           $name = $request->get('name');
-
           $phone = $request->get('phone');
-
           if(!$name || !$phone )
             {
                 flash('Name or phone number cannot be empty')->error();
@@ -194,20 +188,22 @@ class AttemptController extends Controller
             $session->last_activity = 1;
             $session->save();
           }
-
           $request->session()->put('open', $request->session()->getID());
-
         }
+
         //Run prechecks 
         $status= $this->precheck($request);
 
+        
         if($status!=1)
           return redirect($status);
+
 
         /* User Authorization for test */
         $grantaccess = $request->get('grantaccess');
         if($user){
-          if(!$user->testAccess($id)){
+          if(!$user->testAccess($id,$slug)){
+
             if($grantaccess)
             {
               $order = new Order();
@@ -229,6 +225,8 @@ class AttemptController extends Controller
             }
           }
 
+
+
           $attempt = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->first();
 
         }else
@@ -242,13 +240,18 @@ class AttemptController extends Controller
         }
         
 
-        
 
         /* If Attempted show report */
         
 
         if($attempt){
             $testtype=  strtolower($test->testtype->name);
+
+            $current_test= session()->get('current_test');
+            if($slug == $current_test){
+              $url = session()->get('uri').'?status=1&test_slug='.$slug.'&test_id='.$this->test->id;
+               return redirect()->to($url);
+            }
 
             if($testtype=='writing' || $testtype == 'speaking')
             {
@@ -263,12 +266,12 @@ class AttemptController extends Controller
                 return redirect()->route('test.analysis',['test'=>$this->test->slug]);
             }
         }else{
+
             if(!strip_tags($test->instructions)){
               if($product)
                 return redirect()->route('test.try',['test'=>$this->test->slug,'product'=>$product->slug]);
               else
                 return redirect()->route('test.try',['test'=>$this->test->slug]);
-
             } 
             else  
               return view('appl.test.attempt.alerts.instructions')
@@ -1019,6 +1022,12 @@ class AttemptController extends Controller
 
 
       $url = $request->get('uri');
+      if(!$url && session()->get('current_test')==$slug){
+        $url = session()->get('uri');
+      }
+
+      
+
       $result = array();
       $score =0;
       $test = $this->test;
@@ -1108,13 +1117,9 @@ class AttemptController extends Controller
           }
           
         if($fillup->layout=='ielts_two_blank' || $fillup->layout=='two_blank'){
-            
             $fillup->answer= str_replace('[', '&[', $fillup->answer);
             $new_ans = delete_all_between('[',']',$fillup->answer);
             $result[$fillup->qno]['answer'] = $new_ans;
-
-
-
             $result[$fillup->qno]['two_blanks'] =1;
         }
 
@@ -1138,12 +1143,7 @@ class AttemptController extends Controller
         }
       }
 
-
-
-        
       ksort($result);
-
-
 
       $data = array();
       $date_time = new \DateTime();
@@ -1168,9 +1168,7 @@ class AttemptController extends Controller
         if ($request->session()->has('open') && ($test->status==2 || $test->status==3 ) )
           $data[$i]['session_id'] = $session_id;
 
-
         $resp = $request->get($qno);
-
 
         if($resp){
 
@@ -1347,8 +1345,6 @@ class AttemptController extends Controller
 
           if($test->marks)
             $points = $points + round($score * (int)(80/$test->marks));
-          
-
           }
         }
 
@@ -1357,10 +1353,8 @@ class AttemptController extends Controller
         /* sectional score */
         $section_score = $this->section_score($result);
 
-
         $tags = Attempt::tags($data);
         $secs = $this->graph($tags);
-        
 
         if($test->testtype->name=='SURVEY')
           $view = 'thankyou';
@@ -1369,6 +1363,11 @@ class AttemptController extends Controller
 
         $review = false;
         $userid = \auth::user()->id;
+
+        $current_test= session()->get('current_test');
+        if($this->test->slug == $current_test){
+          return redirect()->to($url."?status=1&test_slug=".$this->test->slug);
+        }
 
         if($url)
           return redirect()->to($url."?status=1&reference=".$session_id."&test=".$this->test->id);
@@ -1391,6 +1390,13 @@ class AttemptController extends Controller
               ->with('score',$score);
       }
 
+
+      $current_test= session()->get('current_test');
+        if($this->test->slug == $current_test){
+          return redirect()->to($url."?status=1&test_slug=".$this->test->slug."&test_id=".$this->test->id);
+        }
+
+        
       
     if($url)
           return redirect()->to($url."?status=1&reference=".$session_id."&test=".$this->test->id);
@@ -1757,7 +1763,9 @@ class AttemptController extends Controller
         $score = $param_percent['score'];
       }
 
+    
 
+     
       
       if($request->get('deletescore')){
         Attempt::where('test_id',$test->id)->where('session_id',$session_id)->delete();
@@ -1785,13 +1793,10 @@ class AttemptController extends Controller
       if(strtoupper($test->category->name)=='PTE'){
           $points =10;
           if($type=='listening' || $type=='reading'){
-
-          if($test->marks)
-            $points = $points + round($score * (int)(80/$test->marks));
-          
-
+            if($test->marks)
+              $points = $points + round($score * (int)(80/$test->marks));
           }
-        }
+      }
 
       if($request->get('json')){
        
@@ -1836,6 +1841,8 @@ class AttemptController extends Controller
       }
       else
         $userid = $user->id;
+
+
 
       return view('appl.test.attempt.alerts.'.$view)
               ->with('result',$result)

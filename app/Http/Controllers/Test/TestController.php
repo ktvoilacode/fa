@@ -759,6 +759,11 @@ class TestController extends Controller
             $group = 'session_id';
          //dd(Carbon::now()->endOfWeek());
 
+        if(request()->get('type')=='user'){
+            $test->status =1;
+            $group = 'user_id';
+        }
+
         $data = [];
         $i=0;
         $score = [];
@@ -772,9 +777,12 @@ class TestController extends Controller
             $users = Attempt::where('test_id',$id)->whereDate('created_at', Carbon::today())->get()->groupBy($group);
         else if($from)
             $users = Attempt::where('test_id',$id)->whereBetween('created_at', [$from, $to])->get()->groupBy($group);
-        else    
-            $users = Attempt::where('test_id',$id)->get()->groupBy($group);
-
+        else{
+            if($group=='user_id')
+                $users = Attempt::where('test_id',$id)->where('user_id','!=',0)->get()->groupBy($group);
+            else
+                $users = Attempt::where('test_id',$id)->where('user_id','=',0)->get()->groupBy($group);
+        }    
 
 
         $counter =0;
@@ -908,7 +916,6 @@ class TestController extends Controller
             $view = 'analytics';
 
         
-      
 
         return view('appl.test.test.'.$view)
                 ->with('obj',$test)

@@ -209,12 +209,26 @@ class HomeController extends Controller
         $tests = Test::whereIn('id',$test_ids)->where('name','LIKE',"%{$item}%")->with('testtype')->orderBy('name')->get();
         $products = Product::whereIn('id',$product_ids)->where('name','LIKE',"%{$item2}%")->orderBy('name')->get();
 
+        $att= Attempt::where('user_id',\auth::user()->id)->whereIn('test_id',$test_ids)->get();
+        $attempts = $att->pluck('test_id')->toArray();
         
-        $attempts = Attempt::where('user_id',\auth::user()->id)->whereIn('test_id',$test_ids)->get()->pluck('test_id')->toArray();
-        
+        $status2=[];
         foreach($tests as $k=>$t){
+           $type= $t->testtype->name;
             if(in_array($t->id, $attempts))
                 $status[$t->id] = 'Completed';
+
+            if($type=='WRITING'){
+                $att_w = $att->where('test_id',$t->id)->first();
+                if($att_w){
+                   if($att_w->answer){
+                    $status2[$t->id] = 'evaluated';
+                   }else{
+                    $status2[$t->id] = 'notevaluated';
+                   }
+                }
+                
+            }
         }
 
        if($search){
@@ -239,6 +253,7 @@ class HomeController extends Controller
                 ->with('expiry',$expiry)
                 ->with('product_expiry',$product_expiry)
                 ->with('product_status',$product_status)
-                ->with('status',$status);
+                ->with('status',$status)
+                ->with('status2',$status2);
     }
 }

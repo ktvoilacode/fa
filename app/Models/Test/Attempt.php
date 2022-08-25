@@ -280,16 +280,33 @@ class Attempt extends Model
             if($qno==1)
                 $r->comment = $request->get('comments');
 
+
             
+
             
             $r->marking = json_encode($data);
             $r->status = 1;
             $counter++;
+
             $r->save();
         }
 
+         if($request->get('direct_score')){
+                $r = $result->where('qno',$qno)->first();
+                $r->comment = $request->get('comments');
+                $r->dynamic = 1;
+                $r->score = intval($request->get('direct_score'));
+                
+                foreach($data as $d=>$k){
+                    $data[$d] = round($r->score,3);
+                }
+                $r->marking = json_encode($data);
+                $r->save();
+              
+            }
 
         
+
 
 
     }
@@ -302,6 +319,8 @@ class Attempt extends Model
     }
 
     public function scoreDuolingo($result){
+
+
         $param_count = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
         $param_score = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
         $param_percent = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
@@ -309,24 +328,32 @@ class Attempt extends Model
         $review = false;
 
 
+
         foreach($result as $r){
 
             $data = json_decode($r->marking,true);
-
-            if(!$r->marking){
-                $review = true;
+            // if(!$r->marking){
+            //     $review = true;
                 
-                break;
-            }else{
+            //     break;
+            // }else{
                 
-            }
+            // }
             foreach($param_count as $p=>$v){
                 if(isset($data[$p])){
                     $param_score[$p] = $param_score[$p] +$data[$p];
                     $param_count[$p]++;
                 }
             }
+
+            if($r->dynamic==1)
+            {
+                $param_percent['score'] = $r->score;
+                return $param_percent;
+            }
         }
+
+       
 
         $total =0;
         $s = 0;
@@ -348,6 +375,7 @@ class Attempt extends Model
 
         }
 
+        
         $score = round($score/5,2);
 
         if($review){

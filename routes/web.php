@@ -137,6 +137,10 @@ Route::get('/test/{test}/analytics','Test\TestController@analytics')->name('test
 Route::get('/test/{test}/solutions','Test\AttemptController@solutions')->middleware('auth')->name('test.solutions');
 Route::get('/test/{test}/answers','Test\AttemptController@view')->middleware('auth')->name('test.answers');
 
+Route::resource('/admin/mock', 'Test\MockController')->middleware('auth');
+Route::get('/mock/{mock}','Test\MockController@public')->name('mockpage');
+Route::get('/mock/{mock}/start','Test\MockController@start')->name('mockpage.start');
+Route::get('/mock/{mock}/end','Test\MockController@end')->name('mockpage.end');
 
 /* Product Routes */
 Route::resource('/admin/product', 'Product\ProductController')->middleware('auth');

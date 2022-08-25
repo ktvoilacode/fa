@@ -85,7 +85,7 @@
                    <div class="h3 text-primary">{{ $user->duolingoRange($score) }}</div>
                   @endif
                 @else
-                <div class="display-4">-</div>
+                <div class="display-4">{{$score}}</div>
                 @endif
                 
     

@@ -20,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
         \App\Models\Test\Test::class => \App\Policies\Test\TestPolicy::class,
+        \App\Models\Test\Mock::class => \App\Policies\Test\MockPolicy::class,
         \App\Models\Test\Section::class => \App\Policies\Test\SectionPolicy::class,
         \App\Models\Test\Extract::class => \App\Policies\Test\ExtractPolicy::class,
         \App\Models\Test\Mcq::class => \App\Policies\Test\McqPolicy::class,

@@ -114,6 +114,10 @@ class User extends Authenticatable
 
     }
 
+    public function check_Order($user_id,$test_id){
+        return Order::where('user_id',$user_id)->where('test_id',$test_id)->first();
+    }
+
     public function create_order($user_id,$referral_name,$product_id,$test_id,$validity){
         $order = new Order();
         $order->order_id = 'ORD_'.substr(md5(mt_rand()), 0, 10);
@@ -174,13 +178,21 @@ class User extends Authenticatable
         return count($ids);
     }
 
-    public function testAccess($id){
+    public function testAccess($id,$slug=null){
         $order = $this->orders()->where('test_id',$id)->orderBy('id','desc')->first();
         
         $attempt = Attempt::where('test_id',$id)->where('user_id',$this->id)->first();
 
+
         if($attempt)
             return true;
+
+        $current_test= session()->get('current_test');
+        
+        if($slug == $current_test){
+           
+            return false;
+        }
 
         if($order){
             if(strtotime($order->expiry) < strtotime(date('Y-m-d'))){
@@ -208,18 +220,13 @@ class User extends Authenticatable
             }
                 
         }
-
-
         $order2 = $this->orders()->where('product_id',$id)->orderBy('id','desc')->first();
-        
-
         if($order2){
             if(strtotime($order2->expiry) > strtotime(date('Y-m-d')))
                 return true;
             else
                 return false;
         }
-        
         return false;
     }
 

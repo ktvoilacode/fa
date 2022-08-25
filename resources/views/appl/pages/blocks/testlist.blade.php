@@ -25,8 +25,19 @@
 				<button class="btn  btn-sm btn-success">Try Now</button>
 			</a>
 			@else
-  			@if($test->testtype->name == 'SPEAKING' || $test->testtype->name == 'WRITING')
+  			@if($test->testtype->name == 'SPEAKING' )
+
   			<a href="{{ route('test.try',$test->slug)}}" class="btn btn-primary btn-sm  mb-1"><i class="fa fa-eye"></i> View Response</a>
+        @elseif($test->testtype->name == 'WRITING')
+          @if(isset($status2[$test->id]))
+            @if($status2[$test->id]=='notevaluated')
+            <a href="{{ route('test.try',$test->slug)}}" class="btn btn-primary btn-sm  mb-1"><i class="fa fa-eye"></i> View Response</a>
+            @else
+            <a href="{{ route('test.try',$test->slug)}}" class="btn btn-warning  btn-sm  mb-1"><i class="fa fa-check-circle"></i> Evaluation Ready</a>
+            @endif
+          @else
+            <a href="{{ route('test.try',$test->slug)}}" class="btn btn-primary btn-sm  mb-1"><i class="fa fa-eye"></i> View Response</a>
+          @endif
         @elseif($status[$test->id]=='Expired')
           
          <a href="{{ route('test',$test->slug)}}" class="btn btn-sm btn-outline-success mb-1">@if($test->price!=0) Buy Now  @else Try Now @endif</a>

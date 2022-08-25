@@ -220,11 +220,11 @@
             </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2">
-            <a href="{{ route('page.index') }}">
+            <a href="{{ route('mock.index') }}">
             <div class="border bg-white p-4 rounded mb-3 mr-2">
                 <div>
                     <img src="{{ asset('images/admin/page.png') }}" class="w-100 mb-3" >
-                    <div class="text-center">Pages</div>
+                    <div class="text-center">Mocks</div>
                 </div>
             </div>
             </a>
