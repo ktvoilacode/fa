@@ -446,6 +446,7 @@ class AttemptController extends Controller
                         ->with('product',$product);
           }
       }
+      
     }
     else{
       if($price!=0 && $test->status!=3){
@@ -497,9 +498,9 @@ class AttemptController extends Controller
 
 
 
+
     /* Pre validation */
     $this->precheck($request);
-
 
 
     /* If Attempted show report */

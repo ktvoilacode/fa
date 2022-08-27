@@ -189,6 +189,7 @@ class User extends Authenticatable
 
         $current_test= session()->get('current_test');
         
+        if($current_test)
         if($slug == $current_test){
            
             return false;
