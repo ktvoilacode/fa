@@ -225,6 +225,7 @@
               <option value="1" @if(isset($obj)) @if($obj->status==1) selected @endif @endif >Active </option>
               <option value="2" @if(isset($obj)) @if($obj->status==2) selected @endif @endif >Open (No Login Required)</option>
               <option value="3" @if(isset($obj)) @if($obj->status==3) selected @endif @endif >Private (API driven)</option>
+              <option value="4" @if(isset($obj)) @if($obj->status==4) selected @endif @endif >Private (Mock)</option>
             </select>
           </div>
         </div>
@@ -277,6 +278,28 @@
               <option value="0" @if(isset($settings->sidebox)) @if($settings->sidebox==0) selected @endif @endif >Sequence Number (default)</option>
               
               <option value="1" @if(isset($settings->sidebox)) @if($settings->sidebox==1) selected @endif @endif >Question Number</option>
+            </select>
+          </div>
+        </div>
+
+         <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Microphone Check</label>
+            <select class="form-control" name="audio_permission">
+              <option value="0" @if(isset($settings->audio_permission)) @if($settings->audio_permission==0) selected @endif @endif >No (default)</option>
+              
+              <option value="1" @if(isset($settings->audio_permission)) @if($settings->audio_permission==1) selected @endif @endif >Yes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Back Button (Duolingo)</label>
+            <select class="form-control" name="back_re">
+              <option value="0" @if(isset($settings->back_re)) @if($settings->back_re==0) selected @endif @endif >No (default)</option>
+              
+              <option value="1" @if(isset($settings->back_re)) @if($settings->back_re==1) selected @endif @endif >Yes</option>
             </select>
           </div>
         </div>

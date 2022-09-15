@@ -102,6 +102,25 @@
       </div>
 
     
+      <div class="form-group">
+        <label for="formGroupExampleInput">Mocks</label>
+         <div class=" card p-3">
+          <div class="row">
+          @foreach($mocks as $mock)
+          @if($mock->status==1)
+          <div class="col-12 col-md-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="mocks[]" value="{{$mock->id}}" id="defaultCheck1" @if($obj->mocks->contains($mock->id))) checked @endif>
+            <label class="form-check-label" for="defaultCheck1">
+              {{ $mock->name }} ({{ $mock->slug }})
+            </label>
+          </div>
+          </div>
+          @endif
+          @endforeach
+         </div>
+         </div>
+      </div>
       
       <div class="form-group">
         <label for="formGroupExampleInput">Tests</label>

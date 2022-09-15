@@ -239,13 +239,20 @@ class AttemptController extends Controller
           $attempt =null;
         }
         
+        $testtype=  strtolower($test->testtype->name);
+
+        $audio_permission = false;
+        $settings = json_decode($test->settings,true);
+        if(isset($settings['audio_permission']))
+        if($settings['audio_permission']==1)
+          $audio_permission = true;
+       
+          
 
 
         /* If Attempted show report */
-        
-
         if($attempt){
-            $testtype=  strtolower($test->testtype->name);
+            
 
             $current_test= session()->get('current_test');
             if($slug == $current_test){
@@ -267,18 +274,21 @@ class AttemptController extends Controller
             }
         }else{
 
-            if(!strip_tags($test->instructions)){
+            if(!strip_tags($test->instructions) && !$audio_permission){
               if($product)
                 return redirect()->route('test.try',['test'=>$this->test->slug,'product'=>$product->slug]);
               else
                 return redirect()->route('test.try',['test'=>$this->test->slug]);
             } 
-            else  
+            else  {
+
               return view('appl.test.attempt.alerts.instructions')
                 ->with('test',$test)
+                ->with('audio_permission',$audio_permission)
                 ->with('product',$product)
                 ->with('player',true)
                 ->with('app',$this);
+            }
         }
    }
 
@@ -446,7 +456,7 @@ class AttemptController extends Controller
                         ->with('product',$product);
           }
       }
-      
+
     }
     else{
       if($price!=0 && $test->status!=3){
@@ -641,7 +651,8 @@ class AttemptController extends Controller
         }
       }
 
-
+    $settings = json_decode($test->settings,true);
+    
     $answers = false;
    if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
     return view('appl.test.attempt.try_'.$view)
@@ -654,6 +665,7 @@ class AttemptController extends Controller
             ->with('test',$test)
             ->with('qno',$qno)
             ->with('sidebox',$sidebox)
+            ->with('settings',$settings)
             ->with('product',$product)
             ->with('user',$user)
             ->with('timer',1)
@@ -670,6 +682,7 @@ class AttemptController extends Controller
             ->with('test',$test)
             ->with('product',$product)
             ->with('user',$user)
+            ->with('settings',$settings)
             ->with('answers',$answers)
             ->with('timer',1)
             ->with('qno',$qno)
@@ -686,6 +699,7 @@ class AttemptController extends Controller
         ->with('reading',1)
         ->with('qno',$qno)
         ->with('sidebox',$sidebox)
+        ->with('settings',$settings)
         ->with('user',$user)
         ->with('timer',1)
         ->with('answers',$answers)
@@ -696,6 +710,7 @@ class AttemptController extends Controller
                   ->with('test',$test)
                   ->with('product',$product)
                   ->with('attempt',$attempt)
+                  ->with('settings',$settings)
                   ->with('user',$user)
                    ->with('reading',0)
                   ->with('view',true)
@@ -719,6 +734,7 @@ class AttemptController extends Controller
                   ->with('user',$user)
                   ->with('qno',$qno)
                   ->with('sidebox',$sidebox)
+                  ->with('settings',$settings)
                   ->with('time',$test->test_time)
                   ->with('editor',true)
                   ->with('answers',$answers)

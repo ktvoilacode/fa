@@ -120,7 +120,9 @@
               @if($a->t3==1)
                 {{$a->t3_score}}
               @elseif($a->t3==-1)
+                 <a href="{{ route('test.analysis',$obj->t3)}}?user_id={{$a->user_id}}&admin=1" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
+                </a>
               @else
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
@@ -129,7 +131,9 @@
               @if($a->t4==1)
                 {{$a->t4_score}}
               @elseif($a->t4==-1)
+              <a href="{{ route('test.analysis',$obj->t4)}}?user_id={{$a->user_id}}&admin=1" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
+              </a>
               @else
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif

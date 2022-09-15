@@ -178,7 +178,7 @@
         <div class="text-white">
           <div class="mb-3 h3 "><b class="text-white"><i class="fa fa-area-chart"></i> Analytics</b></div>
           
-         <a href="{{ route('test.analytics',$app->test->id)}} " class="btn btn-outline-light mb-3"><i class="fa fa-user"></i> Student wise &nbsp;-&nbsp;{{$app->test->attemptcount()}}</a> <a href="{{ route('test.qanalytics',$app->test->id)}} " class="btn btn-outline-light "><i class="fa fa-question-circle-o"></i> Question wise</a>
+         <a href="{{ route('test.analytics',$app->test->id)}}?type=user" class="btn btn-outline-light mb-3"><i class="fa fa-user"></i> Student wise &nbsp;-&nbsp;{{$app->test->attemptcount()}}</a> <a href="{{ route('test.qanalytics',$app->test->id)}} " class="btn btn-outline-light "><i class="fa fa-question-circle-o"></i> Question wise</a>
             
         </div>
       </div>

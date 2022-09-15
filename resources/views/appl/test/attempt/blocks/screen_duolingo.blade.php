@@ -56,16 +56,23 @@
 <div class="" style="">
 	<div class=" p-0 " style="">
 	<div class="row">
-		<div class="col-12 col-md-5">
+		<div class="col-12 col-md-4">
 			&nbsp;
 			<h5 class="text-danger recording_message
 			"  style="display: none;margin-top: -10px"><i class="fa fa-dot-circle-o"></i> Recording </h5>
 		</div>
-		<div class="col-12 col-md-5">
+		<div class="col-12 col-md-4">
 			&nbsp;
 			<canvas class="visualizer" height="40px" width="100px" style="display: none;margin-top: 0px"></canvas>
 		</div>
-		
+
+		<div class="col-12 col-md-2">
+			<a href="#" class=" gre_prev disabled" data-qno="0" data-duo="1" data-ques-no="1" style="display: none;">
+			<div class=" rounded  p-1 ml-1 mb-2 mb-md-0  w-100 btn btn-secondary"  >
+					<div class="text-center p-2 "><i class="fa fa-arrow-left"></i> back</div>
+				</div>
+			</a>
+		</div>
 		<div class="col-12 col-md-2">
 			<div class="row no-gutters">
 				<div class="col-12 ">
@@ -73,11 +80,13 @@
 					@if(isset($test->sections[0]->fillup_order[0]->qno)) @if($test->sections[0]->fillup_order[0]->layout=='speak') sample @else display:none; @endif @else display:none; @endif"
 
 					>
-					<div class=" rounded  p-1 ml-1 mb-0 mb-md-0 btn-orange-record" >
+
+					<div class=" rounded  p-1 ml-1 mb-0 mb-md-0 btn-orange-record " >
 						<div class="text-center p-2"><i class="fa fa-circle"></i> <span>Record</span>
 						</div>
 					</div>
 				</a>
+				
 				
 				<a href="#" class="white gre_next disabled" data-qno="2" data-duo="1" data-ques-no="1" 
 					style="@if(isset($test->sections[0]->fillup_order[0]->layout)) 

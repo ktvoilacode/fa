@@ -18,4 +18,9 @@ class Mock extends Model
         'settings',
         // add all other fields
     ];
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Models\Product\Product');
+    }
 }

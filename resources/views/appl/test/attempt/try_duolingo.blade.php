@@ -18,7 +18,7 @@
             </div>
           </div>
 
-<div class="container {{$p=1}}" style="padding-left:0px;padding-right:0px;max-width:900px;">
+<div class="container {{$p=1}} duo_setting" data-back="@if(isset($settings['back_re']))@if($settings['back_re']==1) 1 @endif @endif" style="padding-left:0px;padding-right:0px;max-width:900px;">
 
 
   @guest

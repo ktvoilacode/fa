@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product\Product as Obj;
 use App\Models\Test\Group;
 use App\Models\Test\Test;
+use App\Models\Test\Mock;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 
@@ -193,6 +194,7 @@ class ProductController extends Controller
 
         $groups  = Group::where('status',1)->get();
         $tests  = Test::where('status',1)->get();
+        $mocks  = Mock::where('status',1)->get();
 
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
@@ -200,6 +202,7 @@ class ProductController extends Controller
                 ->with('editor',true)
                 ->with('groups',$groups)
                 ->with('tests',$tests)
+                ->with('mocks',$mocks)
                 ->with('app',$this);
     }
 
@@ -257,17 +260,24 @@ class ProductController extends Controller
                 $obj->tests()->attach($test);
             }
 
+            // attach the mocks
+            $mocks = $request->get('mocks');
+            if($mocks)
+            foreach($mocks as $mock){
+                $obj->mocks()->attach($mock);
+            }
+
             /* update cache file of this product */
             $filename = $request->get('slug').'.json';
             $filepath = $this->cache_path.$filename;
-            file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
+            //file_put_contents($filepath, json_encode($obj,JSON_PRETTY_PRINT));
 
             /* update in cache folder main file */
             $filename = 'index.'.$this->app.'.'.$this->module.'.json';
             $filepath = $this->cache_path.$filename;
             $objs = $obj->orderBy('created_at','desc')
                         ->get(); 
-            file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
+            //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
 
             flash('A new ('.$this->app.'/'.$this->module.') item is created!')->success();
             return redirect()->route($this->module.'.index');
@@ -382,6 +392,7 @@ class ProductController extends Controller
         $this->authorize('update', $obj);
         $groups  = Group::where('status',1)->get();
         $tests  = Test::where('status',1)->get();
+        $mocks  = Mock::where('status',1)->get();
         $settings = json_decode($obj->settings);
 
         if($obj)
@@ -391,6 +402,7 @@ class ProductController extends Controller
                 ->with('editor',true)
                 ->with('groups',$groups)
                  ->with('tests',$tests)
+                 ->with('mocks',$mocks)
                  ->with('settings',$settings)
                 ->with('app',$this);
         else
@@ -465,7 +477,17 @@ class ProductController extends Controller
                 $obj->tests()->detach();
             }
 
-            $obj->update($request->except(['groups','file','tests'])); 
+            $mocks = $request->get('mocks');
+            if($mocks){
+                $obj->mocks()->detach();
+                foreach($mocks as $mock){
+                $obj->mocks()->attach($mock);
+                }
+            }else{
+                $obj->mocks()->detach();
+            }
+
+            $obj->update($request->except(['groups','file','tests','mocks'])); 
 
 
             /* update cache file of this product */

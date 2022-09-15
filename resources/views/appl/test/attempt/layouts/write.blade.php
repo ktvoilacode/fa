@@ -21,7 +21,7 @@
   	<div class="mb-4 ">
 	
 
-	<textarea class="summernote4" name="{{$f->qno}}" data-id="{{$f->qno}}" ></textarea>
+	<textarea class="summernote4" name="{{$f->qno}}" data-id="{{$f->qno}}" row="8"></textarea>
 	@if($f->label || $f->prefix) 
 	<div class=" mt-1 text-secondary"><span class="f-word-count wc_{{$f->qno}}">0</span> words</div>
 	@endif

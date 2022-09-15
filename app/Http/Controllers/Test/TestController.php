@@ -366,6 +366,15 @@ class TestController extends Controller
             if($request->sidebox){
                 $settings['sidebox'] = 1;
             }
+
+            $settings['audio_permission'] = 0;
+            if($request->audio_permission){
+                $settings['audio_permission'] = 1;
+            }
+            $settings['back_re'] = 0;
+            if($request->back_re){
+                $settings['back_re'] = 1;
+            }
             
             $request->merge(['settings' => json_encode($settings)]);
 
@@ -1123,6 +1132,16 @@ class TestController extends Controller
             $settings['sidebox'] = 0;
             if($request->sidebox){
                 $settings['sidebox'] = 1;
+            }
+
+            $settings['audio_permission'] = 0;
+            if($request->audio_permission){
+                $settings['audio_permission'] = 1;
+            }
+
+            $settings['back_re'] = 0;
+            if($request->back_re){
+                $settings['back_re'] = 1;
             }
 
             $request->merge(['settings' => json_encode($settings)]);

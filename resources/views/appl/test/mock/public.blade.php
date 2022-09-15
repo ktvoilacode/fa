@@ -25,7 +25,11 @@
             @if($attempt->t1)
             <a href="{{ route('mockpage.start',$obj->slug)}}" class="btn btn-primary mt-4">Resume Test</a>
             @else
-            <a href="{{ route('mockpage.start',$obj->slug)}}" class="btn btn-success mt-4">Start Test</a>
+              @if($orders!=null)
+                <a href="{{ route('mockpage.start',$obj->slug)}}" class="btn btn-success mt-4">Start Test</a>
+              @else
+                 <a href="{{ route('product.view',$obj->products->first()->slug) }}" class="btn btn-success btn-lg mt-4">Activate your product</a>
+              @endif
             @endif
 
           @endif

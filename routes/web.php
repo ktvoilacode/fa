@@ -24,6 +24,7 @@ Route::get('/', 'HomeController@welcome');
 
 Route::get('/home', 'HomeController@dashboard')->name('home')->middleware('auth');
 Route::get('/gre', 'HomeController@gre')->name('home.gre');
+Route::get('/wapp', 'HomeController@whatsapp')->name('whatsapp');
 
 // login routes
 Auth::routes();

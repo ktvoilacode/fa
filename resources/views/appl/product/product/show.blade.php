@@ -86,6 +86,18 @@
             <div class="col-md-8">{!! $obj->details !!}</div>
           </div>
           
+          @if(count($obj->mocks))
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Mocks</b></div>
+            <div class="col-md-8">
+              @foreach($obj->mocks as $mock)
+                <a href="{{ route('mock.show',$mock->id)}}">
+                  {{$mock->name }} ({{ $mock->slug }})
+                </a><br>
+              @endforeach
+            </div>
+          </div>
+          @endif
 
           @if(count($obj->tests))
           <div class="row mb-2">

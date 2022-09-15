@@ -1,5 +1,6 @@
 
 
+
 @if(isset($code))
 <!-- Codemirror-->
 <script type="application/javascript" src="{{asset('js/jquery.js')}}"></script>  
@@ -137,7 +138,7 @@ $(document).ready(function() {
             $('.summernote4').summernote({
               placeholder: 'Enter your response ... ',
               tabsize: 2,
-                height: 150,                // set editor height
+                height: 350,                // set editor height
                 minHeight: null,             // set minimum height of editor
                 maxHeight: null,             // set maximum height of editor
                 focus: true,
@@ -530,6 +531,29 @@ $(document).ready(function() {
 <script src="{{asset('js/script.js?new=11')}}" type="application/javascript"></script>  
 @endif
 
+
+@if(isset($audio_permission))
+@if($audio_permission)
+<script type="application/javascript">
+$(function() {
+  $(document).on('click','.activate_microphone',function(){
+    navigator.mediaDevices.getUserMedia({video: true, audio: true}).then((stream) => {
+        window.localStream = stream;
+        $('.sc_msg').show();
+    }).catch((err) => {
+
+        console.error(`you got an error: ${err}`);
+
+        $('#er_msg').text(err);
+        $('.msg_er').show();
+          
+    });
+  });
+});
+</script>
+@endif
+@endif
+
 @if(isset($grammar))
 
 <script src="{{asset('js/circular.js')}}" type="application/javascript"></script>
@@ -801,6 +825,9 @@ $(document).ready(function() {
         $section = $('.greblock_'+$qno).data('section');
         $sno = $('.greblock_'+$qno).data('sno');
         $mark = $('.greblock_'+$qno).data('mark');
+
+
+
 
         if($sec_current == $section){
         if($qno){
@@ -1192,8 +1219,10 @@ $(function() {
       $('.duo_section').data('question',$ques);
     }
 
+    if($('.section_data_'+$sno).data('layout'))
     $layout = $('.section_data_'+$id).data('layout').trim();
-  
+    else
+      $layout = 'not';
         // check if its speak question
     if($layout!='speak'){
           $('.record-btn').hide();
@@ -1251,12 +1280,19 @@ $(function() {
     /* Review Button */
     $('.gre_prev').on('click',function(e){
 
+
         $qno = $(this).data('qno');
-        console.log($qno);
+        console.log('prev-'+$qno);
         $section = $('.greblock_'+$qno).data('section');
         $sno = $('.greblock_'+$qno).data('sno');
 
+        if($qno==1 || $qno==0)
+          $('.gre_prev').hide();
+
         updateProgress($section);
+
+        $('.next_text').html('Next');
+        $('.next-btn').removeClass('btn-submit-duo');
 
         if($qno){
             $('.gre_qno').html($sno);
@@ -1283,7 +1319,10 @@ $(function() {
         
         }else{
             $('.gre_prev').addClass('disabled');
+            
         }
+
+        
     });
 
 
@@ -1296,6 +1335,11 @@ $(function() {
       
       $section = $('.greblock_'+$qno).data('section');
       $sno = $('.greblock_'+$qno).data('sno');
+
+      $back = parseInt($('.duo_setting').data('back'));
+      
+      if($qno!=1 && $qno!=0 && $back)
+          $('.gre_prev').show();
       
       //end duolingo test
       if(!$sno){
@@ -1316,6 +1360,7 @@ $(function() {
         if($time)
           section_timer($time);
 
+        if($('.section_data_'+$sno).data('layout').length)
         $layout = $('.section_data_'+$sno).data('layout').trim();
   
         // check if its speak question
@@ -1344,6 +1389,7 @@ $(function() {
         $qno = $qno +1;
 
         
+          console.log('next text -' +$('.next_text').length);
         //update the navbar
         if($('.greblock_'+$qno).length){
             $('.gre_prev').data('qno',($qno-2));
@@ -1351,6 +1397,7 @@ $(function() {
             $('.gre_next').data('ques-no',($qno-1));
             if($qno-2!=0)
                 $('.gre_prev').removeClass('disabled');
+
         }
         else{
           $('.gre_prev').data('qno',($qno-2));
@@ -1416,6 +1463,8 @@ $(function() {
           $qno = $('.gre_next').data('qno');
           document.getElementById("timer3").innerHTML = "";
           document.getElementById("timer4").innerHTML = "";
+        
+          if($time!=-1)
           next($qno);
           
 
@@ -1613,8 +1662,26 @@ function visualize(stream) {
   }
 }
 
+
+  function audio_permission(){
+    const constraints = {
+      audio: true,
+      video: false
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+      .catch((err) => {
+        // always check for errors at the end.
+        console.error(`${err.name}: ${err.message}`);
+      });
+  }
+
+
+
 });
 </script>
+
+
 
 @if(!$reading)
 <script>
@@ -1645,7 +1712,7 @@ $(function(){
     console.log('webcam started');
 
     setTimeout( takepicture,3000 );
-    setInterval( takepicture,60000 );
+    setInterval( takepicture,1200000 );
     try {
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then(function(stream) {

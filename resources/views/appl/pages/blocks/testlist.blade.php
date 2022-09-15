@@ -15,6 +15,7 @@
   </thead>
   <tbody>
   	@foreach($tests as $k=>$test)
+    @if($test->status!=4)
 	<tr>
       <th scope="row">{{$k+1}}</th>
       <td><a href="{{ route('test',$test->slug)}}">{{$test->name}}</a></td>
@@ -52,6 +53,7 @@
       </td>
       <td>{{ date('d M Y', strtotime($expiry[$test->id]))}}</td>
     </tr>		
+    @endif
 	@endforeach
   </tbody>
 </table>

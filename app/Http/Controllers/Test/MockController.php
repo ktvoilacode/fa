@@ -8,6 +8,7 @@ use App\Models\Test\Mock as Obj;
 use App\Models\Test\Mock_Attempt;
 use App\Models\Test\Attempt;
 use App\Models\Test\Test;
+use App\Models\Product\Order;
 
 class MockController extends Controller
 {
@@ -31,11 +32,14 @@ class MockController extends Controller
         $item = $request->item;
         $objs = $obj->where('name','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));   
+                    ->paginate(config('global.no_of_records'));  
+        $attempts = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',-1)->get()->groupBy('mock_id'); 
+
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
+                ->with('attempts',$attempts)
                 ->with('obj',$obj)
                 ->with('app',$this);
     }
@@ -94,6 +98,8 @@ class MockController extends Controller
         $this->authorize('view', $obj);
         $attempts = Mock_Attempt::where('mock_id',$obj->id)->with('user')->get();
 
+        
+
         foreach($attempts as $attempt){
 
             if($attempt->t3==-1){
@@ -112,9 +118,14 @@ class MockController extends Controller
                 if($attempt_done->sum('status') == $attempt_done->count('id')){
                     $attempt->t4 = 1;
                     $attempt->t4_score = $attempt_done->sum('score');
-                    $attempt->status = 1;
                     $attempt->save();
                 }
+            }
+
+            if($attempt->t3==1 && $attempt->t4==1){
+
+                $attempt->status=1;
+                $attempt->save();
             }
         }
 
@@ -165,8 +176,13 @@ class MockController extends Controller
             }
         }
 
+        $pids = $obj->products->pluck('id')->toArray();
+        $orders = Order::where('user_id',$user->id)->whereIn('product_id',$pids)->first();
+        
+
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.public')
+                    ->with('orders',$orders)
                     ->with('obj',$obj)->with('app',$this)->with('attempt',$attempt);
         else
             abort(404);

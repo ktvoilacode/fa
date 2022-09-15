@@ -7,6 +7,7 @@
                 <th scope="col">#({{$objs->total()}})</th>
                 <th scope="col">Name </th>
                 <th scope="col">Tests</th>
+                <th scope="col">Under Review</th>
                 <th scope="col">Status</th>
                 <th scope="col">Created at</th>
               </tr>
@@ -25,6 +26,13 @@
                 Test Slug 2 - {{$obj->t2}}<br>
                 Test Slug 3 - {{$obj->t3}}<br>
                 Test Slug 4 - {{$obj->t4}}<br>
+                </td>
+                <td>
+                  @if(isset($attempts[$obj->id]))
+                   <span class="badge badge-warning"> {{count($attempts[$obj->id])}} </span>
+                  @else
+                  -
+                  @endif
                 </td>
                 <td>
                   @if($obj->status==0)
