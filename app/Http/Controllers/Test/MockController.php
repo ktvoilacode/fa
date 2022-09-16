@@ -147,7 +147,11 @@ class MockController extends Controller
     {
         $obj = Obj::where('slug',$id)->first();
         $user = \Auth::user();
+
+        if($user)
         $attempt = Mock_Attempt::where('user_id',$user->id)->where('mock_id',$obj->id)->first();
+        else
+            $attempt=null;
 
         if(!$attempt){
             $attempt = new Mock_Attempt();
@@ -177,7 +181,10 @@ class MockController extends Controller
         }
 
         $pids = $obj->products->pluck('id')->toArray();
+        if($user)
         $orders = Order::where('user_id',$user->id)->whereIn('product_id',$pids)->first();
+        else
+            $orders=null;
         
 
         if($obj)

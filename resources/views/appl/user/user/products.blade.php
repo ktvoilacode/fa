@@ -21,32 +21,37 @@
                   <tr>
                       <td>{{$k+1}}</td>
                       <td>
-                        @if(isset($order->test->id) && isset($obj->id))
-                        <a href="{{ route('user.test',[$obj->id,$order->test->id])}}">
-                        {{strip_tags($order->test->name)}}  
-                        </a>
-                        @if($obj->attempted($obj->id,$order->test->id))
-                        <span class="badge badge-secondary">attempted</span>
-                        @endif
-                        {{$obj->testscore($obj->id,$order->test->id)}}
+                        @if($order->test_id && isset($obj->id))
+                          @if(isset($tests[$order->test_id]))
+                            <a href="{{ route('user.test',[$obj->id,$order->test_id])}}">
+                            {{strip_tags($tests[$order->test_id]->name)}}  
+                            </a>
+                            @if(isset($attempts[$order->test_id]))
+                            <span class="badge badge-secondary">attempted</span>
+                            <span class="badge badge-warning">score - {{$attempts[$order->test_id]->sum('score')}}</span>
+                            @endif
+                            
+                          @endif
                       
                         @else
 
-                        @if(isset($order->product->name))
-                        {{ strip_tags($order->product->name)}}
+                        @if($order->product_id)
+                        @if(isset($products[$order->product_id]))
+                        {{ strip_tags($products[$order->product_id]->name)}}
                         <ul>
-                          @foreach($order->product->tests as $test)
-                            <li><a href="{{ route('user.test',[$obj->id,$test->id])}}">{{ $test->name }}
-                              
-                            </a>
-
-                            @if($obj->has_attempted($test->id))
+                          
+                          @foreach($products[$order->product_id]->tests as $test)
+                            <li>
+                              <a href="{{ route('user.test',[$obj->id,$test->id])}}">{{ $test->name }}</a>
+                            @if(isset($attempts[$test->id]))
                             <span class="badge badge-secondary">attempted</span>
+                             <span class="badge badge-warning">score - {{$attempts[$test->id]->sum('score')}} </span>
                             @endif
-
-                            {{$obj->get_testscore($obj->id,$test->id)}}</li>
+                            </li>
                           @endforeach
+                          
                         </ul>
+                        @endif
                         @endif
 
                         @endif

@@ -295,8 +295,7 @@ class UserController extends Controller
      */
     public function show($id,Request $request)
     {
-        $obj = Obj::where('id',$id)->first();
-
+        $obj = Obj::where('id',$id)->with('orders')->first();
 
         if($request->get('resend_email')){
             $obj['password_string'] = $obj->auto_password;
@@ -304,9 +303,20 @@ class UserController extends Controller
             flash('Successfully mailed the account details to ('.$obj->email.')')->success();
         }
 
+        $tids = $obj->orders->pluck('test_id')->toArray();
+        $pids = $obj->orders->pluck('product_id')->toArray();
+
+        $tests = Test::whereIn('id',$tids)->get()->keyBy('id');
+        $products = Product::whereIn('id',$pids)->with('tests')->get()->keyBy('id');
+
+
+        $attempts = Attempt::whereIn('test_id',$tids)->where('user_id',$id)->get()->groupBy('test_id');
+
         $this->authorize('view', $obj);
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')
+                    ->with('tests',$tests)->with('products',$products)
+                    ->with('attempts',$attempts)
                     ->with('obj',$obj)->with('app',$this);
         else
             abort(404);
