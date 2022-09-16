@@ -304,15 +304,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-3">
-          <div class="form-group">
-            <label for="formGroupExampleInput ">Unified Timer (Duolingo)</label>
-            <select class="form-control" name="uftimer">
-              <option value="0" @if(isset($settings->uftimer)) @if($settings->uftimer==0) selected @endif @endif >No (default)</option>
-              <option value="1" @if(isset($settings->uftimer)) @if($settings->uftimer==1) selected @endif @endif >Yes</option>
-            </select>
-          </div>
-        </div>
+        
 
       </div>
 
