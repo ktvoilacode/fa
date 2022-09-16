@@ -652,7 +652,9 @@ class AttemptController extends Controller
       }
 
     $settings = json_decode($test->settings,true);
-    
+
+
+
     $answers = false;
    if($view == 'listening' || $view == 'grammar' || $view =='english' || $view=='survey')
     return view('appl.test.attempt.try_'.$view)
@@ -847,6 +849,9 @@ class AttemptController extends Controller
         }
       }
 
+
+    $settings = json_decode($test->settings,true);
+
     if($view == 'listening' || $view == 'grammar' || $view =='english' )
     return view('appl.test.attempt.try_'.$view)
             ->with('player',true)
@@ -857,6 +862,7 @@ class AttemptController extends Controller
             ->with('user',$user)
             ->with('test',$test)
             ->with('pte',$pte)
+              ->with('settings',$settings)
             ->with('qno',$qno)
             ->with('sidebox',$sidebox)
             ->with('product',$product)
@@ -876,6 +882,7 @@ class AttemptController extends Controller
             ->with('qcount',$qcount)
             ->with('qno',$qno)
             ->with('sidebox',$sidebox)
+              ->with('settings',$settings)
             ->with('test',$test)
             ->with('product',$product)
             ->with('timer',$user)
@@ -895,6 +902,7 @@ class AttemptController extends Controller
                 ->with('pte',$pte)
                 ->with('qno',$qno)
                 ->with('sidebox',$sidebox)
+                  ->with('settings',$settings)
                 ->with('product',$product)
                 ->with('reading',1)
                 ->with('view',true)
@@ -908,6 +916,7 @@ class AttemptController extends Controller
                   ->with('product',$product)
                   ->with('user',$user)
                   ->with('attempt',$attempt)
+                    ->with('settings',$settings)
                   ->with('reading',0)
                   ->with('qno',$qno)
                   ->with('sidebox',$sidebox)
@@ -923,6 +932,7 @@ class AttemptController extends Controller
                   ->with('app',$this)
                   ->with('pte',$pte)
                   ->with('attempt',$attempt)
+                    ->with('settings',$settings)
                   ->with('user',$user)
                   ->with('timer',$user)
                   ->with('qno',$qno)

@@ -375,6 +375,11 @@ class TestController extends Controller
             if($request->back_re){
                 $settings['back_re'] = 1;
             }
+
+            $settings['uftimer'] = 0;
+            if($request->uftimer){
+                $settings['uftimer'] = 1;
+            }
             
             $request->merge(['settings' => json_encode($settings)]);
 
@@ -1142,6 +1147,11 @@ class TestController extends Controller
             $settings['back_re'] = 0;
             if($request->back_re){
                 $settings['back_re'] = 1;
+            }
+
+            $settings['uftimer'] = 0;
+            if($request->uftimer){
+                $settings['uftimer'] = 1;
             }
 
             $request->merge(['settings' => json_encode($settings)]);

@@ -1340,6 +1340,8 @@ $(function() {
       
       if($qno!=1 && $qno!=0 && $back)
           $('.gre_prev').show();
+
+        console.log('back-'+$back);
       
       //end duolingo test
       if(!$sno){
@@ -1431,7 +1433,7 @@ $(function() {
 
         var countDownDate = addSeconds(new Date(),$time);
 
-        window.x = setInterval(function() {
+        window.y = setInterval(function() {
         // Get todays date and time
         var now = new Date().getTime();
 
@@ -1459,9 +1461,11 @@ $(function() {
 
         // If the count down is finished, write some text 
         if (distance < 0 ) {
-          clearInterval(x);
+          clearInterval(y);
           $qno = $('.gre_next').data('qno');
+          if($('#timer3').is(':visible'))
           document.getElementById("timer3").innerHTML = "";
+          if($('#timer4').is(':visible'))
           document.getElementById("timer4").innerHTML = "";
         
           if($time!=-1)
@@ -1965,7 +1969,9 @@ var x = setInterval(function() {
   // If the count down is finished, write some text 
   if (distance < 0) {
     clearInterval(x);
+    if($('#timer').is(':visible'))
     document.getElementById("timer").innerHTML = "EXPIRED";
+    if($('#timer2').is(':visible'))
     document.getElementById("timer2").innerHTML = "EXPIRED";
 
     alert('The Test time has expired. ');

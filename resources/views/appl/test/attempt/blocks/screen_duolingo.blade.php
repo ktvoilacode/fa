@@ -26,7 +26,13 @@
   	</canvas>
 		</div>
 		
-		<div class="mb-3 text-secondary" style="font-size: 18px;"><span class="d-block  "><span class="time_count" id="timer3"></span> <span class="time_count d-none" id="timer4"></span>&nbsp;</span></div>
+		
+		<div class="mb-3 text-secondary" style="font-size: 18px;"><span class="d-block  ">
+			@if($app->test->test_time)
+	<span class="" id="timer2">{{$app->test->test_time}}:00 </span>
+	@else
+	<span class="time_count" id="timer3"></span> <span class="time_count d-none" id="timer4"></span>
+	@endif&nbsp;</span></div>
 
 		<div class="progress mb-4" style="height:5px;@if(count($test->sections)<2)display:none;@endif">
   <div class="progress-bar {{$m=1}}" role="progressbar" style="width: 0%;background: #ff8159" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

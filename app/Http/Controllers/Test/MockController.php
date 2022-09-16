@@ -370,9 +370,6 @@ class MockController extends Controller
             flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
             return redirect()->route($this->module.'.index');
         }
-
-        
-        
         
     }
 }
