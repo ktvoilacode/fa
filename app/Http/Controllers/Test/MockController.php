@@ -33,13 +33,15 @@ class MockController extends Controller
         $objs = $obj->where('name','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));  
-        $attempts = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',-1)->get()->groupBy('mock_id'); 
+        $attempts = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->get()->groupBy('mock_id'); 
+        $attempts_review = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',-1)->get()->groupBy('mock_id'); 
 
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
                 ->with('attempts',$attempts)
+                ->with('attempts_review',$attempts_review)
                 ->with('obj',$obj)
                 ->with('app',$this);
     }
@@ -123,7 +125,6 @@ class MockController extends Controller
             }
 
             if($attempt->t3==1 && $attempt->t4==1){
-
                 $attempt->status=1;
                 $attempt->save();
             }
@@ -182,7 +183,7 @@ class MockController extends Controller
 
         $pids = $obj->products->pluck('id')->toArray();
         if($user)
-        $orders = Order::where('user_id',$user->id)->whereIn('product_id',$pids)->first();
+            $orders = Order::where('user_id',$user->id)->whereIn('product_id',$pids)->first();
         else
             $orders=null;
         
@@ -344,10 +345,32 @@ class MockController extends Controller
         $obj = Obj::where('id',$id)->first();
         $this->authorize('update', $obj);
 
-        
-        $obj->delete();
+        $user_id = request()->get('user_id');
 
-        flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
-        return redirect()->route($this->module.'.index');
+        if($user_id){
+            $t1 = Test::where('slug',$obj->t1)->first();
+            Attempt::where('user_id',$user_id)->where('test_id',$t1->test_id)->delete();
+
+            $t2 = Test::where('slug',$obj->t2)->first();
+            Attempt::where('user_id',$user_id)->where('test_id',$t2->test_id)->delete();
+
+            $t3 = Test::where('slug',$obj->t3)->first();
+            Attempt::where('user_id',$user_id)->where('test_id',$t3->test_id)->delete();
+
+            $t4 = Test::where('slug',$obj->t4)->first();
+            Attempt::where('user_id',$user_id)->where('test_id',$t4->test_id)->delete();
+
+            Mock_Attempt::where('mock_id',$obj->id)->where('user_id',$user_id)->delete();
+
+            flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
+            return redirect()->route($this->module.'.show',$obj->id);
+
+        }else{
+            $obj->delete();
+            flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
+            return redirect()->route($this->module.'.index');
+        }
+        
+        
     }
 }
