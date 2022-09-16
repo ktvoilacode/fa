@@ -1487,7 +1487,7 @@ $(function() {
       }
 
       function clearTimer(){
-        clearInterval(window.x);
+        clearInterval(window.y);
         if($('#timer3').is(':visible')){
           document.getElementById("timer3").innerHTML = "";
           document.getElementById("timer4").innerHTML = "";
