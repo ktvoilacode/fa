@@ -28,8 +28,13 @@
 		
 		
 		<div class="mb-3 text-secondary" style="font-size: 18px;"><span class="d-block  ">
-			@if($app->test->test_time)
+			@if(isset($settings['uftimer']))
+			@if($settings['uftimer'])
 	<span class="" id="timer2">{{$app->test->test_time}}:00 </span>
+		@else
+
+	<span class="time_count" id="timer3"></span> <span class="time_count d-none" id="timer4"></span>	
+		@endif
 	@else
 	<span class="time_count" id="timer3"></span> <span class="time_count d-none" id="timer4"></span>
 	@endif&nbsp;</span></div>
