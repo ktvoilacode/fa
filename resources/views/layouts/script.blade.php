@@ -488,6 +488,7 @@ $(document).ready(function() {
 
         
 
+
         $(".play").click(function() {
             $seek = $(this).data('seek');
             player.stop();
@@ -1371,6 +1372,12 @@ $(function() {
 
       // stop audio
       audio_stop();
+
+      if($('#beep').length){
+          var x = document.getElementById("beep");
+          x.autoplay = true;
+          x.load();
+        }
 
       
       // duo timer
