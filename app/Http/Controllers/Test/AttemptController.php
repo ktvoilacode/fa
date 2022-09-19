@@ -652,7 +652,10 @@ class AttemptController extends Controller
       }
 
     $settings = json_decode($test->settings,true);
-
+    $hide_player = false;
+    if(isset($settings['hide_player']))
+      if($settings['hide_player'])
+        $hide_player = true;
 
 
     $answers = false;
@@ -663,6 +666,7 @@ class AttemptController extends Controller
             ->with('grammar',true)
             ->with('app',$this)
             ->with('qcount',$qcount)
+            ->with('hide_player',$hide_player)
             ->with('pte',$pte)
             ->with('test',$test)
             ->with('qno',$qno)
@@ -852,6 +856,11 @@ class AttemptController extends Controller
 
     $settings = json_decode($test->settings,true);
 
+    $hide_player = false;
+    if(isset($settings['hide_player']))
+      if($settings['hide_player'])
+        $hide_player = true;
+
     if($view == 'listening' || $view == 'grammar' || $view =='english' )
     return view('appl.test.attempt.try_'.$view)
             ->with('player',true)
@@ -859,10 +868,11 @@ class AttemptController extends Controller
             ->with('grammar',true)
             ->with('app',$this)
             ->with('qcount',$qcount)
+            ->with('hide_player',$hide_player)
             ->with('user',$user)
             ->with('test',$test)
             ->with('pte',$pte)
-              ->with('settings',$settings)
+            ->with('settings',$settings)
             ->with('qno',$qno)
             ->with('sidebox',$sidebox)
             ->with('product',$product)
@@ -932,7 +942,7 @@ class AttemptController extends Controller
                   ->with('app',$this)
                   ->with('pte',$pte)
                   ->with('attempt',$attempt)
-                    ->with('settings',$settings)
+                  ->with('settings',$settings)
                   ->with('user',$user)
                   ->with('timer',$user)
                   ->with('qno',$qno)

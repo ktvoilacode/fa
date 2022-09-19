@@ -15,7 +15,14 @@
 @endif
 @endguest
 
-<div class="container" style="padding-left:0px;padding-right:0px;">
+
+
+
+<div class="text-center mt-5" id="play_audio">
+  
+    <button class="btn btn-warning btn-lg py-3 px-5" id="btn_play_audio"> Start Listening Test</button>
+</div>
+<div class="container" id="test_container" style="padding-left:0px;padding-right:0px;display: none;" >
     <form id="test" class="test accept" action="{{route('attempt.store',$app->test->slug)}}" method="post" >  
 
     <div class="row no-gutters">
@@ -49,5 +56,6 @@
     @include('appl.test.attempt.blocks.modal')
     </form>
 </div>
+
 
 @endsection

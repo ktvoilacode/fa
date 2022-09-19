@@ -381,6 +381,11 @@ class TestController extends Controller
                 $settings['uftimer'] = 1;
             }
             
+            $settings['hide_player'] = 0;
+            if($request->hide_player){
+                $settings['hide_player'] = 1;
+            }
+
             $request->merge(['settings' => json_encode($settings)]);
 
             if($request->get('details')){
@@ -467,6 +472,9 @@ class TestController extends Controller
                   }
                       
               }
+        $settings = json_decode($obj->settings,true);
+        $hide_player = false;
+    
 
          
         if($obj)
@@ -474,6 +482,7 @@ class TestController extends Controller
                     ->with('obj',$obj)->with('app',$this)
                     ->with('test',$obj)
                     ->with('testtype',$obj->testtype)
+                    ->with('hide_player',$hide_player)
                     ->with('player',true)
                     ->with('testedit',true)
                     ->with('grammar',1)
@@ -1152,6 +1161,11 @@ class TestController extends Controller
             $settings['uftimer'] = 0;
             if($request->uftimer){
                 $settings['uftimer'] = 1;
+            }
+
+            $settings['hide_player'] = 0;
+            if($request->hide_player){
+                $settings['hide_player'] = 1;
             }
 
             $request->merge(['settings' => json_encode($settings)]);

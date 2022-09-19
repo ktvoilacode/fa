@@ -314,6 +314,16 @@
           </div>
         </div>
 
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Hide Audio Player (IElTS Mock)</label>
+            <select class="form-control" name="hide_player">
+              <option value="0" @if(isset($settings->hide_player)) @if($settings->hide_player==0) selected @endif @endif >No (default)</option>
+              <option value="1" @if(isset($settings->hide_player)) @if($settings->hide_player==1) selected @endif @endif >Yes</option>
+            </select>
+          </div>
+        </div>
+
       </div>
 
       

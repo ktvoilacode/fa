@@ -2,7 +2,7 @@
 	<div class="bg-white border-top p-4">
 	<h4><i class="fa fa-check-square-o"></i> {{ $extract->name }} 
 
-	@if($extract->seek_time!=-1)
+	@if($extract->seek_time!=-1 && !$hide_player)
 	<button class="btn play play_e{{$extract->seek_time}} btn-outline-primary btn-sm mt-2 mt-sm-0" data-seek="{{ $extract->seek_time }}" onclick="this.blur();" type="button">Play Track</button>
 	@endif
 	</h4>

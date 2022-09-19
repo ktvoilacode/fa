@@ -460,8 +460,11 @@ $(document).ready(function() {
 <script type="application/javascript" src="{{asset('js/global.js?new=4')}}"></script>  
 
 <script type="application/javascript">
+
+
+
   @if(isset($test))
-  @if($test->testtype->name!='DUOLINGO')
+  @if($test->testtype->name!='DUOLINGO' )
     $(document).ready(function(){
         const controls = [// Restart playback
         'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'pip', 'airplay', 'fullscreen',]
@@ -474,6 +477,16 @@ $(document).ready(function() {
             if(document.querySelector(selector))
             document.querySelector(selector).addEventListener(type, callback, false);
           }
+
+        
+        
+             $("#btn_play_audio").click(function() {
+              $("#play_audio").hide();
+             $("#test_container").show();
+                  player.play();
+              }); 
+
+        
 
         $(".play").click(function() {
             $seek = $(this).data('seek');
@@ -524,8 +537,13 @@ $(document).ready(function() {
 
     });   
 
-    @endif 
-    @endif 
+   
+
+    
+
+
+    @endif
+    @endif
 </script>
 @else
 <script src="{{asset('js/script.js?new=11')}}" type="application/javascript"></script>  
