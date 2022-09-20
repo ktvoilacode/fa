@@ -347,18 +347,20 @@ class MockController extends Controller
 
         $user_id = request()->get('user_id');
 
+
         if($user_id){
             $t1 = Test::where('slug',$obj->t1)->first();
-            Attempt::where('user_id',$user_id)->where('test_id',$t1->test_id)->delete();
+            Attempt::where('user_id',$user_id)->where('test_id',$t1->id)->delete();
 
             $t2 = Test::where('slug',$obj->t2)->first();
-            Attempt::where('user_id',$user_id)->where('test_id',$t2->test_id)->delete();
+           
+            Attempt::where('user_id',$user_id)->where('test_id',$t2->id)->delete();
 
             $t3 = Test::where('slug',$obj->t3)->first();
-            Attempt::where('user_id',$user_id)->where('test_id',$t3->test_id)->delete();
+            Attempt::where('user_id',$user_id)->where('test_id',$t3->id)->delete();
 
             $t4 = Test::where('slug',$obj->t4)->first();
-            Attempt::where('user_id',$user_id)->where('test_id',$t4->test_id)->delete();
+            Attempt::where('user_id',$user_id)->where('test_id',$t4->id)->delete();
 
             Mock_Attempt::where('mock_id',$obj->id)->where('user_id',$user_id)->delete();
 

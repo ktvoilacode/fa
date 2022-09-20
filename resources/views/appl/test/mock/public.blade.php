@@ -45,28 +45,24 @@
                 <div class="border rounded p-4">
                   <h5> Listening</h5>
                   <div class="display-4">{{$attempt->t1_score}}</div>
-                  <div class=""><a href="">view report</a></div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="border rounded p-4">
                   <h5> Reading</h5>
                   <div class="display-4">{{$attempt->t2_score}}</div>
-                  <div class=""><a href="">view report</a></div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="border rounded p-4">
                   <h5> Speaking</h5>
                   <div class="display-4">{{$attempt->t3_score}}</div>
-                  <div class=""><a href="">view report</a></div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="border rounded p-4">
                   <h5> Writing</h5>
                   <div class="display-4">{{$attempt->t4_score}}</div>
-                  <div class=""><a href="">view report</a></div>
                 </div>
               </div>
           </div>
