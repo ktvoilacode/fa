@@ -49,7 +49,7 @@ class AdminController extends Controller
             $d = Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
             foreach($d as $k=>$m){
               
-                $o = Order::where('test_id',$m->test_id)->where('product_id',3)->first();
+                $o = Order::where('test_id',$m->test_id)->where('product_id',3)->where('status',1)->first();
                 if($o)
                     $d[$k]->premium = 1;
                 else
