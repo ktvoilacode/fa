@@ -44,7 +44,7 @@ class AdminController extends Controller
         /* writing data */
         $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->toArray();
        
-        $data['writing']= Cache::remember('wri_users', 240, function() use ($test_ids) {
+        $data['writing'] = Cache::remember('wri_users', 120, function() use ($test_ids) {
 
             $d = Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
             foreach($d as $k=>$m){
@@ -54,8 +54,21 @@ class AdminController extends Controller
                 else
                     $d[$k]->premium =0;
             }
-            return $d;
+
+            $d2=[];$k=0;
+            foreach($d as $a=>$b){
+                if($b->premium==1)
+                $d2[$k++] = $b;
+            }
+            foreach($d as $a=>$b){
+                if($b->premium!=1)
+                $d2[$k++] = $b;
+            }
+            return $d2;
         });
+
+        //$data['writing'] = $data['writing']->sort('premium');
+
 
 
         /* duolingo data */
@@ -85,14 +98,7 @@ class AdminController extends Controller
         });
 
         $data['duo_orders'] = Order::where('product_id',43)->orderBy('created_at','desc')->get();
-
-
-
-       
-        
         $data['new'] = User::where('admin','0')->orderBy('lastlogin_at','desc')->limit(5)->get();
-
-        
         $data['form'] = Form::orderBy('id','desc')->limit(5)->get();
 
         $latest = [];$count=0;

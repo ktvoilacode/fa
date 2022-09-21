@@ -27,8 +27,8 @@
             </div>
 
             <div class="bg-secondary text-light rounded p-4 mb-4">
-                <h3 class="mb-0"><i class="fa fa-file-o"></i> Writing <span class="badge badge-warning">new</span> <Span class="float-right ">{{ $data['writing']->count() }}</Span></h3>
-                @if($data['writing']->count())
+                <h3 class="mb-0"><i class="fa fa-file-o"></i> Writing <span class="badge badge-warning">new</span> <Span class="float-right ">{{ count($data['writing']) }}</Span></h3>
+                @if(count($data['writing']))
                 <hr>
                 @foreach($data['writing'] as $k=>$w)
                 <div class="mb-2"><a href="{{ route('file.show',$w->id) }}" class="text-white">{{$w->user->name}} @if($w->premium)<span class="badge badge-primary">pro</span>@endif</a><span class="float-right " style="color:#888f94">{{ $w->created_at->diffForHumans()}}</span></div>
