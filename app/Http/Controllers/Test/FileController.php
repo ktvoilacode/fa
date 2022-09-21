@@ -152,8 +152,7 @@ class FileController extends Controller
         }
 
         foreach($objs as $k=>$m){
-              
-                $o = Order::where('test_id',$m->test_id)->where('product_id',3)->where('status',1)->first();
+                $o = Order::where('test_id',$m->test_id)->where('user_id',$m->user_id)->where('product_id',3)->where('status',1)->first();
                 if($o)
                     $objs[$k]->premium = 1;
                 else
