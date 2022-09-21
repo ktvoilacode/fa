@@ -670,20 +670,64 @@ $(function() {
 
     $(".td_option").click(function() {
 
+        // $id = $(this).data('id');
+        // $option = $(this).data('option');
+        // $group = $(this).data('group');
+
+
+
+        // if(!$(this).hasClass('td_answered'))
+        // {
+        //   $('.td_'+$id+'_'+$group).removeClass('td_answered');
+        //   $('.'+$id+'_'+$group).prop("checked",false);
+        //   $('.'+$id+'_'+$option).prop("checked", true);
+        //   $(this).addClass('td_answered');
+        //   $('.s'+$id).addClass('answered');
+        //   console.log(123);
+        // }else{
+        //   $(this).removeClass('td_answered');
+        //   $('.'+$id+'_'+$option).prop("checked", false);
+        //   var options = ["A","B","C","D",'E',"F","G","H","I"];
+        //   $isChecked = false;
+        //   options.forEach(function(item, index, arr){
+        //       if($('.'+$id+'_'+item).prop("checked"))
+        //         $isChecked = true;
+        //   });
+        //   if(!$isChecked)
+        //     $('.s'+$id).removeClass('answered');
+        // }
+
         $id = $(this).data('id');
-        $option = $(this).data('option');
+        $qno = $id;
         $group = $(this).data('group');
+        $option = $(this).data('option');
+        $section = $('.greblock_'+$id).data('section');
+        $sno = $('.greblock_'+$id).data('sno');
+        $counter =  parseInt($('.max_options_'+$id).data('counter'));
+        $lastselect =$('.max_options_'+$id).data('lastselect');
 
-
+        $opt = parseInt($('.max_options_'+$id).data('opt'));
+        
 
         if(!$(this).hasClass('td_answered'))
         {
+
           $('.td_'+$id+'_'+$group).removeClass('td_answered');
           $('.'+$id+'_'+$group).prop("checked",false);
           $('.'+$id+'_'+$option).prop("checked", true);
           $(this).addClass('td_answered');
           $('.s'+$id).addClass('answered');
-          console.log(123);
+          $('.r_'+$section+'_'+$qno).html('<span class="badge badge-success">Answered</span>');
+
+          if($counter==$opt || $counter>$opt ){
+            $('.td_'+$id+'_'+$lastselect).removeClass('td_answered');
+            $('.'+$id+'_'+$lastselect).prop("checked", false);
+          }else{
+             $counter++;
+            $('.max_options_'+$id).data('counter',$counter);
+          }
+         
+          
         }else{
           $(this).removeClass('td_answered');
           $('.'+$id+'_'+$option).prop("checked", false);
@@ -693,9 +737,14 @@ $(function() {
               if($('.'+$id+'_'+item).prop("checked"))
                 $isChecked = true;
           });
-          if(!$isChecked)
+          if(!$isChecked){
             $('.s'+$id).removeClass('answered');
+            $('.r_'+$section+'_'+$qno).html('<span class="badge badge-secondary">Not answered</span>');
+          }
+          $counter--;
+          $('.max_options_'+$id).data('counter',$counter);
         }
+        $('.max_options_'+$id).data('lastselect',$group);
     });
 
     $('.sentence').on('click',function(){
