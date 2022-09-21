@@ -57,5 +57,11 @@
     </form>
 </div>
 
+ <div class="" style="display: none;">
+    <audio id="beep">
+    <source id="beep_player"  src="{{ url('/').'/beep.mp3' }}" type="audio/mp3">
+    </audio>
+  </div>
+
 
 @endsection

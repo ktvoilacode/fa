@@ -8,6 +8,7 @@ use App\Models\Test\File as Obj;
 use App\Models\Test\Attempt as Obj2;
 use App\Models\Test\Test ;
 use App\Models\Test\Writing ;
+use App\Models\Product\Order ;
 use Illuminate\Support\Facades\Storage;
 use App\User;
 
@@ -79,8 +80,6 @@ class FileController extends Controller
                 $tests = [];
                 $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
                 $objs = Obj2::whereIn('id',$attempt_ids)->paginate(10);
-
-
             }
             else{
 
@@ -152,6 +151,15 @@ class FileController extends Controller
            //          ->paginate(config('global.no_of_records'));
         }
 
+        foreach($objs as $k=>$m){
+              
+                $o = Order::where('test_id',$m->test_id)->where('product_id',3)->first();
+                if($o)
+                    $objs[$k]->premium = 1;
+                else
+                    $objs[$k]->premium =0;
+            }
+      
 
 
         $view = $search ? 'list': 'index';

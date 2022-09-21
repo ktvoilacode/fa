@@ -481,9 +481,16 @@ $(document).ready(function() {
         
         
              $("#btn_play_audio").click(function() {
-              $("#play_audio").hide();
-             $("#test_container").show();
-                  player.play();
+                $("#play_audio").hide();
+                $("#test_container").show();
+                 if($('#beep').length){
+                    var x = document.getElementById("beep");
+                    x.autoplay = true;
+                    x.load();
+                  }
+
+                  setTimeout( function() { player.play(); }, 2000);
+                  
               }); 
 
         
@@ -732,9 +739,15 @@ $(function() {
         $option = $(this).data('option');
         $section = $('.greblock_'+$id).data('section');
         $sno = $('.greblock_'+$id).data('sno');
+        $counter =  parseInt($('.max_options_'+$id).data('counter'));
+        $lastselect =$('.max_options_'+$id).data('lastselect');
+
+        $opt = parseInt($('.max_options_'+$id).data('opt'));
+        
 
         if(!$(this).hasClass('td_answered'))
         {
+
           $('.td_'+$id+'_'+$group).removeClass('td_answered');
           $('.'+$id+'_'+$group).prop("checked",false);
           $('.'+$id+'_'+$option).prop("checked", true);
@@ -742,6 +755,15 @@ $(function() {
           $('.s'+$id).addClass('answered');
           $('.r_'+$section+'_'+$qno).html('<span class="badge badge-success">Answered</span>');
 
+          if($counter==$opt || $counter>$opt ){
+            $('.td_'+$id+'_'+$lastselect).removeClass('td_answered');
+            $('.'+$id+'_'+$lastselect).prop("checked", false);
+          }else{
+             $counter++;
+            $('.max_options_'+$id).data('counter',$counter);
+          }
+         
+          
         }else{
           $(this).removeClass('td_answered');
           $('.'+$id+'_'+$option).prop("checked", false);
@@ -755,7 +777,11 @@ $(function() {
             $('.s'+$id).removeClass('answered');
             $('.r_'+$section+'_'+$qno).html('<span class="badge badge-secondary">Not answered</span>');
           }
+          $counter--;
+          $('.max_options_'+$id).data('counter',$counter);
         }
+        $('.max_options_'+$id).data('lastselect',$group);
+        
     });
 
     $('.sentence').on('click',function(){
@@ -1373,11 +1399,6 @@ $(function() {
       // stop audio
       audio_stop();
 
-      if($('#beep').length){
-          var x = document.getElementById("beep");
-          x.autoplay = true;
-          x.load();
-        }
 
       
       // duo timer
@@ -1395,6 +1416,13 @@ $(function() {
           $('.record-btn').show();
           $('.gre_next').hide();
         }
+
+         if($('#beep').length){
+          var x = document.getElementById("beep");
+          x.autoplay = true;
+          x.load();
+        }
+
 
       }else{
         if($('.section_data').length){

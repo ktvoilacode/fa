@@ -24,7 +24,7 @@
         <input type="hidden" name="uri" value="{{ request()->get('uri') }}">
         <input type="hidden" name="source" value="{{ request()->get('source') }}">
         <input type="hidden" name="private" value="{{ request()->get('private') }}">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <button type="submit" id="submit_btn" class="btn btn-success">Confirm Submission</button>
       </div>
     </div>
@@ -60,7 +60,7 @@
         <input type="hidden" name="source" value="{{ request()->get('source') }}">
         <input type="hidden" name="private" value="{{ request()->get('private') }}">
         <input type="hidden" name="open" value="1">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <button type="submit" id="submit_btn" class="btn btn-success">Confirm Submission</button>
       </div>
     </div>
@@ -81,7 +81,7 @@
           Only logged in users can submit the test. 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <a href="{{ route('login')}}">
           <button type="button" class="btn btn-success">Login</button>
           </a>
@@ -173,7 +173,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
@@ -193,7 +193,7 @@
         The following section will be submitted. After submission you cannot review or update your responses.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-success btn-submit-section">Submit</button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-<table class="table table-bordered mt-4 @if(strlen($m->a)>30) w-100 @else w-50 @endif" >
+<table class="table table-bordered mt-4 max_options_{{ str_replace(' ','',str_replace('-','',$m->qno))}} @if(strlen($m->a)>30) w-100 @else w-50 @endif" data-opt={{ (strlen(trim(str_replace(' ','',$m->answer)))-1) }} data-lastselect="" data-counter="0">
   
       @if($m->a || $m->a===0)
 
