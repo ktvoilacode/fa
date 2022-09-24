@@ -20,7 +20,7 @@
             <li>Make sure you are taking the test in <b>Google Chrome</b> browser.</li>
             <li>Donot minimize the browser or change tabs during the test.</li>
             <li>Put on your headphones and click on <b>Play Sound</b> button to play a sample sound.<br>
-              <audio id="sound1" src="/audio/sampleclip.mp3" preload="auto"></audio>
+              <audio id="sound1" src="/audio/sampleclip.mp3" preload="auto" style="display: none;"></audio>
   <button onclick="document.getElementById('sound1').play();" class="btn btn-success btn-sm">Play
   Sound</button>
             </li>
