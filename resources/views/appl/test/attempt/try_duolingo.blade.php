@@ -55,7 +55,7 @@
 
   <div class="" >
     <audio id="beep">
-    <source id="beep_player"  src="{{ url('/').'/beep.mp3' }}" type="audio/mp3">
+    <source id="beep_player"  src="{{ url('/').'/beep.wav' }}" type="audio/mp3">
     </audio>
   </div>
     
