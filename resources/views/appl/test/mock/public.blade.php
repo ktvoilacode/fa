@@ -15,12 +15,13 @@
       <div class="card mb-4">
         <div class="card-body">
           <h3 class="mb-0">{{ $obj->name }}</h3>
-          <div class="">{{$obj->description}}</div>
+          <div class="">{!! $obj->description !!}</div>
           @if($attempt->status==1)
             <span class="badge badge-success">Test Report</span><br>
           @elseif($attempt->status ==-1)
+          <hr>
             <span class="badge badge-warning">Under Review</span><br>
-            <div class="text-info mt-4"> The result will be shared in 24 to 48 hours.</div>
+            <div class="text-primary mt-4 h4"> The result will be shared in 24 to 48 hours.</div>
           @else
             @if($attempt->t1)
             <a href="{{ route('mockpage.start',$obj->slug)}}" class="btn btn-primary mt-4">Resume Test</a>

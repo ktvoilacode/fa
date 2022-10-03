@@ -328,6 +328,7 @@ class ProductController extends Controller
             }
         
 
+            
         $obj = Cache::get($filepath);
 
         if(request()->get('l1'))
@@ -421,6 +422,7 @@ class ProductController extends Controller
         try{
             $obj = Obj::where('id',$id)->first();
 
+
             // change to uppercase
             if($request->get('name')){
                 $request->merge(['name' => strtoupper($request->get('name'))]);
@@ -462,9 +464,11 @@ class ProductController extends Controller
             $request->merge(['settings' => json_encode($settings)]);
             
             //refresh cache
-            $filename = 'index.'.$this->app.'.'.$this->module.'.json';
+            $filename = $obj->slug.'.json';
             $filepath = $this->cache_path.$filename;
             Cache::forget($filepath);
+
+            
 
             Cache::forget('ptags');
             $tests = $request->get('tests');
