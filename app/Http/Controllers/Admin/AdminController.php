@@ -67,6 +67,11 @@ class AdminController extends Controller
             return $d2;
         });
 
+        foreach($data['writing'] as $dd){
+            echo $dd->id.' - '.$dd->user->name;
+            echo"<br>";
+        }
+        dd($data['writing']);
         //$data['writing'] = $data['writing']->sort('premium');
 
 

@@ -72,39 +72,34 @@ class FileController extends Controller
                     ->whereIn('id',$d)
                     ->where('status',0)
                     ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));
+                    ->paginate(30);
         }else if($request->get('type')=='writing' || $request->get('writing')==1){
 
             if(\auth::user()->admin==4)
             {
                 $tests = [];
                 $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
-                $objs = Obj2::whereIn('id',$attempt_ids)->paginate(10);
+                $objs = Obj2::whereIn('id',$attempt_ids)->paginate(30);
+
+
             }
             else{
 
-                 if($item){
-
+                if($request->get('open')==1){
+                    $tests = Test::whereIn('type_id',[3])->pluck('id');
+                    $objs = $obj2->whereIn('test_id',$tests)->whereNull('answer')
+                                      ->orderBy('created_at','desc')
+                                      ->paginate(100);
+                                     
+                }elseif($item){
                         $users = User::where('name','like','%'.$item.'%')->get();
                         $uids = $users->pluck('id')->toArray();
-
-
                         $objs = $obj2->whereIn('user_id',$uids)
-                        ->with('user')
-                        ->orderBy('created_at','desc')
-                        ->whereIn('test_id',$tests)->paginate(10);
-
-
-                        // $objs = $obj2->whereHas('user', function ($query) use ($item){
-                        //     $query->where('name', 'like', '%'.$item.'%');
-                        // })
-                        // ->with(['user' => function($query) use ($item){
-                        //     $query->where('name', 'like', '%'.$item.'%');
-                        // }])->orderBy('created_at','desc')
-                        // ->whereIn('test_id',$tests)->paginate(config('global.no_of_records'));
-
-                    }else{
-                        if(!Cache::get('files_'))
+                                ->with('user')
+                                ->orderBy('created_at','desc')
+                                ->whereIn('test_id',$tests)->paginate(30);
+                }else{
+                    if(!Cache::get('files_'))
                         $tests = Test::whereIn('type_id',[3])->pluck('id');
                         else
                             $tests = [];
@@ -112,18 +107,16 @@ class FileController extends Controller
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
                               return  $obj2->whereIn('test_id',$tests)
                                       ->orderBy('created_at','desc')
-                                      ->paginate(10);
+                                      ->paginate(30);
                                     });
                         else {
                           $tests = Test::whereIn('type_id',[3])->pluck('id');
                           $objs= $obj2->whereIn('test_id',$tests)
                                   ->orderBy('created_at','desc')
-                                  ->paginate(10);
+                                  ->paginate(30);
                         }
-
-
-
-                    }
+                }
+                 
 
             }
 
@@ -142,7 +135,7 @@ class FileController extends Controller
 
             $objs = $obj->whereIn('user_id',$uids)
                         ->orderBy('created_at','desc')
-                        ->whereIn('test_id',$tests)->paginate(10);
+                        ->whereIn('test_id',$tests)->paginate(30);
 
 
            // // $objs = $obj->where('response','LIKE',"%{$item}%")

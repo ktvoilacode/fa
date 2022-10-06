@@ -19,6 +19,8 @@
       <div class="card-body mb-0">
         <nav class="navbar navbar-light bg-light justify-content-between border mb-3">
           <a class="navbar-brand"><i class="fa fa-bars"></i> {{ ucfirst($app->module) }}s 
+            <a href="{{ route('file.index')}}?writing=1" class="badge badge-primary">View All</a>
+            <a href="{{ route('file.index')}}?writing=1&open=1" class="badge badge-success">View Open</a>
           @if(request()->get('type')=='speaking')
             - Speaking
           @elseif(request()->get('type')=='writing')
