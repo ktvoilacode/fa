@@ -51,6 +51,10 @@
             <div class="col-md-4"><b>Description</b></div>
             <div class="col-md-8">{!! $obj->description !!}</div>
           </div>
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Settings</b></div>
+            <div class="col-md-8"><pre class=""><code>{{ json_encode(json_decode($obj->settings,true),JSON_PRETTY_PRINT) }}</code></pre></div>
+          </div>
 
           <div class="row mb-2">
             <div class="col-md-4"><b>Tests</b></div>
@@ -80,6 +84,8 @@
     </div>
 
     <div class="col-12">
+    @if(count($attempts)!=0)
+    <div class="alert alert-warning alert-important important p-1 px-2" >Click on under review to evaluate the responses and assign score</div>
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>
@@ -143,7 +149,7 @@
               @if($a->status==1)
                 <span class="badge badge-success">Completed & Reviewed</span>
               @elseif($a->status==-1)
-                <span class="badge badge-warning">Under Review</span>
+                <span class="badge badge-primary">Evaluation Pending</span>
               @else
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
@@ -185,6 +191,16 @@
         </tbody>
       </table>
     </div>
+    @else
+
+    <div class="card">
+      <div class="card-body bg-light h5 ">
+          No mock attempts recorded
+      </div>
+    </div>
+
+
+    @endif
   </div>
 
      

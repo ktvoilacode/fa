@@ -22,9 +22,12 @@
 
    
 
-    <div class="p-4"></div>
-   
-    
+        @if(\auth::user())
+            <a href="/home" class="btn btn-success btn-lg">Open Dashboard</a>
+        @else
+            <a href="/login" class="btn btn-primary btn-lg">Login</a>
+            <a href="/register" class="btn btn-outline-dark btn-lg">Register</a>
+        @endif
         </div>
        
     </div>

@@ -72,6 +72,24 @@ class MockController extends Controller
     public function store(Obj $obj, Request $request)
     {
         try{
+
+            //update datetime
+             $settings = [];
+            if($request->activation)
+                $settings['activation'] = \carbon\carbon::parse($request->activation)->format('Y-m-d H:i:s');
+            else
+                $settings['activation'] = null;
+            if($request->deactivation)
+                $settings['deactivation'] = \carbon\carbon::parse($request->deactivation)->format('Y-m-d H:i:s');
+            else
+                $settings['deactivation'] = null;
+
+            $settings['noreport'] = 0;
+            if($request->noreport){
+                $settings['noreport'] = 1;
+            }
+
+            $request->merge(['settings' => json_encode($settings)]);
             
             /* create a new entry */
             $obj = $obj->create($request->all());
@@ -130,9 +148,12 @@ class MockController extends Controller
             }
         }
 
+
+
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')
                     ->with('attempts',$attempts)
+                    
                     ->with('obj',$obj)->with('app',$this);
         else
             abort(404);
@@ -147,6 +168,7 @@ class MockController extends Controller
     public function public($id)
     {
         $obj = Obj::where('slug',$id)->first();
+        $settings = json_decode($obj->settings);
         $user = \Auth::user();
 
         if($user)
@@ -186,11 +208,26 @@ class MockController extends Controller
             $orders = Order::where('user_id',$user->id)->whereIn('product_id',$pids)->first();
         else
             $orders=null;
+
+        $auto_activation = $auto_deactivation = null;
+        if(isset($settings->activation)){
+            $auto_activation  = \carbon\carbon::parse($settings->activation);
+            $auto_deactivation  = \carbon\carbon::parse($settings->deactivation);
+        }
+        
+
+            $active = 0;
+            if($auto_activation->lt(\carbon\carbon::now()) && $auto_deactivation->gt(\carbon\carbon::now())){
+               $active = 1;
+            }
         
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.public')
                     ->with('orders',$orders)
+                    ->with('auto_activation',$auto_activation)
+                    ->with('auto_deactivation',$auto_deactivation)
+                    ->with('audio_permission',1)
                     ->with('obj',$obj)->with('app',$this)->with('attempt',$attempt);
         else
             abort(404);
@@ -296,12 +333,16 @@ class MockController extends Controller
     public function edit($id)
     {
         $obj= Obj::where('id',$id)->first();
+
+        $settings = json_decode($obj->settings);
         $this->authorize('update', $obj);
+
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Update')
                 ->with('obj',$obj)
+                ->with('settings',$settings)
                 ->with('editor',true)
                 ->with('app',$this);
         else
@@ -320,6 +361,25 @@ class MockController extends Controller
         try{
             $obj = Obj::where('id',$id)->first();
             $this->authorize('update', $obj);
+
+            //update datetime
+             $settings = [];
+            if($request->activation)
+                $settings['activation'] = \carbon\carbon::parse($request->activation)->format('Y-m-d H:i:s');
+            else
+                $settings['activation'] = null;
+            if($request->deactivation)
+                $settings['deactivation'] = \carbon\carbon::parse($request->deactivation)->format('Y-m-d H:i:s');
+            else
+                $settings['deactivation'] = null;
+
+            $settings['noreport'] = 0;
+            if($request->noreport){
+                $settings['noreport'] = 1;
+            }
+
+            $request->merge(['settings' => json_encode($settings)]);
+
             $obj = $obj->update($request->all()); 
 
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();

@@ -1,5 +1,5 @@
 @auth
-<nav class="navbar navbar-expand-md navbar-light  shadow-sm"  style="background:#fbf1df" >
+<nav class="navbar navbar-expand-md navbar-light  shadow-sm"  style="background:#fff" >
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
             <img class="" src="@if(request()->session()->get('client')) {{ request()->session()->get('client')->logo }} @else {{ asset('images/piofx.png') }} @endif" alt="Piofx" width="100" >

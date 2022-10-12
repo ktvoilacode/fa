@@ -104,20 +104,61 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="formGroupExampleInput ">Settings</label>
-<textarea class="form-control " name="settings"  rows="3">@if($stub=='Create'){{ (old('settings')) ? old('settings') : '' }} @else{{ $obj->settings }}
-            @endif
-        </textarea>
-      </div>
+       
       
-       <div class="form-group">
-        <label for="formGroupExampleInput ">Status</label>
-        <select class="form-control" name="status">
-          <option value="0" @if(isset($obj)) @if($obj->status==0) selected @endif @endif >Inactive</option>
-          <option value="1" @if(isset($obj)) @if($obj->status==1) selected @endif @endif >Active</option>
-        </select>
+      <div class="row">
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Report</label>
+            <select class="form-control" name="noreport">
+              <option value="2" @if(isset($settings->noreport)) @if($settings->noreport==1) selected @endif @endif >only score</option>
+              <option value="0" @if(isset($settings->noreport)) @if($settings->noreport==0) selected @endif @endif >Show responses & answers (default)</option>
+              <option value="1" @if(isset($settings->noreport)) @if($settings->noreport==1) selected @endif @endif >no-report</option>
+            </select>
+          </div>
+        </div>
+      <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Activation</label>
+            <input type="text" id="datetimepicker"  class="form-control" name="activation" id="formGroupExampleInput"  
+                @if($stub=='Create')
+                value="{{ (old('activation')) ? old('activation') : '' }}"
+                @else
+                  @if(isset( $settings->activation))
+                    value = "{{ $settings->activation }}"
+                  @endif
+                @endif
+              >
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">De-activation</label>
+            <input type="text" id="datetimepicker2" class="form-control" name="deactivation" id="formGroupExampleInput"  
+                @if($stub=='Create')
+                value="{{ (old('deactivation')) ? old('deactivation') : '' }}"
+                @else
+                  @if(isset( $settings->deactivation))
+                    value = "{{ $settings->deactivation }}"
+                  @endif
+                @endif
+              >
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Status</label>
+            <select class="form-control" name="status">
+              <option value="0" @if(isset($obj)) @if($obj->status==0) selected @endif @endif >Inactive</option>
+              <option value="1" @if(isset($obj)) @if($obj->status==1) selected @endif @endif >Active</option>
+            </select>
+          </div>
+        </div>
       </div>
+
+       
 
       @if($stub=='Update')
         <input type="hidden" name="_method" value="PUT">
