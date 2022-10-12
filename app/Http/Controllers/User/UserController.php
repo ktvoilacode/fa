@@ -338,11 +338,18 @@ class UserController extends Controller
         $products = Product::where('status',1)->get();
         $tracks = Track::where('status',1)->get();
 
+        $orders_product = Order::where('user_id',$obj->id)->pluck('product_id')->toArray();
+        $orders_test = Order::where('user_id',$obj->id)->pluck('test_id')->toArray();
+
+
+
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Update')
                 ->with('obj',$obj)
                 ->with('tests',$tests)
+                ->with('orders_test',$orders_test)
+                ->with('orders_product',$orders_product)
                 ->with('products',$products)
                 ->with('tracks',$tracks)
                 ->with('editor',true)

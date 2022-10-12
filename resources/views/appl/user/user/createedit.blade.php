@@ -132,7 +132,7 @@
           @if($product->status==1)
           <div class="col-12 col-md-4">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="products[]" value="{{$product->id}}" id="defaultCheck1"  @if($stub!='Create') @if($obj->hasProduct($product->id))) checked @endif @endif >
+            <input class="form-check-input" type="checkbox" name="products[]" value="{{$product->id}}" id="defaultCheck1"  @if($stub!='Create') @if(in_array($product->id,$orders_product))) checked @endif @endif >
             <label class="form-check-label" for="defaultCheck1">
               {{ strip_tags($product->name) }} 
             </label>
@@ -159,7 +159,7 @@
           @if($test->status==1)
           <div class="col-12 col-md-4">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="tests[]" value="{{$test->id}}" id="defaultCheck1" @if($stub!='Create') @if($obj->hasTest($test->id))) checked @endif @endif>
+            <input class="form-check-input" type="checkbox" name="tests[]" value="{{$test->id}}" id="defaultCheck1" @if($stub!='Create') @if(in_array($test->id,$orders_test))) checked @endif @endif>
             <label class="form-check-label" for="defaultCheck1">
               {{ strip_tags($test->name) }}
             </label>
