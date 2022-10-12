@@ -434,8 +434,11 @@ class UserController extends Controller
             $tst = Test::where('status',1)->get();
             $prd = Product::where('status',1)->get();
 
+            $orders_product = Order::where('user_id',$obj->id)->pluck('product_id')->toArray();
+            $orders_test = Order::where('user_id',$obj->id)->pluck('test_id')->toArray();
+
             foreach($tst as $ts){
-                if($obj->hasTest($ts->id))
+                if(in_array($ts->id,$orders_test))
                 {   
                     if(!in_array($ts->id, $tests)){
                       $order = $obj->orders()->where('test_id',$ts->id)->orderBy('id','desc')->first();
@@ -446,7 +449,7 @@ class UserController extends Controller
             }
 
             foreach($prd as $pd){
-                if($obj->hasProduct($pd->id))
+                if(in_array($pd->id,$orders_product))
                 {   
                     if(!in_array($pd->id, $products)){
                       $order = $obj->orders()->where('product_id',$pd->id)->orderBy('id','desc')->first();
