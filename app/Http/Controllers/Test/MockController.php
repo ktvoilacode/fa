@@ -215,11 +215,6 @@ class MockController extends Controller
             $auto_deactivation  = \carbon\carbon::parse($settings->deactivation);
         }
         
-
-            $active = 0;
-            if($auto_activation->lt(\carbon\carbon::now()) && $auto_deactivation->gt(\carbon\carbon::now())){
-               $active = 1;
-            }
         
 
         if($obj)
