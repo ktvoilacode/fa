@@ -209,7 +209,8 @@ class MockController extends Controller
         else
             $orders=null;
 
-        $auto_activation = $auto_deactivation = null;
+        $auto_activation = \carbon\carbon::parse(\carbon\carbon::now());
+        $auto_deactivation = \carbon\carbon::parse(\carbon\carbon::now()->addDays(1));
         if(isset($settings->activation)){
             $auto_activation  = \carbon\carbon::parse($settings->activation);
             $auto_deactivation  = \carbon\carbon::parse($settings->deactivation);
