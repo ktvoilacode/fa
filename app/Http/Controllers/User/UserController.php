@@ -309,8 +309,19 @@ class UserController extends Controller
         $tests = Test::whereIn('id',$tids)->get()->keyBy('id');
         $products = Product::whereIn('id',$pids)->with('tests')->get()->keyBy('id');
 
+        foreach($products as $p){
+            $t = $p->tests->pluck('id')->toArray();
+            foreach($t as $k){
+                array_push($tids, $k);
+            }
+        }
+
+       
+
 
         $attempts = Attempt::whereIn('test_id',$tids)->where('user_id',$id)->get()->groupBy('test_id');
+
+
 
         $this->authorize('view', $obj);
         if($obj)
