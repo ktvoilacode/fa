@@ -155,9 +155,9 @@ class AdminController extends Controller
     public function webhookget(Request $r){
 
         $verify_token = 'fa';
-        $mode = $r->get('mode');
-        $token = $r->get('token');
-        $challenge = $r->get('challenge');
+        $mode = $r->get('hub_mode');
+        $token = $r->get('hub_verify_token');
+        $challenge = $r->get('hub_challenge');
         $showed = $r->get('showed');
         $show = $r->get('show');
         $data = $r->all();
@@ -166,10 +166,21 @@ class AdminController extends Controller
             if($token == $verify_token){
                 echo $challenge;
                 exit();
+            }else if(!$token){
+                $mode = $r->get('mode');
+                $token = $r->get('verify_token');
+                $challenge = $r->get('challenge');
+                if($token == $verify_token){
+                    echo $challenge;
+                    exit();
+                }else{
+                    abort(403);
+                }
             }else{
                 abort(403);
             }
         }
+
 
         if($showed){
             $path = Storage::disk('public')->put('wadata/sample.json', json_encode($data));
