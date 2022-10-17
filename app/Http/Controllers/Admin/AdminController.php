@@ -158,14 +158,25 @@ class AdminController extends Controller
         $mode = $r->get('mode');
         $token = $r->get('token');
         $challenge = $r->get('challenge');
+        $showed = $r->get('showed');
+        $show = $r->get('show');
+        $data = $r->all();
 
         if($mode && $token){
             if($token == $verify_token){
-                echp $challenge;
+                echo $challenge;
                 exit();
             }else{
                 abort(403);
             }
+        }
+
+        if($showed){
+            $path = Storage::disk('public')->put('wadata/sample.json', json_encode($data));
+            dd($path);
+        }else if($show){
+            $d = Storage::disk('public')->get('wadata/sample.json');
+            dd($d);
         }
 
     }
@@ -177,10 +188,10 @@ class AdminController extends Controller
         $show = $r->get('show');
 
        if($show){
-        $d = Storage::disk('public')->get('wadata/sample.txt');
+        $d = Storage::disk('public')->get('wadata/sample.json');
         dd($d);
        }else{
-        $path = Storage::disk('public')->put('wadata/sample.txt', $data);
+        $path = Storage::disk('public')->put('wadata/sample.json', json_encode($data));
        }
 
     }
