@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -149,6 +150,39 @@ class AdminController extends Controller
         $data['product_count'] = $admin->productCount();
         $data['coupon_count'] = $admin->couponCount();
         return view('appl.admin.admin.analytics')->with('data',$data);
+    }
+
+    public function webhookget(Request $r){
+
+        $verify_token = 'fa';
+        $mode = $r->get('mode');
+        $token = $r->get('token');
+        $challenge = $r->get('challenge');
+
+        if($mode && $token){
+            if($token == $verify_token){
+                echp $challenge;
+                exit();
+            }else{
+                abort(403);
+            }
+        }
+
+    }
+
+     public function webhookpost(Request $r){
+
+        $file = 'sample.json';
+        $data = $r->all();
+        $show = $r->get('show');
+
+       if($show){
+        $d = Storage::disk('public')->get('wadata/sample.txt');
+        dd($d);
+       }else{
+        $path = Storage::disk('public')->put('wadata/sample.txt', $data);
+       }
+
     }
 
 

@@ -77,6 +77,10 @@ Route::get('/admin/test/{test}/section/{id}/ajax', 'Test\SectionController@ajaxu
 Route::get('/admin/test/{test}/fillup/{id}/ajax', 'Test\FillupController@ajaxupdate')->name('fillup.ajaxupdate')->middleware('auth');
 
 Route::resource('/admin/category', 'Test\CategoryController')->middleware('auth');
+
+Route::get('webhook', 'Admin\AdminController@webhookget');
+Route::post('webhook', 'Admin\AdminController@webhookpost');
+
 Route::resource('/admin/tag', 'Test\TagController')->middleware('auth');
 Route::resource('/admin/test/{test}/section', 'Test\SectionController')->middleware('auth');
 Route::resource('/admin/test/{test}/extract', 'Test\ExtractController')->middleware('auth');
