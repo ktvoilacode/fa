@@ -218,13 +218,14 @@ class AdminController extends Controller
         $path = Storage::disk('public')->put('wadata/sample.json', json_encode($data));
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($data));
         $d = json_decode(json_encode($data),true);
-        $d['accactivation'] = -2;
-        $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
+      
         $phone=$text=null;
         if(isset($d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']))
         $phone = $d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id'];
         if(isset($d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text']))
         $text = $d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text'];
+        if(isset($d['entry'][0]['changes'][0]['value']['messages'][0]['text']['body']))
+        $text = $d['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
         $d['accactivation'] = -1;
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
 
@@ -233,7 +234,13 @@ class AdminController extends Controller
             Admin::sendWhatsapp($phone,$template,[]);
             $d['accactivation'] = 1;
             $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
-        }else{
+        }else if($text =='hello'){
+            $template = 'hello_world';
+            Admin::sendWhatsapp($phone,$template,[]);
+            $d['accactivation'] = 2;
+            $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
+        }
+        else{
             $d['accactivation'] = 0;
         }
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
