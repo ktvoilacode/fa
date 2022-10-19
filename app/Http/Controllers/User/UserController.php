@@ -316,12 +316,17 @@ class UserController extends Controller
             $password = $var[2]=$obj->auto_password;
             $url = $var[3]=env('APP_URL').'/login';
 
+            $template = 'accountdetails';
+            $rem_str = $obj->phone.'_status';
+            Cache::remember($rem_str, 1800, function () {
+                return 1;
+            });
             if(strlen($phone)==12){
                 //Admin::sendWhatsapp($phone,'hello_world',[]);
                 //Admin::sendWhatsapp($phone,'autoreply',$var);
                 //Admin::sendWhatsapp($phone,'otp',$var);
                 //Admin::sendWhatsapp($phone,'accdetails',$var);
-                Admin::sendWhatsapp($phone,'accountdetails',$var);
+                Admin::sendWhatsapp($phone,$template,$var);
                 //Admin::sendWhatsapp($phone,'accactivation',[]);
                 flash('Successfully sent the account details to ('.$obj->phone.') on whatsapp')->success();
                 //Admin::sendWhatsapp($phone,'otp',$var);

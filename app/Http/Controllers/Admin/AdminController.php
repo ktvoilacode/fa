@@ -229,12 +229,14 @@ class AdminController extends Controller
         $d['accactivation'] = -1;
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
 
-        if($text =='Activate Account'){
+        $rem_str = $phone.'_status';
+        $status_str = Cache::get($rem_str);
+        if($text =='Activate Account' && $status_str){
             $template = 'accactivation';
             Admin::sendWhatsapp($phone,$template,[]);
             $d['accactivation'] = 1;
             $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
-        }else if($text =='hello'){
+        }else if($text =='hello' && $status_str){
             $template = 'hello_world';
             Admin::sendWhatsapp($phone,$template,[]);
             $d['accactivation'] = 2;
@@ -243,6 +245,9 @@ class AdminController extends Controller
         else{
             $d['accactivation'] = 0;
         }
+         Cache::remember($rem_str, 1800, function () {
+                return 0;
+            });
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
        }
 
