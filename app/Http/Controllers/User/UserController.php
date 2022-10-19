@@ -312,12 +312,12 @@ class UserController extends Controller
                 $phone = '91'.$obj->phone;
             else if(strlen($obj->phone)==12)
                 $phone = $obj->phone;
-            $email = $var[1]= "sample";
+            $email = $var[1]= $obj->email;
             $password = $var[2]=$obj->auto_password;
             $url = $var[3]=env('APP_URL').'/login';
 
             $template = 'accountdetails';
-            $rem_str = $obj->phone.'_status';
+            $rem_str = $phone.'_status';
             Cache::remember($rem_str, 1800, function () {
                 return 1;
             });
