@@ -190,7 +190,7 @@ class AdminController extends Controller
             $d = json_decode('{"object":"whatsapp_business_account","entry":[{"id":"112847024935011","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"919885837700","phone_number_id":"102903359277453"},"contacts":[{"profile":{"name":"Krishna Teja"},"wa_id":"919515125110"}],"messages":[{"context":{"from":"919885837700","id":"wamid.HBgMOTE5NTE1MTI1MTEwFQIAERgSM0UyMkU1RTM3NjNBNTNGMTI0AA=="},"from":"919515125110","id":"wamid.HBgMOTE5NTE1MTI1MTEwFQIAEhgUM0EzMTY3REFENTkwN0JGNUU0MDkA","timestamp":"1666158555","type":"button","button":{"payload":"Activate Account","text":"Activate Account"}}]},"field":"messages"}]}]}',true);
             $phone = $d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id'];
             $text = $d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text'];
-            dd($d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text']);
+            dd($d);
         }
 
     }
