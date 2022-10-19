@@ -187,10 +187,10 @@ class AdminController extends Controller
             dd($path);
         }else if($show){
             $d = Storage::disk('public')->get('wadata/sample.json');
-            
+            dd($d);
             $phone = $d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id'];
             $text = $d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text'];
-            dd($d);
+            
         }
 
     }
