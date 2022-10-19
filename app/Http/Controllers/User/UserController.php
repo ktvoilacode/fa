@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User as Obj;
 use App\Models\Test\Test;
+use App\Models\Admin\Admin;
 use App\Models\Test\Attempt;
 use App\Models\Product\Order;
 use App\Models\Product\Product;
@@ -303,6 +304,31 @@ class UserController extends Controller
             flash('Successfully mailed the account details to ('.$obj->email.')')->success();
         }
 
+        if($request->get('resend_whatsapp')){
+
+            $var =[];
+            $var[0]= $obj->name;
+            if(strlen($obj->phone)==10)
+                $phone = '91'.$obj->phone;
+            else if(strlen($obj->phone)==12)
+                $phone = $obj->phone;
+            $email = $var[1]= "sample";
+            $password = $var[2]=$obj->auto_password;
+            $url = $var[3]=env('APP_URL').'/login';
+
+            if(strlen($phone)==12){
+                //Admin::sendWhatsapp($phone,'hello_world',[]);
+                //Admin::sendWhatsapp($phone,'autoreply',$var);
+                //Admin::sendWhatsapp($phone,'otp',$var);
+                //Admin::sendWhatsapp($phone,'accdetails',$var);
+                Admin::sendWhatsapp($phone,'accountdetails',$var);
+                flash('Successfully sent the account details to ('.$obj->phone.') on whatsapp')->success();
+                //Admin::sendWhatsapp($phone,'otp',$var);
+            }
+
+
+        }
+
         $tids = $obj->orders->pluck('test_id')->toArray();
         $pids = $obj->orders->pluck('product_id')->toArray();
 
@@ -315,8 +341,6 @@ class UserController extends Controller
                 array_push($tids, $k);
             }
         }
-
-       
 
 
         $attempts = Attempt::whereIn('test_id',$tids)->where('user_id',$id)->get()->groupBy('test_id');

@@ -167,6 +167,10 @@
                 <a href="{{ route('user.show',$obj->id)}}?resend_email=1">
                 <button class="btn btn-sm btn-outline-primary"> Send email </button>
                 </a>
+
+                <a href="{{ route('user.show',$obj->id)}}?resend_whatsapp=1">
+                <button class="btn btn-sm btn-outline-primary"> Send Whatsapp </button>
+                </a>
                 
                 
               </div>
