@@ -253,9 +253,7 @@ class AdminController extends Controller
             $d['rem_Str'] = $rem_str;
             $d['status_str'] = $status_str;
         }
-        Cache::remember($rem_str, 1800, function () {
-                return 0;
-            });
+        Cache::forget($rem_str);
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
        }
 
