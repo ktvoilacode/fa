@@ -198,7 +198,7 @@ class AdminController extends Controller
             dd($d);
         }
         else if($phone){
-            $status = Cache::get($phone.'_status');
+            $status = Cache::get('rem_'.$phone.'_status');
             dd($status);
         }
 
@@ -234,7 +234,7 @@ class AdminController extends Controller
         $d['accactivation'] = -1;
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
 
-        $rem_str = $phone.'_status';
+        $rem_str = 'rem_'.$phone.'_status';
         $status_str = Cache::get($rem_str);
         if($text =='Activate Account' && $status_str){
             $template = 'accactivation';
@@ -252,9 +252,7 @@ class AdminController extends Controller
             $d['rem_Str'] = $rem_str;
             $d['status_str'] = $status_str;
         }
-         Cache::remember($rem_str, 1800, function () {
-                return 0;
-            });
+         Cache::remember($rem_str, 1800, 0);
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($d));
        }
 

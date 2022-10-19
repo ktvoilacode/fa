@@ -317,10 +317,14 @@ class UserController extends Controller
             $url = $var[3]=env('APP_URL').'/login';
 
             $template = 'accountdetails';
-            $rem_str = $phone.'_status';
+            $rem_str = 'rem_'.$phone.'_status';
+
             Cache::remember($rem_str, 1800, function () {
                 return 1;
             });
+
+            Cache::remember('rem', 1800, 'rem_'.$phone.'_status');
+            
             if(strlen($phone)==12){
                 //Admin::sendWhatsapp($phone,'hello_world',[]);
                 //Admin::sendWhatsapp($phone,'autoreply',$var);
