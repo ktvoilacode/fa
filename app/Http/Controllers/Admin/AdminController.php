@@ -212,9 +212,9 @@ class AdminController extends Controller
         dd($d);
        }else{
         $path = Storage::disk('public')->put('wadata/sample.json', json_encode($data));
+        $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($data));
         $d = json_decode($data,true);
         $d['accactivation'] = -2;
-        
         $path = Storage::disk('public')->put('wadata/sample_2.json', json_encode($data));
         $phone=$text=null;
         if(isset($d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']))
