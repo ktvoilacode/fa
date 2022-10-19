@@ -211,7 +211,7 @@ class AdminController extends Controller
         $phone=$text=null;
         if(isset($d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']))
         $phone = $d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id'];
-        if($d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text'])
+        if(isset($d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text']))
         $text = $d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text'];
 
         if($text =='Activate Account'){
