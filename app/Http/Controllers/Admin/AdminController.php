@@ -160,6 +160,7 @@ class AdminController extends Controller
         $challenge = $r->get('hub_challenge');
         $showed = $r->get('showed');
         $show = $r->get('show');
+        $show_2 = $r->get('show_2');
         $data = $r->all();
 
         if($mode && $token){
@@ -191,6 +192,9 @@ class AdminController extends Controller
             $phone = $d['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id'];
             $text = $d['entry'][0]['changes'][0]['value']['messages'][0]['button']['text'];
             
+        }else if($show_2){
+            $d = Storage::disk('public')->get('wadata/sample_2.json');
+            dd($d);
         }
 
     }
