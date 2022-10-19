@@ -213,7 +213,11 @@ class AdminController extends Controller
         if($text =='Activate Account'){
             $template = 'accactivation';
             Admin::sendWhatsapp($phone,$template,[]);
+            $d->accactivation = 1;
+        }else{
+            $d->accactivation = 0;
         }
+        $data = json_encode($d);
         $path = Storage::disk('public')->put('wadata/sample.json', json_encode($data));
        }
 
