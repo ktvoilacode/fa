@@ -321,7 +321,8 @@ class UserController extends Controller
                 //Admin::sendWhatsapp($phone,'autoreply',$var);
                 //Admin::sendWhatsapp($phone,'otp',$var);
                 //Admin::sendWhatsapp($phone,'accdetails',$var);
-                Admin::sendWhatsapp($phone,'accountdetails',$var);
+                //Admin::sendWhatsapp($phone,'accountdetails',$var);
+                Admin::sendWhatsapp($phone,'accactivation',[]);
                 flash('Successfully sent the account details to ('.$obj->phone.') on whatsapp')->success();
                 //Admin::sendWhatsapp($phone,'otp',$var);
             }

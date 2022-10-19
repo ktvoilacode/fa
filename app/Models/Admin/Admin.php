@@ -78,7 +78,7 @@ class Admin extends Model
 
     public static function sendWhatsApp($phone,$template,$variables){
             $url = "https://graph.facebook.com/v13.0/102903359277453/messages";
-            $token = 'EAAK0BmKuQgcBAAnGj9qbUZANSZAQMmp1ocnDWpNdqDqFWe0PIuCiFcZALygZBwiDgat9N0kfDv2ohAcVByhR01bjFmStzzXaLnjK6w5yZAVChxjv0JvNmYUP1gZCDRIpfXYN3X4JUOMpxtBPzsMtK6HL20r14UQzH1pZAVQ8uZA2wAQNz1eiWoYp8ZA2HrNSMFkKFF2ZACvxuMIgZDZD';
+            $token = env('wa_token');//'EAAK0BmKuQgcBAAnGj9qbUZANSZAQMmp1ocnDWpNdqDqFWe0PIuCiFcZALygZBwiDgat9N0kfDv2ohAcVByhR01bjFmStzzXaLnjK6w5yZAVChxjv0JvNmYUP1gZCDRIpfXYN3X4JUOMpxtBPzsMtK6HL20r14UQzH1pZAVQ8uZA2wAQNz1eiWoYp8ZA2HrNSMFkKFF2ZACvxuMIgZDZD';
             $curl = curl_init();
 
 
@@ -232,6 +232,7 @@ class Admin extends Model
 
             $response = curl_exec($curl);
             curl_close($curl);
+            //dd($response);
             return 1;
 
     }
