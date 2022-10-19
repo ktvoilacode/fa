@@ -323,8 +323,10 @@ class UserController extends Controller
                 return 1;
             });
 
-            Cache::remember('rem', 1800, 'rem_'.$phone.'_status');
-            
+            Cache::remember('rem', 1800, function() use ($phone){
+                return 'rem_'.$phone.'_status';
+            });
+
             if(strlen($phone)==12){
                 //Admin::sendWhatsapp($phone,'hello_world',[]);
                 //Admin::sendWhatsapp($phone,'autoreply',$var);
