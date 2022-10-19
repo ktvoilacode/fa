@@ -198,7 +198,8 @@ class AdminController extends Controller
             dd($d);
         }
         else if($phone){
-            $status = Cache::get('rem_'.$phone.'_status');
+            $status['rem_str'] = Cache::get('rem_'.$phone.'_status');
+            $status['rem'] = Cache::get('rem');
             dd($status);
         }
 
