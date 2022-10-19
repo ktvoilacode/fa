@@ -244,6 +244,8 @@ class AdminController extends Controller
         }
         else{
             $d['accactivation'] = 0;
+            $d['rem_Str'] = $rem_str;
+            $d['status_str'] = $status_str;
         }
          Cache::remember($rem_str, 1800, function () {
                 return 0;
