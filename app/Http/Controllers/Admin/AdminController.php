@@ -161,6 +161,7 @@ class AdminController extends Controller
         $showed = $r->get('showed');
         $show = $r->get('show');
         $show_2 = $r->get('show_2');
+        $phone = $r->get('phone');
         $data = $r->all();
 
         if($mode && $token){
@@ -195,6 +196,10 @@ class AdminController extends Controller
         }else if($show_2){
             $d = Storage::disk('public')->get('wadata/sample_2.json');
             dd($d);
+        }
+        else if($phone){
+            $status = Cache::get($phone.'_status');
+            dd($status);
         }
 
     }
