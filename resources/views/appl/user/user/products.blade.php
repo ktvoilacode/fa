@@ -41,6 +41,7 @@
                         <ul>
                           
                           @foreach($products[$order->product_id]->tests as $test)
+                          @if(isset($test->id))
                             <li>
                               <a href="{{ route('user.test',[$obj->id,$test->id])}}">{{ $test->name }}</a>
                             @if(isset($attempts[$test->id]))
@@ -48,6 +49,7 @@
                              <span class="badge badge-warning">score - {{$attempts[$test->id]->sum('score')}} </span>
                             @endif
                             </li>
+                          @endif
                           @endforeach
 
                           @foreach($products[$order->product_id]->mocks as $mock)
