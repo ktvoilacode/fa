@@ -247,6 +247,29 @@ class UserController extends Controller
             //send password on mail
         	Mail::to($user->email)->send(new usercreate($user));
 
+            $obj = $user;
+            // send whatsapp
+             $var =[];
+            $var[0]= $obj->name;
+            if(strlen($obj->phone)==10)
+                $phone = '91'.$obj->phone;
+            else if(strlen($obj->phone)==12)
+                $phone = $obj->phone;
+            $email = $var[1]= $obj->email;
+            $password = $var[2]=$obj->auto_password;
+            $url = $var[3]=env('APP_URL').'/login';
+
+            $template = 'accountdetails';
+            $rem_str = 'rem_'.$phone.'_status';
+
+            Cache::remember($rem_str, 1800, function () {
+                return 1;
+            });
+
+            if(strlen($phone)==12){
+                Admin::sendWhatsapp($phone,$template,$var);
+            }
+
             $referral_name = \auth::user()->name;
             // attach tests and products
             $tests = $request->get('tests');
@@ -273,7 +296,7 @@ class UserController extends Controller
                 $user->tracks()->detach();
             }
 
-            flash('A new ('.$this->app.'/'.$this->module.') item is created!')->success();
+            flash('A new ('.$this->app.'/'.$this->module.') item is created! Email & Whatsapp message sent!')->success();
             return redirect()->route($this->module.'.index');
         }
         catch (QueryException $e){
