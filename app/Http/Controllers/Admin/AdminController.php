@@ -152,6 +152,71 @@ class AdminController extends Controller
         return view('appl.admin.admin.analytics')->with('data',$data);
     }
 
+    public function whatsappMsg(Request $request)
+    {
+
+
+        try{
+            
+            if(isset($request->all()['file'])){
+                
+                $file      = $request->all()['file'];
+                $fname = str_replace(' ','_',strtolower($file->getClientOriginalName()));
+                $extension = strtolower($file->getClientOriginalExtension());
+                $template = $request->get('template');
+
+                if(!in_array($extension, ['csv'])){
+                    flash('Only CSV files are allowed!')->error();
+                    return redirect()->route('whatsapp');
+                }
+
+                $row = 0;
+                 $file_path = Storage::disk('public')->putFileAs('excels', $request->file('file'),$fname,'public');
+                 $fpath = Storage::disk('public')->path($file_path);
+                if (($handle = fopen($fpath, "r")) !== FALSE) {
+                  while (($data = fgetcsv($handle, 9000, ",")) !== FALSE) {
+                    if($row==0){
+                        $row++;
+                        continue;
+                    }
+                    $row++;
+                    foreach($data as $a=>$b){
+                        if($b!="" && $a!=0)
+                            $var[$a-1]=$b;
+
+                    }
+                    $phone = $data[0];
+                    
+                    
+                    
+                    Admin::sendWhatsapp($phone,$template,$var);
+                   
+                  }
+                  fclose($handle);
+                }
+
+                flash('Whatsapp message sent to ('.($row-1).') users')->success();
+                return redirect()->route('whatsapp');
+            }
+            else{
+                return view('appl.pages.wapp');
+
+            }
+
+           
+        }
+        catch (QueryException $e){
+           $error_code = $e->errorInfo[1];
+            if($error_code == 1062){
+                $alert = 'Some error in updating the record';
+                return redirect()->back()->withInput()->with('alert',$alert);
+            }
+        }
+        
+        
+    }
+
+
     public function webhookget(Request $r){
 
         $verify_token = 'fa';

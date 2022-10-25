@@ -82,6 +82,9 @@ class Admin extends Model
             $curl = curl_init();
 
 
+            if(strlen($phone)==10)
+                $phone = '91'.$phone;
+
             if(count($variables)==0){
                 $msg = '{
                 "messaging_product": "whatsapp",

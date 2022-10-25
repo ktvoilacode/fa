@@ -210,11 +210,11 @@
             </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2">
-            <a href="{{ route('editor.index') }}">
+            <a href="{{ route('whatsapp') }}">
             <div class="border bg-white p-4 rounded mb-3 mr-2">
                 <div>
-                    <img src="{{ asset('images/admin/settings.png') }}" class="w-100 mb-3" >
-                    <div class="text-center">Settings</div>
+                    <img src="{{ asset('images/admin/whatsapp.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Whatsapp</div>
                 </div>
             </div>
             </a>
@@ -223,7 +223,7 @@
             <a href="{{ route('mock.index') }}">
             <div class="border bg-white p-4 rounded mb-3 mr-2">
                 <div>
-                    <img src="{{ asset('images/admin/page.png') }}" class="w-100 mb-3" >
+                    <img src="{{ asset('images/admin/exam_mock.png') }}" class="w-100 mb-3" >
                     <div class="text-center">Mocks</div>
                 </div>
             </div>

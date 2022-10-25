@@ -37,12 +37,7 @@ class HomeController extends Controller
         
     }
 
-     public function whatsapp()
-    {
-        $view = 'appl.pages.wapp';
-        
-        return view($view);
-    }
+     
 
     
 
