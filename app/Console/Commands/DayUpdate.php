@@ -7,6 +7,7 @@ use App\User;
 
 use App\Models\Test\Writing;
 use App\Mail\reviewnotify;
+use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Mail;
 
 class DayUpdate extends Command
@@ -53,7 +54,23 @@ class DayUpdate extends Command
                 $w->notify = 0;
                 $w->status = 1;
                 $w->save();
+
+                //send whatsapp
+                $obj = $user;
+                // send whatsapp
+                $var =[];
+                $var[0]= $obj->name;
+                if(strlen($obj->phone)==10)
+                    $phone = '91'.$obj->phone;
+                else if(strlen($obj->phone)==12)
+                    $phone = $obj->phone;
+                $template = 'writing_evaluation';
+                if(strlen($phone)==12){
+                    Admin::sendWhatsapp($phone,$template,$var);
+                }
                 $this->info('Hourly Update has been send successfully');
+
+
             }
             
        }

@@ -10,6 +10,7 @@ use App\Models\Test\Test ;
 use App\Models\Test\Writing ;
 use App\Models\Product\Order ;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Admin\Admin;
 use App\User;
 
 use App\Mail\reviewnotify;
@@ -443,8 +444,22 @@ levels of training.');
         if($obj){
 
              //Mail notifaction to the user
-            if(!$time)
+            if(!$time){
              Mail::to($user->email)->send(new reviewnotify($user,$test));
+             //send whatsapp
+                $obj = $user;
+                // send whatsapp
+                $var =[];
+                $var[0]= $obj->name;
+                if(strlen($obj->phone)==10)
+                    $phone = '91'.$obj->phone;
+                else if(strlen($obj->phone)==12)
+                    $phone = $obj->phone;
+                $template = 'writing_evaluation';
+                if(strlen($phone)==12){
+                    Admin::sendWhatsapp($phone,$template,$var);
+                }
+            }
             else{
 
                 $writing = Writing::where('attempt_id',$id)->first();
