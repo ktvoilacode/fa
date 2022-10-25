@@ -32,7 +32,7 @@
              
              <div class="btn-group" role="group">
     <button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Notify
+      Notify <i class="fa fa-whatsapp"></i>  <i class="fa fa-envelope-o"></i>
     </button>
     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
       <a href="{{ route('review.notify',$obj->id)}}" class="dropdown-item">Now</a>
