@@ -28,6 +28,7 @@ function formatDate(date) {
   );
 }
 
+
 $(document).ready(function(){
 
   // Countdown timer 
