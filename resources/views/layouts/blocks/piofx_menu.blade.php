@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-md navbar-light  shadow-sm"  style="background:#fff" >
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img class="" src="@if(request()->session()->get('client')) {{ request()->session()->get('client')->logo }} @else {{ asset('images/gradable.png') }} @endif" alt="Piofx" width="100" >
+            <img class="" src="@if(request()->session()->get('client')) {{ request()->session()->get('client')->logo }} @else {{ asset('images/gradable.png') }} @endif" alt="Piofx" width="200" >
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
