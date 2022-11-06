@@ -2293,7 +2293,7 @@ $(document).ready(function() {
 </script>
 @endif
 
-<script src="{{ asset('js/client.js')}}?r=1"></script>
+<script src="{{ asset('js/client.js')}}?r=2"></script>
 
 @if(isset($front))
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
