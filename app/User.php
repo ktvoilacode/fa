@@ -26,7 +26,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password','phone','lastlogin_at','status',
-        'activation_token','sms_token','user_id','idno','admin','auto_password','enrolled','comment','info',
+        'activation_token','sms_token','user_id','idno','admin','auto_password','enrolled','comment','info','client_slug','data'
     ];
 
      public $sortable = ['idno',
@@ -64,7 +64,7 @@ class User extends Authenticatable
     }
 
     public function isAdmin(){
-        if(in_array($this->admin,[1,2,3,4]))
+        if(in_array($this->admin,[1,2,3,4,5]))
             return true;
         else
             return false;
@@ -376,11 +376,11 @@ class User extends Authenticatable
     }
 
     public function coupon($coupon){
-        $coupon = Coupon::where('code',$coupon)->first();
+        $coupon = Coupon::where('code',$coupon)->where('client_slug',client('slug'))->first();
          
          if($coupon){
-             if($coupon->status==0){
-            abort('403','Coupon code expired');
+             if($coupon->status==0 && !request()->get('email')){
+                abort('403','Coupon code expired');
             }
 
             $order = new Order();

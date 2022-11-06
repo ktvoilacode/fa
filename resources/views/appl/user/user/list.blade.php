@@ -6,7 +6,9 @@
               <tr>
                 <th scope="col">#({{$objs->total()}})</th>
                 <th scope="col">@sortablelink('idno') </th>
+                
                 <th scope="col">@sortablelink('name') </th>
+                <th>Client & Role</th>
                 <th scope="col">@sortablelink('email') </th>
                 <th scope="col">@sortablelink('phone') </th>
                 <th scope="col">@sortablelink('user_id','Created By')</th>
@@ -26,6 +28,29 @@
                   {{ $obj->name }}
                   </a>
                 </td>
+                <td>{{$obj->client_slug}}<br>
+                  <span class="badge badge-secondary">
+                  @if($obj->admin==0)
+                    User
+                  @elseif($obj->admin==1)
+                    Administrator
+                  @elseif($obj->admin==2)
+                    Employee
+                  @elseif($obj->admin==3)
+                    Caller
+                  @elseif($obj->admin==4)
+                    Trainer
+                  @elseif($obj->admin==5)
+                    Client Admin
+                  @elseif($obj->admin==6)
+                    Client Employee
+                  @elseif($obj->admin==7)
+                    Client Trainer
+                  @else
+
+                  @endif
+                </span>
+                </td>
                 <td>
                   {{ $obj->email }}
                 </td>
@@ -34,9 +59,8 @@
                 </td>
                 <td>
                   @if($obj->user_id)
-                  @if(isset($obj->referral($obj->user_id)->name))
-                    <span class="badge badge-success">{{ $obj->referral($obj->user_id)->name }}</span>
-                  @endif
+                    <span class="badge badge-success">{{ $referrals[$obj->user_id]->name }}</span>
+                
                   @else
                     <span class="badge badge-primary"> None</span>
                   @endif

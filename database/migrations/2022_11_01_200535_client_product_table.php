@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateUsersTable12 extends Migration
+class ClientProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class UpdateUsersTable12 extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('auto_password')->nullable();
-            $table->string('client_slug')->nullable();
+        Schema::create('client_product', function (Blueprint $table) {
+            $table->integer('client_id');
+            $table->integer('product_id');
         });
     }
 
@@ -26,6 +26,6 @@ class UpdateUsersTable12 extends Migration
      */
     public function down()
     {
-        //
+         Schema::dropIfExists('client_product');
     }
 }

@@ -15,7 +15,7 @@
         @if($stub=='Create')
           Create {{ $app->module }}
         @else
-          Update Profile
+          Profile
         @endif  
 
         <button type="submit" class="btn btn-outline-success float-right">Save</button>
@@ -99,7 +99,7 @@
         </div>
       </div>
 
-      <div class='bg-light p-3 mb-3 '>
+      <div class='bg-light p-3 mb-3 d-none'>
         <div class="form-group">
         <label for="formGroupExampleInput ">Profile Pic</label>
         <input type="file" class="form-control bg-light" name="file" id="formGroupExampleInput" placeholder="Enter the image path" 
@@ -117,7 +117,7 @@
         <input type="hidden" name="id" value="{{ $obj->id }}">
       @endif
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-       <button type="submit" class="btn btn-success">Save</button>
+       <button type="submit" class="btn btn-success btn-lg">Save</button>
     </form>
     </div>
   </div>

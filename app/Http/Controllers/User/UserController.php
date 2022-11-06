@@ -10,6 +10,7 @@ use App\Models\Admin\Admin;
 use App\Models\Test\Attempt;
 use App\Models\Product\Order;
 use App\Models\Product\Product;
+use App\Models\Product\Client;
 use App\Models\Admin\Prospect;
 use App\Models\Course\Track;
 
@@ -55,10 +56,13 @@ class UserController extends Controller
                     ->orWhere('phone','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));   
+
+        $referrals = $obj->whereIn('id',$objs->pluck('user_id')->toArray())->get()->keyBy('id');
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
+                ->with('referrals',$referrals)
                 ->with('obj',$obj)
                 ->with('app',$this);
     }
@@ -74,14 +78,15 @@ class UserController extends Controller
         $this->authorize('create', $obj);
         $tests = Test::where('status',1)->get();
         $products = Product::where('status',1)->get();
-        $tracks = Track::where('status',1)->get();
+        $clients = Client::get();
 
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
                 ->with('obj',$obj)
                 ->with('tests',$tests)
                 ->with('products',$products)
-                ->with('tracks',$tracks)
+                ->with('clients',$clients)
+                ->with('select',1)
                 ->with('editor',true)
                 ->with('app',$this);
     }
@@ -236,6 +241,7 @@ class UserController extends Controller
             'enrolled'=>$request->get('enrolled'),
             'comment'=>$request->get('comment'),
             'idno'=>strtoupper($request->get('idno')),
+            'client_slug'=>$request->get('client_slug'),
             'user_id'=>\auth::user()->id,
             'activation_token'=>1,
             'sms_token' => 1,
@@ -406,7 +412,7 @@ class UserController extends Controller
 
         $tests = Test::where('status',1)->get();
         $products = Product::where('status',1)->get();
-        $tracks = Track::where('status',1)->get();
+        $clients = Client::get();
 
         $orders_product = Order::where('user_id',$obj->id)->pluck('product_id')->toArray();
         $orders_test = Order::where('user_id',$obj->id)->pluck('test_id')->toArray();
@@ -421,7 +427,7 @@ class UserController extends Controller
                 ->with('orders_test',$orders_test)
                 ->with('orders_product',$orders_product)
                 ->with('products',$products)
-                ->with('tracks',$tracks)
+                ->with('clients',$clients)
                 ->with('editor',true)
                 ->with('app',$this);
         else

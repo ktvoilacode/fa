@@ -84,22 +84,35 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         
-         $user = User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' =>  Hash::make($data['password']),
             'activation_token' => mt_rand(10000,99999),
             'lastlogin_at' => date('Y-m-d H:i:s'),
-            'sms_token' => mt_rand(1000,9999)
+            'sms_token' => mt_rand(1000,9999),
+            'client_slug'=>client('slug')
         ]);
 
-         if($data['code']){
+        if(isset($data['code']))
+        if($data['code']){
             $user->coupon($data['code']);
-         }
+        }
 
-         $user->resend_sms($user->phone,$user->sms_token);
-         Mail::to($user->email)->send(new EmailActivation($user));
+        $d = [];
+        foreach($data as $a=>$b){
+            if(substr( $a, 0, 8 )=='register'){
+                $k = str_replace('register_','',$a);
+                $d[$k] = $b;
+            }
+        }
+
+        $user->data = json_encode($d);
+        $user->save();
+
+        $user->resend_sms($user->phone,$user->sms_token);
+        Mail::to($user->email)->send(new EmailActivation($user));
 
         session('created','yes');
         return $user;

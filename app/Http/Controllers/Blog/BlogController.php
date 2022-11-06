@@ -30,8 +30,8 @@ class BlogController extends Controller
      */
     public function index(Obj $obj,Request $request)
     {
-
-        return redirect('https://firstacademy.in/blog', 301); 
+        if(domain()!='prep')
+            return redirect('https://firstacademy.in/blog', 301); 
         
         $search = $request->search;
         $item = $request->item;
@@ -344,6 +344,7 @@ class BlogController extends Controller
         $filename = $slug.'.json';
         $filepath = $this->cache_path.$filename;
 
+        if(domain()!='prep')
         return redirect('https://firstacademy.in/blog', 301); 
 
         if(Storage::disk('cache')->exists('pages/'.$filename))

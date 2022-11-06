@@ -332,6 +332,8 @@
         <input type="hidden" name="id" value="{{ $obj->id }}">
       @endif
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        
+        <input type="hidden" name="client_slug" value="{{ subdomain() }}">
        <button type="submit" class="btn btn-primary btn-lg">Save</button>
     </form>
     </div>

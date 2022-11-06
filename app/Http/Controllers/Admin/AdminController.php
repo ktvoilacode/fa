@@ -152,6 +152,9 @@ class AdminController extends Controller
         return view('appl.admin.admin.analytics')->with('data',$data);
     }
 
+
+    
+
     public function whatsappMsg(Request $request)
     {
 

@@ -9,6 +9,7 @@ use App\Models\Product\Product;
 use App\Models\Product\Order;
 use App\Models\Test\Test;
 use App\Models\Test\Attempt;
+use Illuminate\Support\Facades\Cache;
 
 use App\Exports\ScoreExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -35,14 +36,23 @@ class CouponController extends Controller
 
         $search = $request->search;
         $item = $request->item;
+        $client_list = Cache::get('client_list');
+        $client_slug = request()->get('client_slug');
         
-        $objs = $obj->where('code','LIKE',"%{$item}%")
+        if($client_slug)
+        $objs = $obj->where('code','LIKE',"%{$item}%")->where('client_slug',$client_slug)
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));   
+        else
+        $objs = $obj->where('code','LIKE',"%{$item}%")
+                    ->orderBy('created_at','desc')
+                    ->paginate(config('global.no_of_records')); 
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
+                ->with('client_list',$client_list)
+                ->with('client_slug',$client_slug)
                 ->with('obj',$obj)
                 ->with('app',$this);
     }
@@ -57,8 +67,12 @@ class CouponController extends Controller
         $obj = new Obj();
         $this->authorize('create', $obj);
 
-        $products  = Product::where('status',1)->get();
-        $tests  = Test::where('status',1)->get();
+        $client_list = Cache::get('client_list');
+
+        $client_slug = request()->get('client_slug');
+
+        $products  = Product::where('status',1)->where('client_slug',$client_slug)->get();
+        $tests  = Test::where('status',1)->where('client_slug',$client_slug)->get();
 
         $obj->code = strtoupper(\str_random(5));
         $obj->expiry = date("Y-m-d H:i:s",strtotime("+6 month"));
@@ -68,6 +82,7 @@ class CouponController extends Controller
                 ->with('obj',$obj)
                 ->with('editor',true)
                 ->with('products',$products)
+                ->with('client_list',$client_list)
                 ->with('tests',$tests)
                 ->with('app',$this);
     }
@@ -129,8 +144,11 @@ class CouponController extends Controller
         if(!$code)
             abort('403','Coupon code cannot be empty');
 
-        $coupon = Obj::where('code',$code)->first();
+
+        $client_slug = $request->session()->get('client')->slug;
+        $coupon = Obj::where('code',$code)->where('client_slug',$client_slug)->first();
          
+
         if($coupon->status==0){
             abort('403','Coupon code expired');
         }else if(\carbon\Carbon::parse($coupon->expiry)->lte(\carbon\Carbon::now())){
@@ -213,8 +231,11 @@ class CouponController extends Controller
     {
         $obj= Obj::where('id',$id)->first();
         $this->authorize('update', $obj);
-        $products  = Product::where('status',1)->get();
-        $tests  = Test::where('status',1)->get();
+        $client_slug = request()->get('client_slug');
+        
+        $products  = Product::where('status',1)->where('client_slug',$client_slug)->get();
+        $tests  = Test::where('status',1)->where('client_slug',$client_slug)->get();
+        $client_list = Cache::get('client_list');
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
@@ -222,6 +243,7 @@ class CouponController extends Controller
                 ->with('obj',$obj)
                 ->with('editor',true)
                 ->with('products',$products)
+                ->with('client_list',$client_list)
                 ->with('tests',$tests)
                 ->with('app',$this);
         else

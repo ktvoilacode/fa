@@ -2277,6 +2277,24 @@ $(document).ready(function() {
 </script>
 @endif
 
+@if(isset($select))
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script><script>
+// $('select').select2({
+//     theme: 'bootstrap4',
+// });
+ $('.select').select2({
+    closeOnSelect: false,
+    theme: 'bootstrap4',
+});
+</script>
+@endif
+
+<script src="{{ asset('js/client.js')}}?r=1"></script>
+
 @if(isset($front))
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
 <script type="text/javascript">

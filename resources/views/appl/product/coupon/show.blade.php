@@ -1,37 +1,44 @@
-@extends('layouts.app')
-@section('title', $obj->code.' | First Academy')
-@section('description', 'Take a free IELTS | OET test completely free. Full-length OET practice test for free! Free IELTS writing band scores. Test your vocabulary for OET and IELTS.')
+@extends('layouts.bg')
+@section('title', $obj->code.' | '.client('name'))
 
 @section('content')
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb border bg-light">
-    <li class="breadcrumb-item"><a href="{{ url('/home')}}">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ url('/admin')}}">Admin</a></li>
-    <li class="breadcrumb-item"><a href="{{ route($app->module.'.index') }}">{{ ucfirst($app->module) }}</a></li>
-    <li class="breadcrumb-item">{{ $obj->code }}</li>
-  </ol>
-</nav>
 
+<div class="bgblue  bdbblue mb-4" >
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb pl-0 mb-1 bgblue" >
+        <li class="breadcrumb-item"><a href="{{ url('/home')}}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('/admin')}}">Admin</a></li>
+        <li class="breadcrumb-item"><a href="{{ route($app->module.'.index') }}">{{ ucfirst($app->module) }}</a></li>
+        <li class="breadcrumb-item">{{ $obj->code }}</li>
+      </ol>
+    </nav>
+    <div class="row mb-3">
+      <div class="col-12 col-md-8">
+        <h3 class="mb-4"><i class="fa fa-bars"></i> Coupon - {{ $obj->code }} </h3>
+      </div>
+      <div class="col-12 col-md-4">
+        @can('update',$obj)
+            <span class="btn-group float-right" role="group" aria-label="Basic example">
+              <a href="{{ route($app->module.'.edit',$obj->id) }}?client_slug={{$obj->client_slug}}" class="btn btn-success" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+
+              <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
+            </span>
+            @endcan
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
 @include('flash::message')
 
   <div class="row">
 
     <div class="col-md-12">
-      <div class="card bg-light mb-3">
-        <div class="card-body text-secondary">
-          <p class="h2 mb-0"><i class="fa fa-th "></i> {{ $obj->code }} 
-
-          @can('update',$obj)
-            <span class="btn-group float-right" role="group" aria-label="Basic example">
-              <a href="{{ route($app->module.'.edit',$obj->id) }}" class="btn btn-outline-secondary" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-
-              <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
-            </span>
-            @endcan
-          </p>
-        </div>
-      </div>
+   
 
      
       <div class="card mb-4">
@@ -39,6 +46,10 @@
           <div class="row mb-2">
             <div class="col-md-4"><b>Code</b></div>
             <div class="col-md-8">{{ $obj->code }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Client</b></div>
+            <div class="col-md-8">{{ $obj->client_slug }}</div>
           </div>
           <div class="row mb-2">
             <div class="col-md-4"><b>Expiry</b></div>
@@ -105,7 +116,7 @@
                   @endif</div>
           </div>
           <div class="row mb-2">
-            <div class="col-md-4"><b>Created at</b></div>
+            <div class="col-md-4"><b>Created </b></div>
             <div class="col-md-8">{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</div>
           </div>
         </div>
@@ -116,7 +127,7 @@
      
 
   </div> 
-
+</div>
 
   <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -18,6 +18,7 @@ class Product extends Model
         'price',
         'status',
         'settings',
+        'client_slug',
         // add all other fields
     ];
 

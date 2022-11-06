@@ -115,40 +115,43 @@ class ProductController extends Controller
         $tag = $request->tag; 
         $item = $request->item;
         
-        //cache file
-        $filename = 'index.'.$this->app.'.'.$this->module.'.json';
-        $filepath = $this->cache_path.$filename;
+        $client_slug = client('slug');
+
+       
 
         if($request->get('refresh')){
-            Cache::forget($filepath);
-            Cache::forget('ptags');
+            Cache::forget('products_'.$client_slug);
+            Cache::forget('ptags_'.$client_slug);
         }
           
-        $objs = Cache::get($filepath);
-        
+        $objs = Cache::get('products_'.$client_slug);
         
         if(!$objs && !$search)
-        {
-            $objs = $obj->where('name','LIKE',"%{$item}%")->orWhere('settings','LIKE',"%{$item}%")
-                    ->orderBy('created_at','desc')
-                    ->get(); 
-            Cache::forever($filepath,$objs);  
-        }elseif($search){
-            $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->orWhere('settings','LIKE',"%{$item}%")
-                    ->orderBy('created_at','desc')
-                    ->get(); 
-        }elseif($tag){
-             $objs = $obj->where('settings','LIKE',"%{$tag}%")
-                    ->orderBy('created_at','desc')
-                    ->get(); 
-        }
+            {
+                $objs = $obj->where('name','LIKE',"%{$item}%")->where('client_slug',$client_slug)
+                        
+                        ->orderBy('created_at','desc')
+                        ->get(); 
+                 Cache::forever('products_'.$client_slug,$objs);  
+            }elseif($search){
+                $objs = $obj->where('name','LIKE',"%{$item}%")
+                        ->where('client_slug',$client_slug)
+                        ->orderBy('created_at','desc')
+                        ->get(); 
+            }elseif($tag){
+                 $objs = $obj->where('settings','LIKE',"%{$tag}%")
+                        ->where('client_slug',$client_slug)
+                        ->orderBy('created_at','desc')
+                        ->get(); 
+            }
+        
+        
         // else{
         //        abort('404','cache file not found');
         //     //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
         // }
 
-        $ptags = Cache::get('ptags');
+        $ptags = Cache::get('ptags_'.$client_slug);
         if(!$ptags){
             $ptags = [];
             foreach($objs as $obj){
@@ -168,7 +171,7 @@ class ProductController extends Controller
                 }
                 
             }
-            Cache::forever('ptags',$ptags);
+            Cache::forever('ptags_'.$client_slug,$ptags);
         }
 
 
@@ -277,6 +280,7 @@ class ProductController extends Controller
             $filepath = $this->cache_path.$filename;
             $objs = $obj->orderBy('created_at','desc')
                         ->get(); 
+
             //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
 
             flash('A new ('.$this->app.'/'.$this->module.') item is created!')->success();

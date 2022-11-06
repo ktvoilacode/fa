@@ -106,7 +106,10 @@ class Order extends Model
                 //update coupon
                 if(!$coupon->unlimited){
                   $coupon->status = 0;
-                  $coupon->user_id = \auth::user()->id;
+                    if(\auth::user())
+                        $coupon->user_id = \auth::user()->id;
+                    else
+                        $coupon->user_id = null;
                   $coupon->save();
                 }
                 $order->txn_id = $coupon->code;

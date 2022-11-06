@@ -1,7 +1,7 @@
 <div class=" container ">
   <div class="row pt-4 pb-4">
     <div class="col-12 col-md-8">
-      <h1 class="h3 mb-0 mt-2"><b><i class="fa fa-cubes"></i> Products </b></h1>
+      <h1 class="h3 mb-0 mt-2"><b><i class="fa fa-check-square-o"></i> Test Packs</b></h1>
     </div>
 
     <div class="col-12 col-md-4">

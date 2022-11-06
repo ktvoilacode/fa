@@ -1,5 +1,27 @@
 <?php
 
+// function to retrive data from the client settings
+if (!function_exists('client')) {
+    function client($key){
+        $client = request()->session()->get('client');
+        $value = null;
+        //dd($client);
+        if($key=='slug')
+        {
+            if(isset($client->$key))
+                return  $client->$key;
+            else
+                return 'prep';
+        }
+        $config = json_decode($client->config);
+        //check if the settings json has the direct key and value pair
+        if(isset($client->$key))
+            $value = $client->$key;
+        elseif(isset($config->$key))
+            $value = $config->$key;            
+        return $value;
+    }
+}
 if (! function_exists('image_resize')) {
     function image_resize($image_path,$size)
     {
@@ -151,6 +173,53 @@ if (! function_exists('summernote_imageupload')) {
     }
 }
 
+
+if (! function_exists('subdomain')) {
+function subdomain() {
+    $url = url()->full();
+    if($_SERVER['HTTP_HOST'] == 'gradable.in' || $_SERVER['HTTP_HOST'] == 'fa.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in' )
+            return 'prep';
+
+    $parsed = parse_url($url);
+    $exploded = explode('.', $parsed["host"]);
+     if(count($exploded) > 2){
+        $parsed = parse_url($url);
+            $exploded = explode('.', $parsed["host"]);
+            $subdomain = $exploded[0];
+            return $subdomain;
+     }
+     else
+        return null;
+    
+
+}
+}
+
+if (! function_exists('domain')) {
+function domain() {
+    $url = url()->full();
+    $parsed = parse_url($url);
+    $exploded = explode('.', $parsed["host"]);
+     if(count($exploded) > 2){
+        $parsed = parse_url($url);
+        $exploded = explode('.', $parsed["host"]);
+        $domain = $exploded[1];
+        
+     }
+     else{
+         $parsed = parse_url($url);
+        $exploded = explode('.', $parsed["host"]);
+        $domain = $exploded[0];
+     }
+
+
+    if($domain == 'gradable' || $domain== 'fa')
+            $domain  = 'prep';
+
+    return $domain;
+
+}
+}
 
 if (! function_exists('startsWithNumber')) {
 function startsWithNumber($string) {

@@ -136,6 +136,7 @@ class PageController extends Controller
     public function show($slug,$s1=null,$s2=null)
     {
 
+       
         if($s2){
           $slug = $slug.'/'.$s1.'/'.$s2;
         }
@@ -147,6 +148,7 @@ class PageController extends Controller
        
         if(is_numeric($slug) && strlen($slug)==4){
             $this->name = $slug;
+            if(domain()!='prep')
             return redirect('https://firstacademy.in/blog', 301); 
             return app('App\Http\Controllers\Blog\CollectionController')->year($slug);
             //app()->call('App\Http\Controllers\Blog\CollectionController@year',[$slug]);
@@ -187,6 +189,7 @@ class PageController extends Controller
 
             if(!$obj){
                  $obj = Blog::where('slug',$slug)->first();
+                 if(domain()!='prep')
                  return redirect('https://firstacademy.in/'.$slug, 301); 
             }
         }
@@ -211,7 +214,7 @@ class PageController extends Controller
 
             $this->app = 'blog';
             $this->module = 'blog';
-            
+                if(domain()!='prep')
              return redirect('https://firstacademy.in/'.$slug, 301); 
 
          }else{

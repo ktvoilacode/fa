@@ -1,37 +1,42 @@
-@extends('layouts.app')
-@section('title', $obj->code.' | First Academy')
-@section('description', 'Take a free IELTS | OET test completely free. Full-length OET practice test for free! Free IELTS writing band scores. Test your vocabulary for OET and IELTS.')
+@extends('layouts.bg')
+@include('meta.show')
 
 @section('content')
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb border bg-light">
-    <li class="breadcrumb-item"><a href="{{ url('/home')}}">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ url('/admin')}}">Admin</a></li>
-    <li class="breadcrumb-item"><a href="{{ route($app->module.'.index') }}">{{ ucfirst($app->module) }}</a></li>
-    <li class="breadcrumb-item">{{ $obj->name }}</li>
-  </ol>
-</nav>
-
-@include('flash::message')
-
-  <div class="row">
-
-    <div class="col-md-12">
-      <div class="card bg-light mb-3">
-        <div class="card-body text-secondary">
-          <p class="h2 mb-0"><i class="fa fa-th "></i> {{ $obj->name }} 
-
-          @can('update',$obj)
+<div class="bgblue  bdbblue mb-4" >
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb pl-0 mb-1 bgblue" >
+        <li class="breadcrumb-item"><a href="{{ url('/home')}}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('/admin')}}">Admin</a></li>
+        <li class="breadcrumb-item"><a href="{{ route($app->module.'.index') }}">{{ ucfirst($app->module) }}</a></li>
+        <li class="breadcrumb-item">{{ $obj->name }}</li>
+      </ol>
+    </nav>
+    <div class="row mb-3">
+      <div class="col-12 col-md-8">
+        <h3 class="mb-4"><i class="fa fa-bars"></i> {{ $obj->name }} </h3>
+      </div>
+      <div class="col-12 col-md-4">
+        @can('update',$obj)
             <span class="btn-group float-right" role="group" aria-label="Basic example">
-              <a href="{{ route($app->module.'.edit',$obj->id) }}" class="btn btn-outline-secondary" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+              <a href="{{ route($app->module.'.edit',$obj->id) }}" class="btn btn-success" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
 
-              <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
+              <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
             </span>
             @endcan
-          </p>
-        </div>
       </div>
+    </div>
+  </div>
+</div>
+
+  
+
+  <div class="container">
+
+@include('flash::message')
+    <div class="">
+      
 
      
       <div class="card mb-4">
@@ -65,7 +70,9 @@
 
           <div class="row mb-2">
             <div class="col-md-4"><b>User</b></div>
+            @if(isset($obj->user))
             <div class="col-md-8"><a href="{{ route('user.show',$obj->user->id)}}">{{$obj->user->name }}</a></div>
+            @endif
           </div>
 
          

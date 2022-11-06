@@ -17,6 +17,8 @@ use App\Http\Middleware\cors;
     return view('welcome');
 });*/
 
+
+
 Route::group(['middleware' => Subdomain::class], function () {
 
 Route::get('/layout2', 'HomeController@index')->name('root');
@@ -30,10 +32,11 @@ Route::post('/whatsapp', 'Admin\AdminController@whatsappMsg')->name('whatsapp')-
 // login routes
 Auth::routes();
 
+
 //under construction page
-Route::get('/construction', function () {
+Route::get('/testhistory', function () {
         return view('appl.pages.construction');
-})->name('construction');
+})->name('testhistory');
 
 Route::get('/onlinetraining', function () {
         return view('appl.pages.onlinetraining');
@@ -52,6 +55,7 @@ Route::get('/help/fillup', function () {
 Route::post('audioblob','Test\AttemptController@saveAudio')->name('audio.blob');
 
 Route::post('webcamimage','Test\AttemptController@saveImage')->name('image.save');
+Route::get('dbupdated','HomeController@dbupdate')->name('db_update');
 
 
 /* Admin Routes */
@@ -156,18 +160,21 @@ Route::resource('/admin/client', 'Product\ClientController')->middleware('auth')
 Route::get('/orders', 'Product\OrderController@myorders')->middleware('auth')->name('myorders');
 Route::get('/orders/{order}', 'Product\OrderController@myordersview')->middleware('auth')->name('myorder.view');
 
-Route::resource('/admin/track', 'Course\TrackController')->middleware('auth');
-Route::resource('/admin/track/{track}/session', 'Course\SessionController')->middleware('auth');
-Route::get('/session/{session}','Course\SessionController@url')->name('session.url')->middleware('auth');
-Route::get('/session/{session}/join','Course\SessionController@join')->name('session.join')->middleware('auth');
-Route::get('/mytracks','Course\TrackController@mytracks')->name('tracks.url')->middleware('auth');
+// Route::resource('/admin/track', 'Course\TrackController')->middleware('auth');
+// Route::resource('/admin/track/{track}/session', 'Course\SessionController')->middleware('auth');
+// Route::get('/session/{session}','Course\SessionController@url')->name('session.url')->middleware('auth');
+// Route::get('/session/{session}/join','Course\SessionController@join')->name('session.join')->middleware('auth');
+// Route::get('/mytracks','Course\TrackController@mytracks')->name('tracks.url')->middleware('auth');
 
 /* product redirect */
 Route::get('products/ielts-short-test', function () {
     return redirect('products/ielts-mini-test');
 });
+Route::get('products', function () {
+    return redirect('/tests');
+});
 /* Product/Orders Public Routes */
-Route::get('/products','Product\ProductController@public')->name('product.public');
+Route::get('/tests','Product\ProductController@public')->name('product.public');
 Route::get('/products/{product}','Product\ProductController@view')->name('product.view');
 Route::get('/det', function(){
     return view('appl.pages.det');
@@ -189,6 +196,9 @@ Route::get('/contact', function(){
     request()->session()->put('result', $a+$b);
     return view('appl.pages.contact')->with('a',$a)->with('b',$b);
 })->name('contact');
+Route::get('/contactpage', function(){ 
+    return view('appl.pages.contactpage');
+})->name('contactpage');
 Route::get('/frame', function(){ return view('appl.pages.terms');})->name('terms');
 Route::get('/downloads', function(){ return view('appl.pages.downloads');})->name('downloads');
 
@@ -197,6 +207,7 @@ Route::post('/api/register', 'User\UserController@register')->name('apiregister'
 Route::post('/api/login', 'User\UserController@login')->name('apilogin');
 Route::get('/api/login', 'User\UserController@login')->name('apilogin');
 Route::get('/api/phone', 'User\UserController@phone')->name('apiphone');
+Route::get('/profile', 'User\UserController@useredit')->name('usereditprofile');
 Route::get('/user/edit', 'User\UserController@useredit')->name('useredit');
 Route::post('/user/edit', 'User\UserController@userstore')->name('userstore');
 
@@ -208,9 +219,11 @@ Route::get('/activation/mail/{token}', 'User\VerifyController@email')->name('ema
 Route::post('/activation/phone', 'User\VerifyController@sms')->name('sms.verify');
 
 Route::get('/blog', function(){
+    if(domain()!='prep')
     return redirect('https://firstacademy.in/blog', 301); 
 })->name('blog');
 Route::get('/blog/*', function(){
+    if(domain()!='prep')
     return redirect('https://firstacademy.in/blog', 301); 
 })->name('blog');
 
@@ -259,31 +272,11 @@ Route::get('/courses', function(){
     return view('appl.pages.courses');
 })->name('courses.page');
 
-Route::get('/studyabroad', function(){
-    return view('appl.pages.studyabroad');
-})->name('studyabroad.page');
+
 
 Route::get('/{page}','Admin\PageController@show')->name('page.view');
 Route::get('/{page}/{s1}','Admin\PageController@show')->name('page.s1');
 Route::get('/{page}/{s1}/{s2}','Admin\PageController@show')->name('page.s2');
-/* learners club */
-Route::get('/learnersclub', function(){
-    return view('appl.pages.lclub');
-})->name('listening');
 
-/* Sample Routes */
-
-
-Route::get('/listening', function(){
-    return view('appl.pages.listening');
-})->name('listening');
-
-Route::get('/reading', function(){
-    return view('appl.pages.reading')->with('reading',1);
-})->name('reading');
-
-Route::get('/pricing', function(){
-    return view('appl.pages.pricing');
-})->name('pricing');
 
 });

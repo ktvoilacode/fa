@@ -6,7 +6,9 @@
               <tr>
                 <th scope="col">#({{$objs->total()}})</th>
                 <th scope="col">@sortablelink('name') </th>
+
                 <th scope="col">@sortablelink('slug')</th>
+                <th scope="col">Client</th>
                 <th scope="col">@sortablelink('status')</th>
                 <th scope="col">Product</th>
                 <th scope="col">@sortablelink('created_at','Created')</th>
@@ -23,6 +25,9 @@
                 </td>
                 <td>
                   {{$obj->slug}}
+                </td>
+                <td>
+                  {{$obj->client_slug}}
                 </td>
                 <td>
                   @if($obj->status==0)

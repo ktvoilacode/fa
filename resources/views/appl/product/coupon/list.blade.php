@@ -7,6 +7,7 @@
                 <th scope="col">#({{$objs->total()}})</th>
                 <th scope="col">Code </th>
                 <th scope="col">Usage</th>
+                <th scope="col">Client</th>
                 <th scope="col">Status</th>
                 <th scope="col">Created at</th>
               </tr>
@@ -25,6 +26,7 @@
                  {{ $obj->count() }}
                 </a>
                 </td>
+                <td><a href="{{ route('coupon.index')}}?client_slug={{$obj->client_slug}}">{{ $obj->client_slug}}</a></td>
                 <td>
                   @if($obj->status==0)
                     <span class="badge badge-danger">Used</span>

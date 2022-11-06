@@ -1,21 +1,32 @@
 @extends('layouts.login')
-@section('title', 'Register | '.getenv('APP_NAME'))
-@section('description', 'Don\'t have the First Academy account? Create one for FREE.')
-@section('keywords', 'Register first academy, signup first academy, registration first academy')
+@section('title', 'Register | '.client('name'))
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-<div class="col-12 col-lg-10"> 
-<div class="bg-white border rounded p-4 p-md-5">
-<div class="row">
-    <div class="col-12 col-md-6">
+<div class="col-12 col-lg-8"> 
+<div class="bg-white border rounded p-3 ">
+<div class="">
+    <div class=" ">
 <form class=" " method="POST" action="{{ route('register') }}">
     @csrf
 
+    @if(client('image_register'))
+     <img src="{{ Storage::disk('s3')->url(client('image_register'))}}" class="w-100 mb-3" />
+    @endif
+
+     @if(request()->session()->get('config'))
+            @if(request()->session()->get('config')->message_r)
+              <div class="alert alert-warning alert-important mt-3">
+                <div class=" h5 mt-1">{{request()->session()->get('config')->message_r}}</div>
+                @if(request()->session()->get('config')->timer_r)
+                 <p id="d" class="my-2 text-danger blink countdown_timer" data-timer="{{request()->session()->get('config')->timer_r}}"></p>
+                @endif
+              </div>
+            @endif
+          @endif
+
     <h1>Register</h1>
     <hr>
-    <!--
-    <div class="bg-light border rounded p-3 mb-3"><small class="text-left"> Note that verification of email or phone number is mandatory to attempt the free or premium tests. So kindly ensure that you enter the correct details.</small></div> -->
     <div class="form-group row">
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -77,17 +88,25 @@
 
         <div class="col-md-8">
             <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="re-enter password" required autocomplete="new-password">
+            <input type="hidden" name="client_slug" value="{{client('slug')}}" />
         </div>
     </div>
 
+    @if(subdomain()=='prep')
     <div class="form-group row">
         <label for="code" class="col-md-4 col-form-label text-md-right">Coupon (optional)</label>
-
         <div class="col-md-8">
-            <input id="code" type="text" class="form-control" placeholder="Enter Coupon Code " name="code" >
+            <input id="code" type="text" class="form-control" placeholder="Enter Coupon Code" name="code">
         </div>
     </div>
+    @elseif(client('default_coupon'))
+    <input id="code" type="hidden" class="form-control" placeholder="Enter Coupon Code" name="code" value="{{client('default_coupon')}}">
+        
+    @endif
 
+    @if(client('rform'))
+        {!! client('rform') !!}
+    @endif
 
     <div class="form-group row text-md-left">
         <div class="col-md-4 col-form-label text-md-left">&nbsp;
@@ -95,14 +114,14 @@
         <div class="col-md-8">
             <button type="submit" class="btn btn-primary">
                 {{ __('Register') }}
-            </button>
+            </button><br><br><br>
+            <a href="/" >back to homepage</a>
         </div>
     </div>
-</form>
+
+    </form>
     </div>
-    <div class="col-12 col-md-6 ">
-        <img src="{{ asset('images/general/signup-image.jpg')}}" class="mt-5 mt-md-3 p-3 w-100" />
-    </div>
+
 
 </div>
 </div>

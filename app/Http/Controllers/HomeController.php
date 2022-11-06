@@ -7,8 +7,10 @@ use App\Models\Test\Test;
 use App\Models\Test\Category;
 use App\Models\Test\Attempt;
 use App\Models\Product\Product;
+use App\Models\Product\Coupon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -37,7 +39,18 @@ class HomeController extends Controller
         
     }
 
-     
+     public function dbUpdate(){
+
+        //update user subdomians
+        if(request()->get('user'))
+            User::query()->update(['client_slug' => 'prep']);
+        if(request()->get('test'))
+            Test::query()->update(['client_slug' => 'prep']);
+        if(request()->get('product'))
+            Product::query()->update(['client_slug' => 'prep']);
+        if(request()->get('coupon'))
+            Coupon::query()->update(['client_slug' => 'prep']);
+    }
 
     
 
@@ -131,6 +144,9 @@ class HomeController extends Controller
 
         }
 
+        if(\auth::user())
+            return redirect()->to('/home');
+        else
         return view($view)
                 ->with('tests',$objs)
                 ->with('objs',$objs)
@@ -142,120 +158,171 @@ class HomeController extends Controller
 
     public function dashboard(Request $request){
 
-        $user = \auth::user();
-        $orders = \auth::user()->orders()->where('status',1)->orderBy('expiry','desc')->get();
 
-        if($request->get('refresh')){
-            foreach($orders as $o){
-            Cache::forget('my_tests_'.$user->id.'_'.$o->product_id);
-            }
+        if($_SERVER['HTTP_HOST']!='prep.firstacademy.in' && $_SERVER['HTTP_HOST']!='fa.test')
+        {
+            return $this->dashboard_piofx($request);
         }
-        $test_ids = array();
-        $test_ids2 = array();
-        $product_ids = array();
-        $tests=array();
-        $status =array();
-        $product_status =array();
-        $product_expiry = array();
-        $expiry = array();
-        $search = $request->search;
-        $item = $request->item;
-        $item2 = $request->item2;
+        else{
+            $user = \auth::user();
+            $orders = \auth::user()->orders()->where('status',1)->orderBy('expiry','desc')->get();
 
-        $i=0;
 
-        foreach($orders as $o){
-          //if(strtotime($o->expiry) > strtotime(date('Y-m-d'))){
-            if($o->test_id){
-                if(!in_array($o->test_id, $test_ids)){
-                     array_push($test_ids, $o->test_id);
-                     $expiry[$o->test_id] = $o->expiry;
-                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
-                        $status[$o->test_id] = 'Active';
-                    else
-                        $status[$o->test_id] = 'Expired';
+            if($request->get('refresh')){
+                foreach($orders as $o){
+                Cache::forget('my_tests_'.$user->id.'_'.$o->product_id);
                 }
-                
             }
-            
+            $test_ids = array();
+            $test_ids2 = array();
+            $product_ids = array();
+            $tests=array();
+            $status =array();
+            $product_status =array();
+            $product_expiry = array();
+            $expiry = array();
+            $search = $request->search;
+            $item = $request->item;
+            $item2 = $request->item2;
 
-            if($o->product_id){
-                array_push($product_ids, $o->product_id);
-                if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
-                    $product_status[$o->product_id] = 'Active';
-                else
-                    $product_status[$o->product_id] = 'Expired';
-                $product_expiry[$o->product_id] = $o->expiry;
-                $tests = Cache::remember('my_tests_'.$user->id.'_'.$o->product_id,240,function() use ($o){
-                    return  $o->product->tests;
-                });
-                foreach($tests as $t){
-                    if(!in_array($t->id, $test_ids)){
-                        array_push($test_ids, $t->id);
-                        array_push($test_ids2, $t->id);
-                        $expiry[$t->id] = $o->expiry;
+            $i=0;
+
+            foreach($orders as $o){
+              //if(strtotime($o->expiry) > strtotime(date('Y-m-d'))){
+                if($o->test_id){
+                    if(!in_array($o->test_id, $test_ids)){
+                         array_push($test_ids, $o->test_id);
+                         $expiry[$o->test_id] = $o->expiry;
                         if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
-                            $status[$t->id] = 'Active';
+                            $status[$o->test_id] = 'Active';
                         else
-                            $status[$t->id] = 'Expired';
+                            $status[$o->test_id] = 'Expired';
                     }
                     
                 }
-            }    
-        
-        }
-        
-
-
-
-        $tests = Test::whereIn('id',$test_ids)->where('name','LIKE',"%{$item}%")->with('testtype')->orderBy('name')->get();
-        $products = Product::whereIn('id',$product_ids)->where('name','LIKE',"%{$item2}%")->orderBy('name')->get();
-
-        $att= Attempt::where('user_id',\auth::user()->id)->whereIn('test_id',$test_ids)->get();
-        $attempts = $att->pluck('test_id')->toArray();
-        
-        $status2=[];
-        foreach($tests as $k=>$t){
-           $type= $t->testtype->name;
-            if(in_array($t->id, $attempts))
-                $status[$t->id] = 'Completed';
-
-            if($type=='WRITING'){
-                $att_w = $att->where('test_id',$t->id)->first();
-                if($att_w){
-                   if($att_w->answer){
-                    $status2[$t->id] = 'evaluated';
-                   }else{
-                    $status2[$t->id] = 'notevaluated';
-                   }
-                }
                 
+
+                if($o->product_id){
+                    array_push($product_ids, $o->product_id);
+                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                        $product_status[$o->product_id] = 'Active';
+                    else
+                        $product_status[$o->product_id] = 'Expired';
+                    $product_expiry[$o->product_id] = $o->expiry;
+                    $tests = Cache::remember('my_tests_'.$user->id.'_'.$o->product_id,240,function() use ($o){
+                        return  $o->product->tests;
+                    });
+                    foreach($tests as $t){
+                        if(!in_array($t->id, $test_ids)){
+                            array_push($test_ids, $t->id);
+                            array_push($test_ids2, $t->id);
+                            $expiry[$t->id] = $o->expiry;
+                            if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                                $status[$t->id] = 'Active';
+                            else
+                                $status[$t->id] = 'Expired';
+                        }
+                        
+                    }
+                }    
+            
             }
+            
+
+
+
+            $tests = Test::whereIn('id',$test_ids)->where('name','LIKE',"%{$item}%")->with('testtype')->orderBy('name')->get();
+            $products = Product::whereIn('id',$product_ids)->where('name','LIKE',"%{$item2}%")->orderBy('name')->get();
+
+            $att= Attempt::where('user_id',\auth::user()->id)->whereIn('test_id',$test_ids)->get();
+            $attempts = $att->pluck('test_id')->toArray();
+            
+            $status2=[];
+            foreach($tests as $k=>$t){
+               $type= $t->testtype->name;
+                if(in_array($t->id, $attempts))
+                    $status[$t->id] = 'Completed';
+
+                if($type=='WRITING'){
+                    $att_w = $att->where('test_id',$t->id)->first();
+                    if($att_w){
+                       if($att_w->answer){
+                        $status2[$t->id] = 'evaluated';
+                       }else{
+                        $status2[$t->id] = 'notevaluated';
+                       }
+                    }
+                    
+                }
+            }
+
+           if($search){
+                if($item2)
+                $view = 'appl.pages.blocks.productlist';
+               else   
+                $view = 'appl.pages.blocks.testlist';
+           }
+           else
+            $view = 'appl.pages.dashboard2';
+
+
+            /* code specific to piofx */
+            if($_SERVER['HTTP_HOST'] == 'onlinelibrary.test' || $_SERVER['HTTP_HOST'] == 'piofx.com' )
+            {
+                if($user->role==0)
+                    $view = 'appl.admin.bfs.index_student';
+            }
+
+
+            return view($view)
+                    ->with('tests',$tests)
+                    ->with('products',$products)
+                    ->with('expiry',$expiry)
+                    ->with('product_expiry',$product_expiry)
+                    ->with('product_status',$product_status)
+                    ->with('status',$status)
+                    ->with('status2',$status2);
         }
+        
+    }
 
-       if($search){
-            if($item2)
-            $view = 'appl.pages.blocks.productlist';
-           else   
-            $view = 'appl.pages.blocks.testlist';
-       }
-       else
-        $view = 'appl.pages.dashboard2';
-
-        /* code specific to piofx */
-        if($_SERVER['HTTP_HOST'] == 'onlinelibrary.test' || $_SERVER['HTTP_HOST'] == 'piofx.com' )
-        {
-            if($user->role==0)
-                $view = 'appl.admin.bfs.index_student';
+    public function dashboard_piofx(Request $request){
+        $user = \auth::user();
+        if($request->get('refresh')){
+            Cache::forget('my_products_'.$user->id);
+                Cache::forget('my_orders_'.$user->id);
         }
+        $orders = Cache::remember('my_orders_'.$user->id, 300, function() use($user){
+            return $user->orders()->where('status',1)->orderBy('expiry','desc')->get();
+        });
+        $products = Cache::remember('my_products_'.$user->id, 300, function() use($orders){
+            $products =  array();
+            foreach($orders as $o){
+                if($o->product_id)
+                $products[$o->product_id] = $o->product;
+            }
+            return $products;
+        });
 
+        $product_status =array();
+        $product_expiry = array();
+
+        foreach($orders as $o){
+                if($o->product_id){
+                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                        $product_status[$o->product_id] = 'Active';
+                    else
+                        $product_status[$o->product_id] = 'Expired';
+                    $product_expiry[$o->product_id] = $o->expiry;
+                    
+                }    
+            
+            }
+
+        $view = 'appl.pages.piofx_dashboard';
         return view($view)
-                ->with('tests',$tests)
                 ->with('products',$products)
-                ->with('expiry',$expiry)
                 ->with('product_expiry',$product_expiry)
-                ->with('product_status',$product_status)
-                ->with('status',$status)
-                ->with('status2',$status2);
+                ->with('product_status',$product_status);
     }
 }

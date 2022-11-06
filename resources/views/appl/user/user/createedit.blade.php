@@ -58,8 +58,20 @@
                 <option value="2" @if(isset($obj)) @if($obj->admin===2) selected @endif @endif >Employee</option>
                 <option value="4" @if(isset($obj)) @if($obj->admin===4) selected @endif @endif >Trainer</option>
                 <option value="3" @if(isset($obj)) @if($obj->admin===3) selected @endif @endif >Tele Caller</option>
-                <option value="5" @if(isset($obj)) @if($obj->admin===5) selected @endif @endif >Client</option>
-                <option value="6" @if(isset($obj)) @if($obj->admin===6) selected @endif @endif >College</option>
+                <option value="5" @if(isset($obj)) @if($obj->admin===5) selected @endif @endif >Client Admin</option>
+                <option value="6" @if(isset($obj)) @if($obj->admin===6) selected @endif @endif >Client Employee</option>
+                <option value="7" @if(isset($obj)) @if($obj->admin===7) selected @endif @endif >Client Faculty</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="formGroupExampleInput ">Client</label>
+              <select class="form-control" name="client_slug">
+                <option value="prep" @if(isset($obj)) @if($obj->client_slug==="prep") selected @endif @endif>Prep</option>
+                @foreach($clients as $client)
+                <option value="{{$client->slug}}" @if(isset($obj)) @if($obj->client_slug===$client->slug) selected @endif @endif >{{$client->slug}}</option>
+                @endforeach
+               
               </select>
             </div>
            @endif
@@ -116,6 +128,8 @@
               
             </select>
           </div>
+
+
 
         </div>
       </div>

@@ -120,11 +120,15 @@
                 @elseif($obj->admin==2)
                 Employee
                 @elseif($obj->admin==4)
-                Faculty
+                Trainer
                 @elseif($obj->admin==3)
-                Telecaller
+                Caller
                 @elseif($obj->admin==5)
-                Client
+                Client Admin
+                @elseif($obj->admin==6)
+                Client Employee
+                @elseif($obj->admin==7)
+                Client Trainer
                 @endif
                 </span>
               </div>

@@ -222,7 +222,11 @@ class OrderController extends Controller
             else
               $test = null;
 
-            $coupon = Coupon::where('code',strtoupper($request->get('coupon')))->first();
+            if(isset(request()->session()->get('client')->slug))
+            $client_slug = request()->session()->get('client')->slug;
+            else
+                $client_slug = 'prep';
+            $coupon = Coupon::where('code',strtoupper($request->get('coupon')))->where('client_slug',$client_slug)->first();
 
 
             
@@ -465,9 +469,7 @@ class OrderController extends Controller
     {
         try{
             $obj = Obj::where('id',$id)->first();
-
             $obj->update($request->all()); 
-
             flash('('.$this->app.'/'.$obj->order_id.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
         }

@@ -200,11 +200,11 @@
         
        
          <div class="col-4 col-md-3 col-lg-2">
-            <a href="{{ route('admin.analytics') }}">
+            <a href="{{ route('client.index') }}">
             <div class="border bg-white p-4 rounded mb-3 mr-2">
                 <div>
-                    <img src="{{ asset('images/admin/analytics.png') }}" class="w-100 mb-3" >
-                    <div class="text-center">Analytics</div>
+                    <img src="{{ asset('images/admin/client.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Clients</div>
                 </div>
             </div>
             </a>

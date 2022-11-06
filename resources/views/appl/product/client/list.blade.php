@@ -2,12 +2,15 @@
  @if($objs->total()!=0)
         <div class="table-responsive">
           <table class="table table-bordered mb-0">
-            <thead>
+            <thead style="background: #f8f8f8;">
               <tr>
                 <th scope="col">#({{$objs->total()}})</th>
                 <th scope="col">Name </th>
-                <th scope="col">User </th>
+                <th scope="col">slug </th>
+                <th scope="col">Users </th>
+
                 <th scope="col">Domains</th>
+                <th scope="col">Administrator</th>
                 <th scope="col">Status</th>
                 <th scope="col">Created at</th>
               </tr>
@@ -21,15 +24,17 @@
                   {{ $obj->name }}
                   </a>
                 </td>
+                <td>{{ $obj->slug }}</td>
+                <td>{{ $obj->users }}</td>
+                <td>{{ $obj->domains }}</td>
                 <td>
-                <a href="{{ route('user.show',$obj->user->id)}}">
-                 {{ $obj->user->name }}
+                @if(isset($admins[$obj->user_id]))
+                <a href="{{ route('user.show',$obj->user_id)}}">
+                 {{ $admins[$obj->user_id]->name }}
                 </a>
+                @endif
                 </td>
-                <td>
-                 {{ $obj->domains }}
-                
-                </td>
+
                 <td>
                   @if($obj->status==0)
                     <span class="badge badge-danger">Inactive</span>

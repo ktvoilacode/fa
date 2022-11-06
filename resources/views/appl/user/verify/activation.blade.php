@@ -4,10 +4,6 @@
 
 @include('flash::message')
 
-<div class="alert alert-info alert-important " role="alert">
- Kindly note that activation of account is compulsory to attempt the tests. In case of any issue kindly write to us at <span class="text-primary">info@firstacademy.in</span> 
-</div>
-
 <div class="row">
 	<div class="col-12 col-md-12">
 		<div class="bg-white">

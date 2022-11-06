@@ -57,7 +57,7 @@
     <p>and will be deactivated by <span class="text-info">{{\carbon\carbon::parse($auto_deactivation)->toDayDateTimeString()}}</span></p>
     <p><b> Note:</b> You are required to start the test within the above mentioned test window. <br>
     
-    For queries, kindly write to us at <span class="text-primary"><span class="text-info">@if(env('CONTACT_MAIL')) {{env('CONTACT_MAIL')}} @else info@firstacademy.in @endif</span> </p>
+   </p>
     <p>
     </p>
     <a href="{{ url('/') }}"><button class="btn btn-outline-primary">Home</button></a>
