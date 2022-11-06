@@ -43,10 +43,10 @@
        
        
         <div class="col-sm-6 px-0 d-none d-sm-block">
-          @if(Storage::disk('s3')->exists('clients/'.request()->session()->get('client')->slug.'_dashboard.png'))
-          <img src="{{ Storage::disk('s3')->url('clients/'.request()->session()->get('client')->slug.'_dashboard.png')}}?time={{ microtime()}}" alt="login image" class="login-img" />
-          @elseif(Storage::disk('s3')->exists('clients/'.request()->session()->get('client')->slug.'_dashboard.jpg'))
-          <img src="{{ Storage::disk('s3')->url('clients/'.request()->session()->get('client')->slug.'_dashboard.jpg')}}?time={{ microtime()}}" alt="login image" class="login-img" />
+          @if(Storage::disk('s3')->exists('clients/'.request()->session()->get('client')->slug.'_login.png'))
+          <img src="{{ Storage::disk('s3')->url('clients/'.request()->session()->get('client')->slug.'_login.png')}}?time={{ microtime()}}" alt="login image" class="login-img" />
+          @elseif(Storage::disk('s3')->exists('clients/'.request()->session()->get('client')->slug.'_login.jpg'))
+          <img src="{{ Storage::disk('s3')->url('clients/'.request()->session()->get('client')->slug.'_login.jpg')}}?time={{ microtime()}}" alt="login image" class="login-img" />
           @else
           <img src="{{ asset('images/bg_login_gradable.jpg') }}?time={{ microtime()}}" alt="login image" class="login-img">
           @endif
