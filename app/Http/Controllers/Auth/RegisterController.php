@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
+use App\Rules\EmailExists;
 use App\Mail\EmailActivation;
 use App\Mail\WelcomeMail;
 
@@ -67,9 +67,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255',new EmailExists],
             'phone' => ['numeric','min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -83,6 +85,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+       
+
         
         $user = User::create([
             'name' => $data['name'],

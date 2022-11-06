@@ -27,6 +27,7 @@
 
     <h1>Register</h1>
     <hr>
+    @include('flash::message')
     <div class="form-group row">
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
