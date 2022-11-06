@@ -4,19 +4,12 @@
 <div class="container">
     <div class="row justify-content-center">
 <div class="col-12 col-lg-8"> 
-<div class="bg-white border rounded p-3 ">
-<div class="">
-    <div class=" ">
-<form class=" " method="POST" action="{{ route('register') }}">
-    @csrf
-
     @if(client('image_register'))
-     <img src="{{ Storage::disk('s3')->url(client('image_register'))}}" class="w-100 mb-3" />
+     <img src="{{ Storage::disk('s3')->url(client('image_register'))}}" class="w-100 " />
     @endif
-
-     @if(request()->session()->get('config'))
+    @if(request()->session()->get('config'))
             @if(request()->session()->get('config')->message_r)
-              <div class="alert alert-warning alert-important mt-3">
+              <div class="alert alert-warning alert-important mb-0">
                 <div class=" h5 mt-1">{{request()->session()->get('config')->message_r}}</div>
                 @if(request()->session()->get('config')->timer_r)
                  <p id="d" class="my-2 text-danger blink countdown_timer" data-timer="{{request()->session()->get('config')->timer_r}}"></p>
@@ -24,6 +17,15 @@
               </div>
             @endif
           @endif
+<div class="bg-white border p-3 ">
+<div class="">
+    <div class=" ">
+<form class=" " method="POST" action="{{ route('register') }}">
+    @csrf
+
+    
+
+     
 
     <h1>Register</h1>
     <hr>
