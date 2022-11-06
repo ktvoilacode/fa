@@ -177,7 +177,7 @@ if (! function_exists('summernote_imageupload')) {
 if (! function_exists('subdomain')) {
 function subdomain() {
     $url = url()->full();
-    if($_SERVER['HTTP_HOST'] == 'gradable.in' || $_SERVER['HTTP_HOST'] == 'fa.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in' )
+    if($_SERVER['HTTP_HOST'] == 'gradable.in' || $_SERVER['HTTP_HOST'] == 'fa.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in' || $_SERVER['HTTP_HOST'] == 'firstacademy.gradable.in'  )
             return 'prep';
 
     $parsed = parse_url($url);
