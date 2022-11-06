@@ -8,16 +8,36 @@ function blink_text() {
 }
 setInterval(blink_text, 1000);
 
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
 
+function formatDate(date) {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-') +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      padTo2Digits(date.getSeconds()),
+    ].join(':')
+  );
+}
 
 $(document).ready(function(){
+
   // Countdown timer 
   if($('.countdown_timer').length){
     var timer = $('.countdown_timer').data('timer');
     console.log(timer);
+    timer = timer.replace(' ', 'T');
     // Set the date we're counting down to
     var countDownDate = new Date(timer).getTime();
-
+    console.log(countDownDate);
     // Update the count down every 1 second
     var x = setInterval(function() {
       // Get today's date and time
