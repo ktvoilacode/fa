@@ -107,7 +107,7 @@ class VerifyController extends Controller
     	$email = $request->get('email');
     	if(!$email)
     		abort('403','Email not found');
-    	$user = User::where('email',$email)->first();
+    	$user = User::where('email',$email)->where('client_slug',client('slug'))->first();
 
     	if($activation_code == $user->activation_token){
     		$user->activation_token =1;
