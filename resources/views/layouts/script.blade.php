@@ -42,6 +42,7 @@ $(document).ready(function() {
 <script src="{{ asset('js/datetime/jquery-ui-timepicker-addon.min.js')}}"></script>
 <script src="{{ asset('js/datetime/jquery-ui-sliderAccess.js')}}"></script>
   <script>
+
   $( function() {
     $( "#datepicker" ).datepicker({dateFormat: 'yy-mm-dd'});
     $('#datetimepicker').datetimepicker({
@@ -55,6 +56,19 @@ $(document).ready(function() {
   } );
   </script>
 
+<!-- Writing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script>
+<script>
+Split(['#one', '#two'], {
+  sizes: [60, 60 ],
+  minSize: [200, 200]
+});
+Split(['#three', '#four'], {
+ direction: 'vertical',
+  minSize: 0,
+    maxSize: 1000,
+})
+</script>
 <script type="application/javascript">
 $(document).ready(function() {
     $(document).on("keyup", function(){
@@ -1790,8 +1804,10 @@ function visualize(stream) {
 
 
 @if(!$reading)
+
 <script>
 $(function(){
+
 
   var width = 250;    // We will scale the photo width to this
   var height = 250;     // This will be computed based on the input stream
