@@ -963,7 +963,12 @@ class AttemptController extends Controller
    public function upload($slug,Request $request){
       $test = Test::where('slug',$slug)->first();
 
-      if($request->get('accept')&& !$request->get('response'))
+     
+      if($request->get('response_2'))
+        $request->merge(['response'=>$request->get('response_2')]);
+
+     
+      if(($request->get('accept')&& !$request->get('response')) )
       {
         flash('Response cannot be empty!')->error();
         return redirect()->back()->withInput();
@@ -1000,16 +1005,20 @@ class AttemptController extends Controller
       $model = new Attempt();
       $model->user_id = $user->id;
       $model->qno = 1;
-      if(!$request->get('response'))
+      if(!$request->get('response') && !$request->get('response_2'))
 
         $model->response = $path;
       else{
+        $response = $request->get('response');
+        if(!$response)
+          $response = $request->get('response_2');
+
         if($request->get('question')){
           $question = summernote_imageupload(\auth::user(),$request->get('question'));
           $question = '<div class="question"><p><h4>Question</h4></p>'.$question.'</div><hr>';
-          $model->response = $question.'<div class="option response"><p><h4>User Response</h4></p>'.$request->get('response').'</div>';
+          $model->response = $question.'<div class="option response"><p><h4>User Response</h4></p>'.$response.'</div>';
         }else
-          $model->response = '<div class="option response"><p><h4>User Response</h4></p>'.$request->get('response').'</div>';
+          $model->response = '<div class="option response"><p><h4>User Response</h4></p>'.$response.'</div>';
       }
       $model->test_id = $test->id;
 
