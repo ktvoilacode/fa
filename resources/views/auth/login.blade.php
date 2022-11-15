@@ -70,11 +70,13 @@
         </label>
     </div>
     <button class="btn btn-lg btn-primary " type="submit">Sign in</button>
-    <a href="{{ route('register') }}">
-        <button class="btn btn-lg btn-success" type="button">Register</button>
+   
+    <a class="btn btn-link mt-2" href="{{ route('register') }}">
+        Create an account &nbsp;
     </a>
     @if (Route::has('password.request'))
     <div>
+        
     <a class="btn btn-link mt-2" href="{{ route('password.request') }}">
         {{ __('Forgot Your Password?') }}
     </a>

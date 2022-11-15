@@ -53,6 +53,10 @@
               <div class="col-md-4"><b>Name</b></div>
               <div class="col-md-8">{{ $obj->name }}</div>
             </div>
+             <div class="row mb-2">
+              <div class="col-md-4"><b>Client</b></div>
+              <div class="col-md-8">{{ $obj->client_slug }}</div>
+            </div>
             <div class="row mb-2">
               <div class="col-md-4"><b>Email</b></div>
               <div class="col-md-8">{{ $obj->email }}
