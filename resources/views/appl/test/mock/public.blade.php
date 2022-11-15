@@ -67,7 +67,9 @@
                 @endif
                 
               @else
-                 <a href="{{ route('product.view',$obj->products->first()->slug) }}" class="btn btn-success btn-lg mt-4">Activate your product</a>
+                 <a href="{{ route('product.checkout',$obj->products->first()->slug) }}" class="btn btn-success btn-lg mt-4">Activate your product</a>
+
+                 
               @endif
             @endif
 

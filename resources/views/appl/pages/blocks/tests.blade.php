@@ -5,16 +5,17 @@
 		
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 			<li class="nav-item">
-				<a class="nav-link active" id="mytest-tab" data-toggle="tab" href="#mytest" role="tab" aria-controls="mytest" aria-selected="false"><h4 class="mt-2">My Tests</h4></a>
+				<a class="nav-link active" id="myproduct-tab" data-toggle="tab" href="#myproduct" role="tab" aria-controls="myproduct" aria-selected="false"><h4 class="mt-2">My Products</h4></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" id="myproduct-tab" data-toggle="tab" href="#myproduct" role="tab" aria-controls="myproduct" aria-selected="false"><h4 class="mt-2">My Products</h4></a>
+				<a class="nav-link " id="mytest-tab" data-toggle="tab" href="#mytest" role="tab" aria-controls="mytest" aria-selected="false"><h4 class="mt-2">My Tests</h4></a>
 			</li>
+			
 			
 		</ul>
 	</div>
 <div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="mytest" role="tabpanel" aria-labelledby="mytest-tab">
+  <div class="tab-pane fade " id="mytest" role="tabpanel" aria-labelledby="mytest-tab">
   	<div class="mt-4">
   	<form class=" mb-4" method="GET" action="{{ route('home') }}">
 			<div class="input-group input-group-lg">
@@ -30,7 +31,7 @@
 	</div>
 	</div>
   </div>
-  <div class="tab-pane fade" id="myproduct" role="tabpanel" aria-labelledby="myproduct-tab">
+  <div class="tab-pane fade show active" id="myproduct" role="tabpanel" aria-labelledby="myproduct-tab">
   	<div class="mt-4">
   		<form class=" mb-4" method="GET" action="{{ route('home') }}">
 			<div class="input-group input-group-lg">
