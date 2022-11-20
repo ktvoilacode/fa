@@ -1,8 +1,12 @@
 <div class=" container ">
-  <div class="pb-1">
-    <a href="{{ url('/')}}" class="text-secondary">Home</a> 
-    &nbsp;<i class="fa fa-angle-right"></i>&nbsp;
-    <a href="{{ url('/products')}}" class="text-primary">Products</a> 
+  <div class="pb-2">
+    @auth
+    &nbsp;<i class="fa fa-angle-left"></i>&nbsp;
+    <a href="{{ url('/home')}}" class="text-primary">  back to dashboard </a> 
+    @else
+     &nbsp;<i class="fa fa-angle-left"></i>&nbsp;
+    <a href="{{ url('/products')}}" class="text-primary">  All Products </a> 
+    @endauth
   </div>
   <h1 class="h3 mb-0"><b> {{ strip_tags($obj->name) }} </b>
     @can('update',$obj)

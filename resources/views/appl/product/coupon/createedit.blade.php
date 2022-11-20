@@ -105,6 +105,27 @@
          </div>
       </div>
 
+      @if(subdomain()=='prep')
+       <div class="form-group">
+        <label for="formGroupExampleInput">Tests</label>
+         <div class=" card p-3 bg-white">
+          <div class="row">
+          @foreach($tests as $product)
+          @if($product->status==1)
+          <div class="col-12 col-md-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="tests[]" value="{{$product->id}}" id="defaultCheck1" @if($obj->tests->contains($product->id))) checked @endif>
+            <label class="form-check-label" for="defaultCheck1">
+              {!! $product->name !!} 
+            </label>
+          </div>
+          </div>
+          @endif
+          @endforeach
+         </div>
+         </div>
+      </div>
+      @endif
 
       @if($stub=='Update')
         <input type="hidden" name="_method" value="PUT">
