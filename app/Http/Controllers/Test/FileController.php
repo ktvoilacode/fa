@@ -455,6 +455,12 @@ levels of training.');
                     $phone = '91'.$obj->phone;
                 else if(strlen($obj->phone)==12)
                     $phone = $obj->phone;
+                else{
+                    $phone = str_replace(" ","",$obj->phone);
+                }
+
+                $phone = str_replace("+","",$phone);
+                
                 $template = 'writing_evaluation';
                 if($obj->phone)
                 if(strlen($phone)==12){
