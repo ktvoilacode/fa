@@ -456,6 +456,7 @@ levels of training.');
                 else if(strlen($obj->phone)==12)
                     $phone = $obj->phone;
                 $template = 'writing_evaluation';
+                if($obj->phone)
                 if(strlen($phone)==12){
                     Admin::sendWhatsapp($phone,$template,$var);
                 }
