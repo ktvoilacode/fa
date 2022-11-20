@@ -32,6 +32,7 @@
 	</div>
   </div>
   <div class="tab-pane fade show active" id="myproduct" role="tabpanel" aria-labelledby="myproduct-tab">
+  	
   	<div class="mt-4">
   		<form class=" mb-4" method="GET" action="{{ route('home') }}">
 			<div class="input-group input-group-lg">
