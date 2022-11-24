@@ -86,8 +86,6 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
        
-
-        
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -112,9 +110,11 @@ class RegisterController extends Controller
             }
         }
 
+
         $user->data = json_encode($d);
         $user->save();
 
+        if(subdomain()!='prep')
         $user->resend_sms($user->phone,$user->sms_token);
         Mail::to($user->email)->send(new EmailActivation($user));
 

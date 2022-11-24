@@ -29,23 +29,25 @@ class AdminController extends Controller
     public function index(Obj $obj)
     {
         $this->authorize('view', $obj);
-
+        $subdomain = subdomain();
         if(request()->get('refresh')){
-            Cache::forget('tot_users');
-            Cache::forget('latest_users');
-            Cache::forget('wri_users');
-            Cache::forget('att_users');
+            Cache::forget('tot_users_'.$subdomain);
+            Cache::forget('latest_users_'.$subdomain);
+            Cache::forget('wri_users_'.$subdomain);
+            Cache::forget('att_users_'.$subdomain);
         }
-        $data['ucount'] =Cache::remember('tot_users', 240, function(){ 
-            return User::count();
+        
+        $data['ucount'] =Cache::remember('tot_users_'.$subdomain, 240, function() { 
+            return User::where('client_slug',subdomain())->count();
         });
-        $data['users'] =Cache::remember('latest_users', 240, function(){
-            return User::limit(3)->orderBy('id','desc')->get();
+        $data['users'] =Cache::remember('latest_users_'.$subdomain, 240, function(){
+            return User::where('client_slug',subdomain())->limit(3)->orderBy('id','desc')->get();
         });
+
         /* writing data */
         $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->toArray();
        
-        $data['writing'] = Cache::remember('wri_users', 120, function() use ($test_ids) {
+        $data['writing'] = Cache::remember('wri_users_'.$subdomain, 120, function() use ($test_ids) {
 
             $d = Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
             foreach($d as $k=>$m){
@@ -95,7 +97,7 @@ class AdminController extends Controller
         $data['duolingo'] = $d2;
 
 
-        $attempts = Cache::remember('att_users', 240, function(){
+        $attempts = Cache::remember('att_users_'.$subdomain, 240, function(){
             return Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
         });
 
@@ -135,6 +137,9 @@ class AdminController extends Controller
             if($user->admin==4)
                 $view = 'appl.admin.bfs.index_trainer';
         }
+
+        if(subdomain()!='prep')
+            $view = 'appl.admin.admin.client';
 
         return view($view)->with('data',$data);
         

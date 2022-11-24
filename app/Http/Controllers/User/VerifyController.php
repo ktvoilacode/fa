@@ -32,8 +32,16 @@ class VerifyController extends Controller
     		if(!$user_exists){
     			$user->phone = $phone;
     			$user->save();
-    			$message = 'User phone number successfully updated to '.$phone;
-    			flash($message)->success();	
+
+                if(!$user->sms_token ){
+                   $user->sms_token = mt_rand(1000,9999);
+                    $user->save(); 
+                }
+                
+                $user->resend_sms($user->phone,$user->sms_token);
+                $message = 'User phone number is updated to ('.$phone.'). And successfully resent the activation code to '.$user->phone;
+                flash($message)->success(); 
+
     		}else{
     			$message = 'The given phone number '.$phone.' is already in use. Kindly use a different number.';
     			flash($message)->error();
@@ -73,6 +81,11 @@ class VerifyController extends Controller
     	/* Resend SMS */
     	if($request->get('resend_sms')){
     		if($user->sms_token!=1){
+                if(!$user->sms_token ){
+                   $user->sms_token = mt_rand(1000,9999);
+                    $user->save(); 
+                }
+                
     			$user->resend_sms($user->phone,$user->sms_token);
     			$message = 'Successfully resent the activation code to '.$user->phone;
     			flash($message)->success();	

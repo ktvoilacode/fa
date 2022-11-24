@@ -333,8 +333,12 @@ class User extends Authenticatable
 
 
      public function resend_sms($numbers,$code){
-        $url = "https://2factor.in/API/V1/7722ff6e-9912-11ea-9fa5-0200cd936042/SMS/".$numbers."/".$code;
+        if(strlen($numbers)==10)
+            $numbers = "+91".$numbers;
+
+        $url = "https://2factor.in/API/V1/b2122bd6-9856-11ea-9fa5-0200cd936042/SMS/".$numbers."/".$code;
         $d = $this->curl_get_contents($url);
+     
         
     }
 
