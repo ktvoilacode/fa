@@ -62,7 +62,7 @@
         
         @if(isset($message)){{$message }}@endif
         <div class="col-md-8">
-            <input id="phone" type="number" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Enter phone number">
+            <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Enter phone number">
         </div>
 
         @error('phone')
