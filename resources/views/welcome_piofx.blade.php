@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-sm-6 login-section-wrapper ">
           <div class="brand-wrapper">
-            <img  src="{{ request()->session()->get('client')->logo }} "  class="ml-md-0 @if(domain()=='gradable') w-50 @else w-100 @endif mb-5"  alt=" logo " type="image/png" style="max-width:250px">
+            <img  src="{{ request()->session()->get('client')->logo }} "  class="ml-md-0 @if(domain()=='gradable') w-50 @else w-100 @endif mb-5"  alt=" logo " type="image/png" style="max-width:350px">
           </div>
           @if(request()->session()->get('config'))
             @if(request()->session()->get('config')->message_l)

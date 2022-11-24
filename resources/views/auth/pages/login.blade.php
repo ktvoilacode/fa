@@ -67,26 +67,28 @@
                                 <button type="submit" class="btn btn-primary">
                                     Login
                                 </button>
-
+                                <br>
                                 @if(request()->session()->get('config'))
                                 @if(request()->session()->get('config')->register)
-                 <a class="btn btn-success" href="{{ route('register') }}">
-                                    Register
-                                </a>
+                                <div class="mt-4">
+                 <a class="" href="{{ route('register') }}">
+        <b>Create an account </b>
+    </a>
+</div>
                                 <br>
                                 @endif
               @endif
                                 
                                 @if(request()->session()->get('config'))
                                 @if(request()->session()->get('config')->change_password)
-                                <div class="mt-4">
+                                <div class="mb-4">
                                     <a class="" href="{{ route('password.request') }}">
                                          Reset password via email
                                     </a>
                                 </div>
                                 @endif
                                 @else
-                                <div class="mt-4">
+                                <div class="mb-4">
                                     <a class="" href="{{ route('password.request') }}">
                                          Reset password via email
                                     </a>
