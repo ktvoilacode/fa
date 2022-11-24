@@ -6,7 +6,15 @@
 <div class="row">
   <div class="col-12 col-md-9">
     <!-- Banner-->
-
+    @if( \auth::user()->activation_token!=1 )
+    <div class="rounded p-3 mb-4" style="background: #caf7dd; border:1px solid #39c072;"><h4 class="">Validate your account</h4>
+    <p>Your account has not been validated yet. You are only a few steps away from complete access to our platform.</p>
+    <a href="{{ route('activation')}}">
+    <button class="btn btn-success">Validate Now</button>
+    </a>
+    </div>
+    @endif
+    
     @if(client('message_l') || client('timer_l') || client('image_login'))
     <div class="bg-white p-3 rounded " style="border-top: 2px solid #bcd1e1">
       @if(client('image_dashboard'))
@@ -65,14 +73,7 @@
     </div>
   </div>
   <div class="col-12 col-md-3">
-    @if( \auth::user()->activation_token!=1 )
-    <div class="rounded p-3 mb-4" style="background: #caf7dd; border:1px solid #39c072;"><h4 class="">Validate your account</h4>
-    <p>Your account has not been validated yet. You are only a few steps away from complete access to our platform.</p>
-    <a href="{{ route('activation')}}">
-    <button class="btn btn-success">Validate Now</button>
-    </a>
-    </div>
-    @endif
+    
 
     <div class="card mb-4 text-white" style="background: #2a79b9;border:0px">
       <div class="p-3">
