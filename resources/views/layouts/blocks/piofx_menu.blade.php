@@ -23,9 +23,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/tests') }}"><i class="fa fa-check-square-o"></i> Test Packs</a>
                 </li>
-                <li class="nav-item">
+               <!--  <li class="nav-item">
                     <a class="nav-link" href="{{ url('/testhistory') }}"><i class="fa fa-list-alt"></i>  Test History </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/user/edit') }}?p=1"><i class="fa fa-user-circle-o"></i>  Profile </a>
                 </li>
