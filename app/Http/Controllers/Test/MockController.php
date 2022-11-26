@@ -84,10 +84,16 @@ class MockController extends Controller
             else
                 $settings['deactivation'] = null;
 
-            $settings['noreport'] = 0;
-            if($request->noreport){
-                $settings['noreport'] = 1;
-            }
+            $settings['noreport'] = 1;
+            if($request->noreport==0){
+                $settings['noreport'] = 0;
+            }elseif($request->noreport==2)
+                $settings['noreport'] = 2;
+
+             if($request->testtype)
+                $settings['testtype'] = $request->testtype;
+            else
+                $settings['testtype'] = null;
 
             $request->merge(['settings' => json_encode($settings)]);
             
@@ -215,7 +221,13 @@ class MockController extends Controller
             $auto_activation  = \carbon\carbon::parse($settings->activation);
             $auto_deactivation  = \carbon\carbon::parse($settings->deactivation);
         }
-        
+
+        $noreport = false;
+        if(isset($settings->noreport)){
+            $noreport = $settings->noreport;
+        }
+
+        $settings = json_decode($obj->settings,1);
         
 
         if($obj)
@@ -224,6 +236,8 @@ class MockController extends Controller
                     ->with('auto_activation',$auto_activation)
                     ->with('auto_deactivation',$auto_deactivation)
                     ->with('audio_permission',1)
+                    ->with('noreport',$noreport)
+                    ->with('settings',$settings)
                     ->with('obj',$obj)->with('app',$this)->with('attempt',$attempt);
         else
             abort(404);
@@ -369,10 +383,16 @@ class MockController extends Controller
             else
                 $settings['deactivation'] = null;
 
-            $settings['noreport'] = 0;
-            if($request->noreport){
-                $settings['noreport'] = 1;
-            }
+            $settings['noreport'] = 1;
+            if($request->noreport==0){
+                $settings['noreport'] = 0;
+            }elseif($request->noreport==2)
+                $settings['noreport'] = 2;
+
+            if($request->testtype)
+                $settings['testtype'] = $request->testtype;
+            else
+                $settings['testtype'] = null;
 
             $request->merge(['settings' => json_encode($settings)]);
 

@@ -299,7 +299,7 @@ class AttemptController extends Controller
     if(!$test)
       abort('403','Test not Found ');
 
-    
+    return 1;
 
     // check for verified users
     if(\auth::user()){

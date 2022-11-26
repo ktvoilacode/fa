@@ -111,7 +111,7 @@
           <div class="form-group">
             <label for="formGroupExampleInput ">Report</label>
             <select class="form-control" name="noreport">
-              <option value="2" @if(isset($settings->noreport)) @if($settings->noreport==1) selected @endif @endif >only score</option>
+              <option value="2" @if(isset($settings->noreport)) @if($settings->noreport==2) selected @endif @endif >only score</option>
               <option value="0" @if(isset($settings->noreport)) @if($settings->noreport==0) selected @endif @endif >Show responses & answers (default)</option>
               <option value="1" @if(isset($settings->noreport)) @if($settings->noreport==1) selected @endif @endif >no-report</option>
             </select>
@@ -154,6 +154,20 @@
               <option value="0" @if(isset($obj)) @if($obj->status==0) selected @endif @endif >Inactive</option>
               <option value="1" @if(isset($obj)) @if($obj->status==1) selected @endif @endif >Active</option>
             </select>
+          </div>
+        </div>
+        <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Test Type</label>
+            <input type="text" id="datetimepicker"  class="form-control" name="testtype" id="formGroupExampleInput"  
+                @if($stub=='Create')
+                value="{{ (old('testtype')) ? old('testtype') : '' }}"
+                @else
+                  @if(isset( $settings->testtype))
+                    value = "{{ $settings->testtype }}"
+                  @endif
+                @endif
+              >
           </div>
         </div>
       </div>

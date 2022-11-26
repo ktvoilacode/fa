@@ -14,14 +14,23 @@
 
       <div class="card mb-4">
         <div class="card-body">
-          <h3 class="mb-0">{{ $obj->name }}</h3>
-          <div class="">{!! $obj->description !!}</div>
-          @if($attempt->status==1)
-            <span class="badge badge-success">Test Report</span><br>
-          @elseif($attempt->status ==-1)
+          <h2 class="mb-2"><b>{{ $obj->name }}</b></h2>
+          <div class="" style="font-size:18px;">{!! $obj->description !!}</div>
+         
+          @if($attempt->status == -1 || $noreport=== 1)
           <hr>
-            <span class="badge badge-warning">Under Review</span><br>
+          <div class="badge badge-warning">
+            <h4 class="p-2 mb-0">Under Review</h4>
+          </div>
+
             <div class="text-primary mt-4 h4"> The result will be shared in 24 to 48 hours.</div>
+          @elseif($attempt->status==1)
+            
+
+
+            @include('appl.test.mock.report.report')
+     
+  
           @else
             @if($attempt->t1)
             <a href="{{ route('mockpage.start',$obj->slug)}}" class="btn btn-primary mt-4">Resume Test</a>
@@ -78,40 +87,7 @@
         </div>
       </div>
 
-      @if($attempt->status==1)
-      <div class="card mb-4">
-        <div class="card-body">
-
-          <div class="row">
-              <div class="col-12 col-md-3">
-                <div class="border rounded p-4">
-                  <h5> Listening</h5>
-                  <div class="display-4">{{$attempt->t1_score}}</div>
-                </div>
-              </div>
-              <div class="col-12 col-md-3">
-                <div class="border rounded p-4">
-                  <h5> Reading</h5>
-                  <div class="display-4">{{$attempt->t2_score}}</div>
-                </div>
-              </div>
-              <div class="col-12 col-md-3">
-                <div class="border rounded p-4">
-                  <h5> Speaking</h5>
-                  <div class="display-4">{{$attempt->t3_score}}</div>
-                </div>
-              </div>
-              <div class="col-12 col-md-3">
-                <div class="border rounded p-4">
-                  <h5> Writing</h5>
-                  <div class="display-4">{{$attempt->t4_score}}</div>
-                </div>
-              </div>
-          </div>
-
-        </div>
-      </div>
-      @endif
+      
 
     </div>
   </div> 
