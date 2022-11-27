@@ -4,6 +4,8 @@ namespace App\Models\Test;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Test\Test;
+use App\Models\Test\Mock_Attempt;
+use App\Models\Test\Mock;
 use App\Models\Test\Tag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -259,14 +261,16 @@ class Attempt extends Model
 
         }
 
-
+      
          // if(count($json))
          // dd($result[0]);
         $counter=0;
         foreach($json as $qno =>$data){
     
-
-            $r = $result->where('qno',$qno)->first();
+            if(isset($qno))
+                $r = $result->where('qno',$qno)->first();
+            else
+                $r = $result->where('user_id',$request->get('user_id'))->first();
             $total = 0; $count = 0;
             foreach($data as $param=>$sc){
                 $total = $total + intval($sc);
@@ -292,18 +296,58 @@ class Attempt extends Model
         }
 
          if($request->get('direct_score')){
-                $r = $result->where('qno',$qno)->first();
+                 if(isset($qno))
+                    $r = $result->where('qno',$qno)->first();
+                 else
+                    $r = $result->where('user_id',$request->get('user_id'))->first();
                 $r->comment = $request->get('comments');
                 $r->dynamic = 1;
+                $r->status = 1;
                 $r->score = intval($request->get('direct_score'));
                 
-                foreach($data as $d=>$k){
-                    $data[$d] = round($r->score,3);
+                if(isset($data)){
+                    foreach($data as $d=>$k){
+                        $data[$d] = round($r->score,3);
+                    }
+                    $r->marking = json_encode($data);
                 }
-                $r->marking = json_encode($data);
                 $r->save();
+
+
+                if($request->get('mock'))
+                {
+                    $mock = Mock::where('id',$request->get('mock'))->first();
+                    $t3 = Test::where('slug',$mock->t3)->first();
+                    $t4 = Test::where('slug',$mock->t4)->first();
+
+                    $mattempt = Mock_Attempt::where('mock_id',$request->get('mock'))->where('user_id',$request->get('user_id'))->first();
+
+                   
+                    if($r->test_id == $t3->id){
+                        $mattempt->t3 = 1;
+                        $mattempt->t3_score = $r->score;
+                        $mattempt->save();
+                    }
+
+                    if($r->test_id == $t4->id){
+                        $mattempt->t4 = 1;
+                        $mattempt->t4_score = $r->score;
+                        $mattempt->save();
+                    }
+
+                    if($mattempt->t1==1 && $mattempt->t2==1 && $mattempt->t3==1 && $mattempt->t4==1){
+                        $mattempt->status =1;
+                        $mattempt->save();
+                    }
+                 
+                    
+                }
+
+
               
             }
+
+
 
         
 

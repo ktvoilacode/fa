@@ -35,10 +35,14 @@
           </div>
         @else
 
-
-          @if($item['mcq']->question)<b class='h6' style="line-height: 1.5">{!! $item['mcq']->question !!}</b> @endif
+          @if(isset($item['mcq']->question))
+            @if($item['mcq']->question)<b class='h6' style="line-height: 1.5">{!! $item['mcq']->question !!}</b> @endif
+          @elseif( $test->testtype->name=='WRITING')
+           {!! $test->description !!}
+          @endif
           <div>
 
+           @if(isset($item['mcq']->layout))
           @if($item['mcq']->layout!='gre_numeric' && $item['mcq']->layout!='gre_fraction' && $item['mcq']->layout!='gre_sentence')
           @foreach(['a','b','c','d','e','f','g','h','i'] as $opt)
             @if(isset($item['mcq']->$opt))
@@ -52,12 +56,16 @@
           <div class="p-1">Answer: &nbsp;<b>{{$item['mcq']['a']}}/{{$item['mcq']['b']}}</b></div>
           @endif
 
+
+
           @if($item['mcq']->explanation)
           <div class="bg-light rounded p-3 mt-3">
           <div><b>Explanation</b></div>
           <div>{!! $item['mcq']->explanation !!}</div>
         </div>
           @endif
+
+           @endif
 
          
           </div>
@@ -212,10 +220,11 @@
   </tbody>
 </table>
 
-@if($test->testtype->name=='DUOLINGO')
+@if($test->testtype->name=='DUOLINGO' || $test->testtype->name=='WRITING')
 <div class="form-group mb-1 mt-4">
   <label for="exampleTextarea">Score (optional)</label>
     <input class="form-control" name="direct_score" />
+    <input class="form-control" type="hidden" name="mock"  value="{{request()->get('mock')}}"/>
      
    </div>
     <label for="exampleTextarea">Comments (add &lt;/br> for new lines)</label>

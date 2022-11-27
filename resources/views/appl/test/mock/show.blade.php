@@ -26,6 +26,7 @@
             <span class="btn-group float-right" role="group" aria-label="Basic example">
               <a href="{{ route($app->module.'.edit',$obj->id) }}" class="btn btn-outline-secondary" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
               <a href="{{ route('mockpage',$obj->slug) }}" class="btn btn-outline-secondary" target="_blank" ><i class="fa fa-eye"></i></a>
+              <a href="{{ route($app->module.'.show',$obj->id) }}?validate=1" class="btn btn-outline-secondary"  ><i class="fa fa-check-circle"></i></a>
               <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i></a>
             </span>
             @endcan
@@ -127,7 +128,7 @@
               @if($a->t3==1)
                 {{$a->t3_score}}
               @elseif($a->t3==-1)
-                 <a href="{{ route('test.analysis',$obj->t3)}}?user_id={{$a->user_id}}&admin=1" target="_blank">
+                 <a href="{{ route('test.analysis',$obj->t3)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
                 </a>
               @else
@@ -138,7 +139,7 @@
               @if($a->t4==1)
                 {{$a->t4_score}}
               @elseif($a->t4==-1)
-              <a href="{{ route('test.analysis',$obj->t4)}}?user_id={{$a->user_id}}&admin=1" target="_blank">
+              <a href="{{ route('test.analysis',$obj->t4)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
               </a>
               @else

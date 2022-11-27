@@ -9,6 +9,7 @@ use App\Models\Test\Mock_Attempt;
 use App\Models\Test\Attempt;
 use App\Models\Test\Test;
 use App\Models\Product\Order;
+use Illuminate\Support\Facades\Cache;
 
 class MockController extends Controller
 {
@@ -123,15 +124,22 @@ class MockController extends Controller
         $obj = Obj::where('id',$id)->first();
         $this->authorize('view', $obj);
         $attempts = Mock_Attempt::where('mock_id',$obj->id)->with('user')->get();
+        $t = $obj->t3;
+        $t3= Cache::remember('mtest_'.$obj->t3,60, function() use($t){
+                return Test::where('slug',$t)->first();
+              });
+        $t = $obj->t4;
+        $t4 = Cache::remember('mtest_'.$obj->t4,60, function() use($t){
+                return Test::where('slug',$t)->first();
+              });
 
-        
+        $attempt_test[$t3->id] = Attempt::where('test_id',$t3->id)->get();
+        $attempt_test[$t4->id] = Attempt::where('test_id',$t4->id)->get();
 
+        if(request()->get('validate'))
         foreach($attempts as $attempt){
-
             if($attempt->t3==-1){
-                $test = Test::where('slug',$obj->t3)->first();
-                $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$attempt->user_id)->get();
-                
+                $attempt_done = Attempt::where('test_id',$t3->id)->where('user_id',$attempt->user_id)->get();
                 if($attempt_done->sum('status') == $attempt_done->count('id')){
                     $attempt->t3 = 1;
                     $attempt->t3_score = $attempt_done->sum('score');
@@ -139,8 +147,8 @@ class MockController extends Controller
                 }
             }
               if($attempt->t4==-1){
-                $test = Test::where('slug',$obj->t4)->first();
-                $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$attempt->user_id)->get();
+                
+                $attempt_done = Attempt::where('test_id',$t4->id)->where('user_id',$attempt->user_id)->get();
                 if($attempt_done->sum('status') == $attempt_done->count('id')){
                     $attempt->t4 = 1;
                     $attempt->t4_score = $attempt_done->sum('score');

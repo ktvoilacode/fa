@@ -35,11 +35,13 @@
           </div>
 
             <div class="text-primary mt-4 h4"> The result will be shared in 24 to 48 hours.</div>
-          @else
+          @elseif($attempt->status!=1)
           <div class="alert alert-warning alert-important"> Test link at the bottom of the page ! Scroll down 👇</div>
-          @endif
-
           <div class="" style="font-size:18px;">{!! $obj->description !!}</div>
+          @endif
+         
+          
+
          
           @if($attempt->status == -1 )
           <hr>

@@ -87,6 +87,12 @@
                 @else
                 <div class="display-4">{{$score}}</div>
                 @endif
+              
+               @elseif($test->testtype->name=='WRITING')
+                <div class="">Score </div>
+                
+                <div class="display-4">{{$score}}</div>
+                
                 
     
               @else
@@ -167,7 +173,7 @@
 
         @if(\auth::user())
           @if(\auth::user()->isAdmin() )
-            @if( $test->testtype->name=='DUOLINGO' )
+            @if( $test->testtype->name=='DUOLINGO'  || $test->testtype->name=='WRITING')
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn-primary btn-lg mt-4">Save</button>
             @endif
