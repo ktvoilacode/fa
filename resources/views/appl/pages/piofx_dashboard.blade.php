@@ -4,7 +4,7 @@
  
 @include('flash::message')
 <div class="row">
-  <div class="col-12 col-md-9">
+  <div class="col-12 col-md-12">
     <!-- Banner-->
     @if( \auth::user()->activation_token!=1 )
     <div class="rounded p-3 mb-4" style="background: #caf7dd; border:1px solid #39c072;"><h4 class="">Validate your account</h4>
@@ -14,7 +14,7 @@
     </a>
     </div>
     @endif
-    
+
     @if(client('message_l') || client('timer_l') || client('image_login'))
     <div class="bg-white p-3 rounded " style="border-top: 2px solid #bcd1e1">
       @if(client('image_dashboard'))
@@ -72,7 +72,7 @@
       @endif
     </div>
   </div>
-  <div class="col-12 col-md-3">
+  <div class="col-12 col-md-3 d-none">
     
 
     <div class="card mb-4 text-white" style="background: #2a79b9;border:0px">

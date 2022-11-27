@@ -1032,6 +1032,8 @@ class AttemptController extends Controller
 
 
         if($url){
+          $model->status = 0;
+          $model->save();
           return redirect()->to($url."?status=1&test_slug=".$this->test->slug."&test_id=".$this->test->id);
         }
 
