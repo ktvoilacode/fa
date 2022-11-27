@@ -8,7 +8,7 @@
 	</textarea>
 	<a href="#" class="btn btn-success btn-lg  mt-3" data-toggle="modal" data-target="#exampleModal2" data-tooltip="tooltip" data-placement="top" title="Delete" >Submit </a>
 		
-		<div class="float-right mt-4 text-secondary"><span class="word-count">0</span> words</div>
+		<div class="float-right mt-4 text-secondary d-none"><span class="word-count">0</span> words</div>
 
 </div>
 

@@ -67,7 +67,7 @@
                           <div class="writing">{!!$test->description!!}</div>
                           @else
                           <h5>Enter your question</h5>
-                          <textarea class="form-control summernote3" name="question" rows=4></textarea>
+                          <textarea class="form-control " name="question" rows=4></textarea>
                           @endif
                         </div>
 
@@ -110,7 +110,7 @@
                   <div class="writing">{!!$test->description!!}</div>
                   @else
                   <h5>Enter your question</h5>
-                  <textarea class="form-control summernote3" name="question" rows=4></textarea>
+                  <textarea class="form-control " name="question" rows=4></textarea>
                   @endif
                 </div>
 

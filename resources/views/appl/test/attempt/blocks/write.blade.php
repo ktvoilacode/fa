@@ -3,12 +3,12 @@
 <h3 >Write your response in the textbox below.</h3>
 <div class="mb-4  mt-3 bg-light p-4 border">
 	
-	<textarea class="summernote2" name="response">
+	<textarea class="" name="response">
 		
 	</textarea>
 	<a href="#" class="btn btn-success btn-lg  mt-3" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" >Submit </a>
 		
-		<div class="float-right mt-4 text-secondary"><span class="word-count">0</span> words</div>
+		<div class="float-right mt-4 text-secondary d-none"><span class="word-count">0</span> words</div>
 
 </div>
 

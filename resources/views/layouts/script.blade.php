@@ -238,27 +238,27 @@ $(document).ready(function() {
 
           });
 
-      $(document).on("keyup", function(){
+      // $(document).on("keyup", function(){
 
-        if($(".summernote2").length){
-        var text = $(".summernote2").summernote("code");
-        text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
-        var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
-        //Update Count value
-        $(".word-count").text(words);
-      }
+      //   if($(".summernote2").length){
+      //   var text = $(".summernote2").summernote("code");
+      //   text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
+      //   var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
+      //   //Update Count value
+      //   $(".word-count").text(words);
+      // }
 
 
-      if($(".summernote4").length){
-        var text = $(".summernote4").summernote("code");
+      // if($(".summernote4").length){
+      //   var text = $(".summernote4").summernote("code");
         
-        text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
-        var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
-        //Update Count value
-        $(".word-count").text(words);
-      }
+      //   text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
+      //   var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
+      //   //Update Count value
+      //   $(".word-count").text(words);
+      // }
 
-      });
+      // });
 
       
 

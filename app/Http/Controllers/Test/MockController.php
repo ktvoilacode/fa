@@ -229,6 +229,7 @@ class MockController extends Controller
 
         $settings = json_decode($obj->settings,1);
         
+       
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.public')
