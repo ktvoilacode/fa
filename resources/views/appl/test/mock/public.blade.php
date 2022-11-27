@@ -12,9 +12,30 @@
   <div class="row">
     <div class="col-md-12">
 
+      
+
       <div class="card mb-4">
         <div class="card-body">
           <h2 class="mb-2"><b>{{ $obj->name }}</b></h2>
+
+          @if($attempt->status == -1 )
+          <div class="mb-3"> Test Attempted : <span class="text-success">{{\carbon\carbon::parse($attempt->created_at)->toDayDateTimeString()}}</span></div>
+          <div class="badge badge-warning">
+            <h4 class="p-2 mb-0">Under Review</h4>
+          </div>
+
+            <div class="text-primary mt-4 h4"> The result will be shared in 24 to 48 hours.</div>
+
+          @elseif($attempt->status == 1 && $noreport=== 1)
+
+         
+          <div class="badge badge-warning">
+            <h4 class="p-2 mb-0">Under Review</h4>
+          </div>
+
+            <div class="text-primary mt-4 h4"> The result will be shared in 24 to 48 hours.</div>
+      @endif
+
           <div class="" style="font-size:18px;">{!! $obj->description !!}</div>
          
           @if($attempt->status == -1 )

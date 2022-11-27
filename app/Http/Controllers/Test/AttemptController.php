@@ -963,6 +963,10 @@ class AttemptController extends Controller
    public function upload($slug,Request $request){
       $test = Test::where('slug',$slug)->first();
 
+      $url = $request->get('uri');
+      if(!$url && session()->get('current_test')==$slug){
+        $url = session()->get('uri');
+      }
      
       if($request->get('response_2'))
         $request->merge(['response'=>$request->get('response_2')]);
@@ -1024,6 +1028,12 @@ class AttemptController extends Controller
 
 
       $model->save();
+
+
+
+        if($url){
+          return redirect()->to($url."?status=1&test_slug=".$this->test->slug."&test_id=".$this->test->id);
+        }
 
       //Mail notifaction to the administrator
       if(!$request->get('response'))
@@ -1099,7 +1109,7 @@ class AttemptController extends Controller
         $attempt = Attempt::where('test_id',$this->test->id)->where('user_id',$user->id)->first();
 
 
-      
+       
 
       if($attempt){
 
@@ -1333,6 +1343,7 @@ class AttemptController extends Controller
 
       $this->section_score($data);
 
+
       if($request->get('evaluate') && !$request->get('test_score')){
         return $result;
       }
@@ -1438,6 +1449,8 @@ class AttemptController extends Controller
 
 
       $current_test= session()->get('current_test');
+
+
         if($this->test->slug == $current_test){
           return redirect()->to($url."?status=1&test_slug=".$this->test->slug."&test_id=".$this->test->id);
         }
