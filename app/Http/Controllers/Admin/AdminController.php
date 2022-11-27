@@ -56,6 +56,8 @@ class AdminController extends Controller
                     $d[$k]->premium = 1;
                 else
                     $d[$k]->premium =0;
+                if($k==3)
+                    break;
             }
 
             $d2=[];$k=0;
