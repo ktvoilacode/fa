@@ -295,7 +295,7 @@ class Attempt extends Model
             $r->save();
         }
 
-         if($request->get('direct_score')){
+         if($request->get('direct_score')!=null){
                  if(isset($qno))
                     $r = $result->where('qno',$qno)->first();
                  else
@@ -303,7 +303,7 @@ class Attempt extends Model
                 $r->comment = $request->get('comments');
                 $r->dynamic = 1;
                 $r->status = 1;
-                $r->score = intval($request->get('direct_score'));
+                $r->score = $request->get('direct_score');
                 
                 if(isset($data)){
                     foreach($data as $d=>$k){
