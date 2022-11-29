@@ -10,6 +10,8 @@ use App\Models\Test\Attempt;
 use App\Models\Test\Test;
 use App\Models\Product\Order;
 use Illuminate\Support\Facades\Cache;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MockController extends Controller
 {
@@ -162,6 +164,14 @@ class MockController extends Controller
                 $attempt->status=1;
                 $attempt->save();
             }
+        }
+
+        if(request()->get('export')){
+            $attempts = Mock_Attempt::where('mock_id',$obj->id)->get();
+            request()->session()->put('attempts',$attempts);
+            
+            $name = $obj->slug.'_report';
+            return Excel::download(new UsersExport, $name.'.xlsx');
         }
 
 
