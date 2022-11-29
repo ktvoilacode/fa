@@ -36,6 +36,7 @@ class MockController extends Controller
                     ->paginate(config('global.no_of_records'));  
         $attempts = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->get()->groupBy('mock_id'); 
         $attempts_review = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',-1)->get()->groupBy('mock_id'); 
+        $attempts_completed = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',1)->get()->groupBy('mock_id'); 
 
         $view = $search ? 'list': 'index';
 
@@ -43,6 +44,7 @@ class MockController extends Controller
                 ->with('objs',$objs)
                 ->with('attempts',$attempts)
                 ->with('attempts_review',$attempts_review)
+                ->with('attempts_completed',$attempts_completed)
                 ->with('obj',$obj)
                 ->with('app',$this);
     }
@@ -185,8 +187,10 @@ class MockController extends Controller
         $settings = json_decode($obj->settings);
         $user = \Auth::user();
 
+        if(request()->get('user_id'))
+            $user = \Auth::user()->where('id',request()->get('user_id'))->first();
         if($user)
-        $attempt = Mock_Attempt::where('user_id',$user->id)->where('mock_id',$obj->id)->first();
+            $attempt = Mock_Attempt::where('user_id',$user->id)->where('mock_id',$obj->id)->first();
         else
             $attempt=null;
 
@@ -236,8 +240,38 @@ class MockController extends Controller
         }
 
         $settings = json_decode($obj->settings,1);
-        
        
+        // check for comments
+        $t3slug = $obj->t3;
+        if(request()->get('refresh'))
+            Cache::forget('t3_'.$obj->t3.'_'.$user->id);
+
+        $comments['t3'] =Cache::remember('t3_'.$obj->t3.'_'.$user->id, 60, function() use($t3slug,$user){
+            $t3= Test::where('slug',$t3slug)->first();
+           
+            $com = Attempt::where('test_id',$t3->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
+            foreach($com as $c){
+                if($c->comment !='')
+                    return $c;
+            }
+        });
+
+        $t4slug = $obj->t4;
+        if(request()->get('refresh'))
+            Cache::forget('t4_'.$obj->t4.'_'.$user->id);
+
+        $comments['t4'] =Cache::remember('t4_'.$obj->t4.'_'.$user->id, 60, function() use($t4slug,$user){
+            $t4= Test::where('slug',$t4slug)->first();
+            $com = Attempt::where('test_id',$t4->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
+            foreach($com as $c){
+                if($c->comment !='')
+                    return $c;
+            }
+           
+        });
+
+      
+
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.public')
@@ -246,6 +280,7 @@ class MockController extends Controller
                     ->with('auto_deactivation',$auto_deactivation)
                     ->with('audio_permission',1)
                     ->with('noreport',$noreport)
+                    ->with('comments',$comments)
                     ->with('settings',$settings)
                     ->with('obj',$obj)->with('app',$this)->with('attempt',$attempt);
         else

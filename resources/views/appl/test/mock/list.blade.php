@@ -8,6 +8,7 @@
                 <th scope="col">Name </th>
                 <th scope="col">Tests</th>
                 <th scope="col">Under Review</th>
+                <th scope="col">Evaluated</th>
                 <th scope="col">Attempts</th>
                 <th scope="col">Status</th>
                 <th scope="col">Created at</th>
@@ -31,6 +32,13 @@
                 <td>
                   @if(isset($attempts_review[$obj->id]))
                    <span class="badge badge-warning"> {{count($attempts_review[$obj->id])}} </span>
+                  @else
+                  -
+                  @endif
+                </td>
+                 <td>
+                  @if(isset($attempts_completed[$obj->id]))
+                   {{count($attempts_completed[$obj->id])}} 
                   @else
                   -
                   @endif

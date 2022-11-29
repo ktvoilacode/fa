@@ -399,5 +399,23 @@ class User extends Authenticatable
        
     }
 
+    public function scoreExplained($score){
+        $score = intval($score);
+        $bands =array("0"=>
+                    array("name"=>"Non- user","value"=>"No ability in using the English language. May know a few isolated words."),
+                    "1"=> array("name"=>"Non- user","value"=>"No ability in using the English language. May know a few isolated words."),
+                    "2"=> array("name"=>"Intermittent user ","value"=>"Has great difficulty in understanding spoken and written English. May know a few isolated words or phrases useful in familiar situations. "),
+                    "3"=> array("name"=>"Extremely limited user ","value"=>"Able to convey and understand only general meaning in very familiar situations. Communication frequently breakdowns. "),
+                    "4"=> array("name"=>"Limited user","value"=>"Basic competence is limited to familiar situations. Unable to use complex language and frequently has problems in understanding and expression."),
+                    "5"=> array("name"=>"Moderate user ","value"=>"Has partial command of the language. Copes well with overall meaning in most situations, though many mistakes are likely. Should be able to handle basic communication in own field."),
+                    "6"=> array("name"=>"Competent user","value"=>"Has effective command of the language. Shows some inaccuracies, inappropriate usage and misunderstandings. Can use and understand fairly complex language, particularly in familiar situations. "),
+                    "7"=> array("name"=>"Good user ","value"=>"Has operational command of the language with occasional inaccuracies, inappropriate usage and misunderstandings in some situations. Understands detailed reasoning and generally handles complex language well. "),
+                    "8"=> array("name"=>"Very good user ","value"=>"Has full operational command of the language except in a few unfamiliar situations. Occasional unsystematic inaccuracies. Complex and detailed argumentation handled well."),
+                    "9"=> array("name"=>"Expert user","value"=>"Shows complete understanding of English. Uses language appropriately and with fluency and accuracy. Full operational command. ")
+                    );
+
+        return $bands[$score];
+    }
+
 
 }

@@ -97,7 +97,7 @@
             <th scope="col">T2</th>
             <th scope="col">T3</th>
             <th scope="col">T4</th>
-            <th scope="col">Status</th>
+            <th scope="col">Score / Band</th>
             <th scope="col">Details</th>
           </tr>
         </thead>
@@ -126,7 +126,9 @@
             </td>
              <td>
               @if($a->t3==1)
+              <a href="{{ route('test.analysis',$obj->t3)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 {{$a->t3_score}}
+              </a>
               @elseif($a->t3==-1)
                  <a href="{{ route('test.analysis',$obj->t3)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
@@ -137,7 +139,9 @@
             </td>
              <td>
               @if($a->t4==1)
+              <a href="{{ route('test.analysis',$obj->t4)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 {{$a->t4_score}}
+              </a>
               @elseif($a->t4==-1)
               <a href="{{ route('test.analysis',$obj->t4)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
@@ -148,7 +152,9 @@
             </td>
             <td>
               @if($a->status==1)
-                <span class="badge badge-success">Completed & Reviewed</span>
+                <span class="badge badge-success">{{
+                    round(($a->t1_score+$a->t2_score+ $a->t3_score + $a->t4_score)/4,2)
+                }}</span>
               @elseif($a->status==-1)
                 <span class="badge badge-primary">Evaluation Pending</span>
               @else
@@ -156,7 +162,7 @@
               @endif
             </td>
             <td>
-
+                <a href="{{ route('mockpage',$obj->slug)}}?user_id={{$a->user_id}}" class="btn btn-outline-primary mr-3 btn-sm" >View Report</a>
                 <a href="#" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModal_{{$a->id}}" data-tooltip="tooltip" data-placement="top" title="Delete" >Delete Attempt</a>
             
 

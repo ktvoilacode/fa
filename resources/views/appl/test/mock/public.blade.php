@@ -35,7 +35,14 @@
           </div>
 
             <div class="text-primary mt-4 h4"> The result will be shared in 24 to 48 hours.</div>
-          @elseif($attempt->status!=1)
+
+          @endif
+
+
+          @if($attempt->status!=1)
+          <div class="alert alert-warning alert-important"> Test link at the bottom of the page ! Scroll down 👇</div>
+          <div class="" style="font-size:18px;">{!! $obj->description !!}</div>
+          @elseif($attempt->status == 1 && $noreport===1)
           <div class="alert alert-warning alert-important"> Test link at the bottom of the page ! Scroll down 👇</div>
           <div class="" style="font-size:18px;">{!! $obj->description !!}</div>
           @endif
