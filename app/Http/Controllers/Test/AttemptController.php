@@ -1764,6 +1764,23 @@ class AttemptController extends Controller
       else
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
+
+      //check for duplicates
+      $qnos = $result->groupBy('qno');
+      if(request()->get('duplicates')){
+      foreach($qnos as $q=>$da){
+        if(count($da)>1){
+          foreach($da as $m=>$a)
+            if($m!=0){
+              $a->delete();
+            }
+
+        }
+      }
+      flash('Duplicated removed!')->success();
+      }
+     
+
       if(!count($result)){
         abort('403','Test not attempted');
       }

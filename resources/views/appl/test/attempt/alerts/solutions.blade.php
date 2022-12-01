@@ -8,6 +8,7 @@
 <div class="">
   <div class="row">
     <div class="col-12">
+      @include('flash::message')
       <div class="bg-white p-4 border">
         <div class="row">
           <div class="col-12 col-md-6">
@@ -132,6 +133,7 @@
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <button type="submit" class="btn btn-link float-right"><i class="fa fa-trash"></i> Delete Permanently</button>
               </form>
+              <a href="{{route('test.analysis',$test->slug)}}?duplicates=1&admin=1&mock={{request()->get('mock')}}&user_id={{request()->get('user_id')}}" class="float-right"><i class="fa fa-retweet"></i> remove duplicates</a>
             @endif
           @endif
 
@@ -147,6 +149,7 @@
           @if(\auth::user())
             @if(\auth::user()->isAdmin())
               <a href="{{route('test.analysis',$test->slug)}}?delete=1&session_id={{request()->get('session_id')}}"><i class="fa fa-trash"></i> delete</a>
+              <a href="{{route('test.analysis',$test->slug)}}?duplicates=1&session_id={{request()->get('session_id')}}"><i class="fa fa-retweet"></i> remove duplicates</a>
             @endif
           @endif
           <span class="float-md-right">IP: <b>{{$user->ip_address}}</b></span> </div>
@@ -159,6 +162,8 @@
           @if(\auth::user())
             @if(\auth::user()->isAdmin())
               <a href="{{route('test.analysis',$test->slug)}}?delete=1&session_id={{request()->get('session_id')}}"><i class="fa fa-trash"></i> delete</a>
+              <a href="{{route('test.analysis',$test->slug)}}?duplicates=1&session_id={{request()->get('session_id')}}"><i class="fa fa-retweet"></i> remove duplicates</a>
+
             @endif
           @endif
           <span class="float-md-right">IP: <b>{{$user->ip_address}}</b></span> </div>
