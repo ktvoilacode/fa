@@ -50,13 +50,14 @@ class FileController extends Controller
 
         $item = $request->item;
         if($request->get('type')=='speaking'){
-            $tests = Test::whereIn('type_id',[4])->pluck('id');
+            $tests = Test::whereIn('type_id',[4])->where('client_slug',subdomain())->pluck('id');
             $objs = $obj->where('response','LIKE',"%{$item}%")
+
                     ->whereIn('test_id',$tests)
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));
         }elseif($request->get('type')=='duolingo'){
-            $tests = Test::whereIn('type_id',[9])->where('price','!=',0)->pluck('id');
+            $tests = Test::whereIn('type_id',[9])->where('price','!=',0)->where('client_slug',subdomain())->pluck('id');
 
 
             $items = $obj2
@@ -76,8 +77,10 @@ class FileController extends Controller
                     ->paginate(30);
         }else if($request->get('type')=='writing' || $request->get('writing')==1){
 
+
             if(\auth::user()->admin==4)
             {
+
                 $tests = [];
                 $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
                 $objs = Obj2::whereIn('id',$attempt_ids)->paginate(30);
@@ -87,7 +90,7 @@ class FileController extends Controller
             else{
 
                 if($request->get('open')==1){
-                    $tests = Test::whereIn('type_id',[3])->pluck('id');
+                    $tests = Test::whereIn('type_id',[3])->where('client_slug',subdomain())->pluck('id');
                     $objs = $obj2->whereIn('test_id',$tests)->whereNull('answer')
                                       ->orderBy('created_at','desc')
                                       ->paginate(100);
@@ -101,17 +104,21 @@ class FileController extends Controller
                                 ->whereIn('test_id',$tests)->paginate(30);
                 }else{
                     if(!Cache::get('files_'))
-                        $tests = Test::whereIn('type_id',[3])->pluck('id');
+                        $tests = Test::whereIn('type_id',[3])->where('client_slug',subdomain())->pluck('id');
                         else
                             $tests = [];
+
+
                         if(!$request->get('page'))
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
+
                               return  $obj2->whereIn('test_id',$tests)
                                       ->orderBy('created_at','desc')
                                       ->paginate(30);
                                     });
                         else {
-                          $tests = Test::whereIn('type_id',[3])->pluck('id');
+                          $tests = Test::whereIn('type_id',[3])->where('client_slug',subdomain())->pluck('id');
+                      
                           $objs= $obj2->whereIn('test_id',$tests)
                                   ->orderBy('created_at','desc')
                                   ->paginate(30);

@@ -41,7 +41,7 @@
                 @endif  
             </div>
 
-            <div class="text-light rounded p-4 mb-4" style="background: #795548;">
+            <div class="text-light rounded p-4 mb-4 d-none" style="background: #795548;">
                 <h3 class="mb-0"><i class="fa fa-twitter"></i> Duo Orders  <Span class="float-right ">{{ count($data['duo_orders']) }}</Span></h3>
                 @if(count($data['duo_orders']))
                 <hr class="{{$counter=0}}">
@@ -263,7 +263,7 @@
 
 <div class="row">
     <div class="col-12 ">
-        <div class="">
+        <div class="d-none">
     <h5 class="rounded mt-4 border p-2"><i class="fa fa-plus-square-o"></i> Latest Logins</h5>
     <div class="table-responsive mb-4">
     <table class="table table-bordered">

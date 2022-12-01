@@ -108,7 +108,7 @@
             <td>{{$a->user->name}}</td>
             <td>
               @if($a->t1==1)
-                {{$a->t1_score}}
+                {{lmband($a->t1_score)}}
               @elseif($a->t1==-1)
                 <span class="badge badge-warning">Under Review</span>
               @else
@@ -117,7 +117,7 @@
             </td>
             <td>
               @if($a->t2==1)
-                {{$a->t2_score}}
+                {{rmband($a->t2_score)}}
               @elseif($a->t2==-1)
                 <span class="badge badge-warning">Under Review</span>
               @else
@@ -153,7 +153,7 @@
             <td>
               @if($a->status==1)
                 <span class="badge badge-success">{{
-                    round(($a->t1_score+$a->t2_score+ $a->t3_score + $a->t4_score)/4,2)
+                    overallband($a->t1_score,$a->t2_score,$a->t3_score,$a->t4_score)
                 }}</span>
               @elseif($a->status==-1)
                 <span class="badge badge-primary">Evaluation Pending</span>

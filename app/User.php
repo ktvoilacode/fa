@@ -169,6 +169,7 @@ class User extends Authenticatable
     }
 
      public function testCount(){
+        return 0;
         $test_id = DB::table('attempts')
                 ->select('test_id')
                 ->where('user_id', $this->id)

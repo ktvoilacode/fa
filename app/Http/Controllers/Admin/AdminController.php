@@ -45,7 +45,7 @@ class AdminController extends Controller
         });
 
         /* writing data */
-        $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->toArray();
+        $test_ids = Obj::whereIn('type_id',[3])->pluck('id')->where('client_slug',subdomain())->toArray();
        
         $data['writing'] = Cache::remember('wri_users_'.$subdomain, 120, function() use ($test_ids) {
 
