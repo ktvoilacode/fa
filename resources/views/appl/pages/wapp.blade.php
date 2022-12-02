@@ -18,6 +18,7 @@
 			  <option value="couponcode">Coupon Code</option>
 			  <option value="new_product">New Product</option>
 			  <option value="promo1">IELTS Promo 1</option>
+			  <option value="result">Result Message</option>
 			</select>
 		  </div>
 
@@ -36,6 +37,7 @@
 				<li>Coupon code file - <a href="/wtemplate_coupon.csv">download</a></li>
 				<li>New Product file - <a href="/wtemplate_product.csv">download</a></li>
 				<li>IELTS promo file - <a href="/wtemplate_ielts.csv">download</a></li>
+				<li>Result Message file - <a href="/wtemplate_result.csv">download</a></li>
 			</ul>
 		</div>
 @endsection           

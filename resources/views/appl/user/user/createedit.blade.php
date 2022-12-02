@@ -64,17 +64,18 @@
               </select>
             </div>
 
-            <div class="form-group">
+            
+           @endif
+
+           <div class="form-group">
               <label for="formGroupExampleInput ">Client</label>
               <select class="form-control" name="client_slug">
                 <option value="prep" @if(isset($obj)) @if($obj->client_slug==="prep") selected @endif @endif>Prep</option>
                 @foreach($clients as $client)
                 <option value="{{$client->slug}}" @if(isset($obj)) @if($obj->client_slug===$client->slug) selected @endif @endif >{{$client->slug}}</option>
                 @endforeach
-               
               </select>
             </div>
-           @endif
 
            <div class="form-group">
             <label for="formGroupExampleInput ">Comments</label>
