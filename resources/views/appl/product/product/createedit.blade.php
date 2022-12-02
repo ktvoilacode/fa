@@ -74,6 +74,16 @@
       </div>
 
       <div class="form-group">
+              <label for="formGroupExampleInput ">Client</label>
+              <select class="form-control" name="client_slug">
+                <option value="prep" @if(isset($obj)) @if($obj->client_slug==="prep") selected @endif @endif>Prep</option>
+                @foreach($clients as $client)
+                <option value="{{$client->slug}}" @if(isset($obj)) @if($obj->client_slug===$client->slug) selected @endif @endif >{{$client->slug}}</option>
+                @endforeach
+              </select>
+            </div>
+
+      <div class="form-group">
         <label for="formGroupExampleInput ">Image</label>
         <input type="file" class="form-control" name="file" id="formGroupExampleInput" placeholder="Enter the image path" 
           >
@@ -158,7 +168,6 @@
         <input type="hidden" name="id" value="{{ $obj->id }}">
       @endif
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="client_slug" value="{{ subdomain() }}">
        <button type="submit" class="btn btn-info">Save</button>
     </form>
     </div>

@@ -11,6 +11,7 @@ use App\Models\Test\Test;
 use App\Models\Test\Mock;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Product\Client;
 
 class ProductController extends Controller
 {
@@ -252,6 +253,7 @@ class ProductController extends Controller
         $groups  = Group::where('status',1)->get();
         $tests  = Test::where('status',1)->get();
         $mocks  = Mock::where('status',1)->get();
+        $clients = Client::get();
 
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
@@ -260,6 +262,7 @@ class ProductController extends Controller
                 ->with('groups',$groups)
                 ->with('tests',$tests)
                 ->with('mocks',$mocks)
+                ->with('clients',$clients)
                 ->with('app',$this);
     }
 
@@ -299,6 +302,7 @@ class ProductController extends Controller
                 $request->merge(['price' => 0]);
             }
 
+
             /* create a new entry */
             $obj->create($request->except(['groups','file','tests']));
 
@@ -335,6 +339,9 @@ class ProductController extends Controller
             $objs = $obj->orderBy('created_at','desc')
                         ->get(); 
 
+             $filepath = $this->cache_path.$filename;
+
+            Cache::forget($filepath);
             //file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
 
             flash('A new ('.$this->app.'/'.$this->module.') item is created!')->success();
@@ -453,6 +460,7 @@ class ProductController extends Controller
         $tests  = Test::where('status',1)->get();
         $mocks  = Mock::where('status',1)->get();
         $settings = json_decode($obj->settings);
+        $clients = Client::get();
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
@@ -462,6 +470,7 @@ class ProductController extends Controller
                 ->with('groups',$groups)
                  ->with('tests',$tests)
                  ->with('mocks',$mocks)
+                 ->with('clients',$clients)
                  ->with('settings',$settings)
                 ->with('app',$this);
         else
@@ -589,6 +598,9 @@ class ProductController extends Controller
                         ->get(); 
            // file_put_contents($filepath, json_encode($objs,JSON_PRETTY_PRINT));
             
+            $filepath = $this->cache_path.$filename;
+
+            Cache::forget($filepath);
 
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
             return redirect()->route($this->module.'.show',$id);
