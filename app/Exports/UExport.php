@@ -7,18 +7,14 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 use Illuminate\Support\Facades\DB;
 
-class UsersExport implements FromCollection
+class UExport implements FromCollection
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        $attempts= request()->session()->get('attempts');
-
-        $userattempts = $attempts->keyBy('user_id');
-        $ids = $attempts->pluck('user_id')->toArray();
-        $usr = User::whereIn('id', $ids)->get()->keyBy('id');
+        $usr = User::where('client_slug', subdomain())->get()->keyBy('id');
          
         foreach($usr as $k=>$u){
             unset($usr[$k]->created_at);
@@ -41,28 +37,11 @@ class UsersExport implements FromCollection
             $data = json_decode($usr[$k]->data,true);
             unset($usr[$k]->data);
             unset($usr[$k]->client_slug);
-            $attempt = $d = $userattempts[$k];
             if($data)
             foreach($data as $name =>$value){
                 $usr[$k]->$name = $value;
             }
-            if($attempt->t1_score!=NULL)
-            $usr[$k]->listening_band=lmband($attempt->t1_score);
-            else
-                $usr[$k]->listening_band = 'NA';
-            if($attempt->t2_score!=NULL)
-            $usr[$k]->reading_band=rmband($attempt->t2_score);
-            else
-                $usr[$k]->reading_band = 'NA';
-            if($attempt->t3_score!=NULL)
-            $usr[$k]->writing_band= $attempt->t3_score;
-            else
-                $usr[$k]->writing_band= 'NA';
-            if($attempt->t4_score!=NULL)
-            $usr[$k]->speaking_band=$attempt->t4_score;
-            else
-            $usr[$k]->speaking_band = 'NA';
-            $usr[$k]->overall_band= overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score);
+           
             
         }
 
@@ -74,11 +53,7 @@ class UsersExport implements FromCollection
         foreach($data as $name =>$value){
             $ux->$name = $name;
         }
-        $ux->lband= "Listening band";
-        $ux->rband= "Reading band";
-        $ux->wband= "Writing band";
-        $ux->sband= "Speaking band";
-        $ux->band= "Overall band";
+       
         unset($ux->id);
         unset($ux->created_at);
         unset($ux->updated_at);

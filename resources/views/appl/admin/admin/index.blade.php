@@ -25,7 +25,7 @@
 
                 <a href="{{ route('user.index')}}"><button class="btn btn-outline-light btn-sm mt-3">view all</button></a>
             </div>
-
+             @if(subdomain()=='prep')
             <div class="bg-secondary text-light rounded p-4 mb-4">
                 <h3 class="mb-0"><i class="fa fa-file-o"></i> Writing <span class="badge badge-warning">new</span> <Span class="float-right ">{{ count($data['writing']) }}</Span></h3>
                 @if(count($data['writing']))
@@ -40,6 +40,7 @@
                 <a href="{{ route('file.index')}}?type=writing"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
                 @endif  
             </div>
+
 
             <div class="text-light rounded p-4 mb-4 d-none" style="background: #795548;">
                 <h3 class="mb-0"><i class="fa fa-twitter"></i> Duo Orders  <Span class="float-right ">{{ count($data['duo_orders']) }}</Span></h3>
@@ -67,6 +68,7 @@
                 <a href="{{ route('order.index')}}?product_id=43"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
                 @endif  
             </div>
+            @endif
 <!--
             <div class="text-light rounded p-4 mb-4" style="background: #e64b3c;">
                 <h3 class="mb-0"><i class="fa fa-twitter"></i> Duolingo  <Span class="float-right ">{{ $data['duolingo_count'] }}</Span></h3>
@@ -89,6 +91,7 @@
                 @endif  
             </div>
 -->
+        @if(subdomain()=='prep')
              <div class=" text-light rounded p-4 mb-4" style="background-color: #55a95f">
                 <h3 class="mb-0"><i class="fa fa-envelope-o"></i> Forms  </h3>
                 @if($data['form']->count())
@@ -107,6 +110,7 @@
                 <a href="{{ route('form.index')}}"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
                 @endif  
             </div>
+        @endif
 
 
 
@@ -128,6 +132,10 @@
             </div>
             </a>
         </div>
+        
+        @endif
+
+        @if(\auth::user()->admin==1 || \auth::user()->admin==5)
         <div class="col-4 col-md-3 col-lg-2">
             <a href="{{ route('product.index') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
@@ -142,12 +150,37 @@
             <a href="{{ route('order.index') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
                 <div>
-                    <img src="{{ asset('images/admin/orders.png') }}" class="w-100 mb-3" >
+                    <img src="{{ asset('images/admin/type.png') }}" class="w-100 mb-3" >
                     <div class="text-center">Orders</div>
                 </div>
             </div>
             </a>
         </div>
+
+        @endif
+
+        @if(\auth::user()->admin==5)
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('order.index') }}">
+            <div class="border bg-white p-3 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/menu.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Test History</div>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('order.index') }}">
+            <div class="border bg-white p-3 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/settings.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Settings</div>
+                </div>
+            </div>
+            </a>
+        </div>
+
         @endif
 
         @if(\auth::user()->admin!=4)
@@ -162,7 +195,7 @@
             </div>
             </a>
         </div>
-
+           @if(subdomain()=='prep')
         <div class="col-4 col-md-3 col-lg-2">
             <a href="{{ route('form.index') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
@@ -184,6 +217,7 @@
             </div>
             </a>
         </div>
+        @endif
         <div class="col-4 col-md-3 col-lg-2">
             <a href="{{ route('coupon.index') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
@@ -259,7 +293,7 @@
 
     </div>
 
-@if(\auth::user()->admin!=4)
+@if(\auth::user()->admin!=4 && subdomain()=='prep')
 
 <div class="row">
     <div class="col-12 ">

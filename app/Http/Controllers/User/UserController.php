@@ -22,6 +22,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use App\Exports\UExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -50,12 +52,26 @@ class UserController extends Controller
         $search = $request->search;
         $item = $request->item;
         
+        if(subdomain()=='prep')
         $objs = $obj->sortable()->where('name','LIKE',"%{$item}%")
+                    ->where('client_slug',subdomain())
                     ->orWhere('email','LIKE',"%{$item}%")
                     ->orWhere('idno','LIKE',"%{$item}%")
                     ->orWhere('phone','LIKE',"%{$item}%")
+
                     ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));   
+                    ->paginate(config('global.no_of_records')); 
+        else
+          $objs = $obj->sortable()->where('name','LIKE',"%{$item}%")
+                    ->where('client_slug',subdomain())
+                    ->orderBy('created_at','desc')
+                    ->paginate(config('global.no_of_records')); 
+
+        if(request()->get('export')){
+            
+            $name = subdomain().'_users';
+            return Excel::download(new UExport, $name.'.xlsx');
+        }
 
         $referrals = $obj->whereIn('id',$objs->pluck('user_id')->toArray())->get()->keyBy('id');
         $view = $search ? 'list': 'index';

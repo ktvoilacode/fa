@@ -18,10 +18,12 @@
     <div class="card mb-3 mb-md-0 ">
       <div class="card-body mb-0">
         <nav class="navbar navbar-light bg-light justify-content-between border mb-3">
-          <a class="navbar-brand"><i class="fa fa-bars"></i> {{ ucfirst($app->module) }} </a>
+          <a class="navbar-brand"><i class="fa fa-bars"></i> {{ ucfirst($app->module) }}s </a>
 
           <form class="form-inline" method="GET" action="{{ route($app->module.'.index') }}">
-
+            <a href="{{route($app->module.'.index')}}?export=1">
+              <button type="button" class="btn btn-success my-2 my-sm-2 mr-sm-3">Download</button>
+            </a>
             @can('create',$obj)
             @if(\auth::user()->admin==1 ||\auth::user()->admin==2)
             <a href="{{route($app->module.'.create')}}">

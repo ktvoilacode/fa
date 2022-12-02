@@ -45,10 +45,14 @@ class AdminController extends Controller
         });
 
         /* writing data */
+        if(subdomain()=='prep')
         $test_ids = Obj::where('client_slug',subdomain())->whereIn('type_id',[3])->pluck('id')->toArray();
+        else
+            $test_ids = [];
 
     
        
+        if(subdomain()=='prep')
         $data['writing'] = Cache::remember('wri_users_'.$subdomain, 120, function() use ($test_ids) {
 
             $d = Attempt::whereIn('test_id',$test_ids)->whereNull('answer')->with('user')->orderBy('created_at','desc')->get();
@@ -73,6 +77,8 @@ class AdminController extends Controller
             }
             return $d2;
         });
+        else
+        $data['writing'] = [];
 
        
         //$data['writing'] = $data['writing']->sort('premium');
@@ -101,9 +107,12 @@ class AdminController extends Controller
         $data['duolingo'] = $d2;
 
 
+        if(subdomain()=='prep')
         $attempts = Cache::remember('att_users_'.$subdomain, 240, function(){
             return Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
         });
+        else
+            $attempts = [];
 
         $data['duo_orders'] = Order::where('product_id',43)->orderBy('created_at','desc')->get();
         $data['new'] = User::where('admin','0')->orderBy('lastlogin_at','desc')->limit(5)->get();
@@ -142,8 +151,8 @@ class AdminController extends Controller
                 $view = 'appl.admin.bfs.index_trainer';
         }
 
-        if(subdomain()!='prep')
-            $view = 'appl.admin.admin.client';
+        // if(subdomain()!='prep')
+        //     $view = 'appl.admin.admin.client';
 
         return view($view)->with('data',$data);
         
