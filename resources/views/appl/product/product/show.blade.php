@@ -119,12 +119,44 @@
                     <span class="badge badge-success">Active</span>
                   @endif</div>
           </div>
+
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Orders</b></div>
+            <div class="col-md-8">
+              @if($obj->orders)
+                {{ $obj->orders->count()}}
+              @else
+                0
+              @endif
+            </div>
+          </div>
          
           <div class="row mb-2">
             <div class="col-md-4"><b>Created at</b></div>
             <div class="col-md-8">{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</div>
           </div>
         </div>
+      </div>
+
+
+      <h3>Recent Product Orders</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tr>
+            <td>ID</td>
+            <td>User</td>
+            <td>Payment Mode</td>
+            <td>Created</td>
+          </tr>
+          @foreach($obj->orders()->orderBy('id','desc')->limit(5)->get() as $o)
+          <tr>
+            <td>{{$o->id}}</td>
+            <td>{{ $o->user->name}}</td>
+            <td>{{ $o->payment_mode}}</td>
+            <td>{{ $o->created_at}}</td>
+          </tr>
+          @endforeach
+        </table>
       </div>
 
     </div>

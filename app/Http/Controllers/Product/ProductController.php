@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product\Product as Obj;
+use App\Models\Product\Order;
 use App\Models\Test\Group;
 use App\Models\Test\Test;
 use App\Models\Test\Mock;
@@ -184,6 +185,59 @@ class ProductController extends Controller
                 ->with('app',$this);
     }
 
+    public function upload(Request $request){
+
+         if(isset($request->all()['file'])){
+                
+                $file      = $request->all()['file'];
+                $fname = str_replace(' ','_',strtolower($file->getClientOriginalName()));
+                $extension = strtolower($file->getClientOriginalExtension());
+
+                if(!in_array($extension, ['csv'])){
+                    $alert = 'Only CSV files are allowed';
+                    return redirect()->route('product.upload')->with('alert',$alert);
+                }
+
+                 $file_path = Storage::disk('public')->putFileAs('excels', $request->file('file'),$fname,'public');
+                 $fpath = Storage::disk('public')->path($file_path);
+
+                 $row = 1;
+                 
+                if (($handle = fopen($fpath, "r")) !== FALSE) {
+                  while (($data = fgetcsv($handle, 9000, ",")) !== FALSE) {
+               
+                    if($row==1){
+                        $row++;
+                        continue;
+                    }
+                    $row++;
+                    $num = count($data);
+                    $d=$data[0];
+                    $p = Cache::remember('p_'.$data[0], 60, function() use($d) {
+                        return Obj::where('slug',$d)->first();
+                    });
+                    $user = \auth::user()::where('email',$data[2])->where('client_slug',$data[1])->first();
+                    $order = new Order();
+                    $order->coupon($p->id,null,'ADMIN',$user);
+                    
+                   
+                    
+                  }
+                  fclose($handle);
+                }
+
+
+                $alert = 'Data Records Added!';
+                return redirect()->route('product.index')->with('alert',$alert);
+            }
+            else{
+                return view('appl.'.$this->app.'.'.$this->module.'.upload')
+                    ->with('stub','Create')
+                    ->with('editor',true)
+                    ->with('app',$this);
+
+            }
+    }
 
     /**
      * Show the form for creating a new resource.

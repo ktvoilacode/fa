@@ -153,7 +153,10 @@ Route::get('/mock/{mock}/start','Test\MockController@start')->name('mockpage.sta
 Route::get('/mock/{mock}/end','Test\MockController@end')->name('mockpage.end');
 
 /* Product Routes */
+Route::get('/admin/product/upload', 'Product\ProductController@upload')->middleware('auth')->name('product.upload');
+Route::post('/admin/product/upload', 'Product\ProductController@upload')->middleware('auth')->name('product.upload');
 Route::resource('/admin/product', 'Product\ProductController')->middleware('auth');
+
 Route::resource('/admin/coupon', 'Product\CouponController')->middleware('auth');
 Route::resource('/admin/order', 'Product\OrderController')->middleware('auth');
 Route::resource('/admin/client', 'Product\ClientController')->middleware('auth');

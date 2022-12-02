@@ -26,6 +26,9 @@
             <a href="{{route($app->module.'.index')}}?refresh=1">
               <button type="button" class="btn btn-outline-secondary my-2 my-sm-2 mr-sm-3">Refresh Cache</button>
             </a>
+            <a href="{{route($app->module.'.upload')}}">
+              <button type="button" class="btn btn-outline-secondary my-2 my-sm-2 mr-sm-3">Attach</button>
+            </a>
             @can('create',$obj)
             <a href="{{route($app->module.'.create')}}">
               <button type="button" class="btn btn-outline-success my-2 my-sm-2 mr-sm-3">Create {{ ucfirst($app->module) }}</button>

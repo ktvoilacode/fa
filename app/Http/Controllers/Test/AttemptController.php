@@ -137,6 +137,7 @@ class AttemptController extends Controller
         $test = $this->test;
         $product = $this->product;
 
+
         $product_id = $test_id = null;
 
         if($product){
@@ -247,8 +248,20 @@ class AttemptController extends Controller
         if($settings['audio_permission']==1)
           $audio_permission = true;
        
-          
+        $settings = json_decode($test->settings);
+        $active = 1;
+        if(isset($settings->activation))
+        {   
+            $auto_activation  = \carbon\carbon::parse($settings->activation);
+            $auto_deactivation  = \carbon\carbon::parse($settings->deactivation);
 
+            $active = 0;
+            if($auto_activation->lt(\carbon\carbon::now()) && $auto_deactivation->gt(\carbon\carbon::now())){
+               $active = 1;
+            }
+        }else{
+
+        }
 
         /* If Attempted show report */
         if($attempt){
@@ -274,6 +287,7 @@ class AttemptController extends Controller
             }
         }else{
 
+
             if(!strip_tags($test->instructions) && !$audio_permission){
               if($product)
                 return redirect()->route('test.try',['test'=>$this->test->slug,'product'=>$product->slug]);
@@ -282,12 +296,21 @@ class AttemptController extends Controller
             } 
             else  {
 
-              return view('appl.test.attempt.alerts.instructions')
+
+              if($active)
+                return view('appl.test.attempt.alerts.instructions')
                 ->with('test',$test)
                 ->with('audio_permission',$audio_permission)
                 ->with('product',$product)
                 ->with('player',true)
                 ->with('app',$this);
+              else
+             return view('appl.test.test.inactive')
+                ->with('exam',$test)
+                ->with('settings',$settings)
+                ->with('obj',$test);
+
+              
             }
         }
    }

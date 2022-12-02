@@ -37,6 +37,11 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Test\Mock');
     }
 
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Product\Order');
+    }
+
     public function order($user=null){
         if(!$user)
             return null;

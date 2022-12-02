@@ -104,15 +104,21 @@ class Order extends Model
               $order->txn_id = '';
               $order->payment_mode = 'COUPON';
                 //update coupon
-                if(!$coupon->unlimited){
+                if(isset($coupon->unlimited)){
+                   if(!$coupon->unlimited){
                   $coupon->status = 0;
                     if(\auth::user())
                         $coupon->user_id = \auth::user()->id;
                     else
                         $coupon->user_id = null;
                   $coupon->save();
+                 } 
+                 $order->txn_id = $coupon->code;
+                }else{
+                    $order->txn_id = $coupon;
                 }
-                $order->txn_id = $coupon->code;
+                
+                
               
 
               //product check
