@@ -34,7 +34,9 @@
 
         @include('appl.product.product.blocks.why_these_tests')
           @include('appl.product.product.blocks.details')
+          @if(subdomain()=='prep')
           @include('appl.product.product.blocks.related')
+          @endif
     </div>
   </div>
 
