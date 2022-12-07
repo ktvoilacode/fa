@@ -39,7 +39,6 @@
           <tr class="bg-light">
             <th scope="col">#</th>
             <th scope="col">Tests </th>
-            <th scope="col">Valid Till</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
@@ -49,7 +48,7 @@
         <tr>
             <th scope="row">{{($i++)}}</th>
             <td><a href="{{ route('product.view',$product->slug)}}">{{ strip_tags($product->name)}}</a></td>
-            <td>{{ date('d M Y', strtotime($product_expiry[$product->id]))}}</td>
+          
             <td>
               {{ $product_status[$product->id]}}
             </td>
