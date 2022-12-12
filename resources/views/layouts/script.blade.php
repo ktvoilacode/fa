@@ -50,29 +50,30 @@ $(document).ready(function() {
 </style>
 <script>
 
-  ClassicEditor
-    .create( document.querySelector( '.summernote' ), {
-      // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+// tcyeditor
+  // ClassicEditor
+  //   .create( document.querySelector( '.summernote' ), {
+  //     // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
         
-    } )
-    .then( editor => {
-      window.editor = editor;
-    } )
-    .catch( err => {
-      console.error( err.stack );
-    } );
+  //   } )
+  //   .then( editor => {
+  //     window.editor = editor;
+  //   } )
+  //   .catch( err => {
+  //     console.error( err.stack );
+  //   } );
 
-     ClassicEditor
-    .create( document.querySelector( '.summernote2' ), {
-      // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+  //    ClassicEditor
+  //   .create( document.querySelector( '.summernote2' ), {
+  //     // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
         
-    } )
-    .then( editor => {
-      window.editor = editor;
-    } )
-    .catch( err => {
-      console.error( err.stack );
-    } );
+  //   } )
+  //   .then( editor => {
+  //     window.editor = editor;
+  //   } )
+  //   .catch( err => {
+  //     console.error( err.stack );
+  //   } );
 </script>
 
   <script>
@@ -149,39 +150,39 @@ $(document).ready(function() {
 
 <script type="application/javascript">
     $(document).ready(function() {
-    //         $('.summernote').summernote({
-    //             placeholder: 'Hello ! Write something...',
-    //             tabsize: 2,
-    //             height: 200,                // set editor height
-    //             minHeight: null,             // set minimum height of editor
-    //             maxHeight: null,             // set maximum height of editor
-    //             focus: true,
-    //             callbacks: {
-    //     onPaste: function (e) {
-    //         var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-    //         e.preventDefault();
-    //         document.execCommand('insertText', false, bufferText);
-    //     }
-    // }
-    //           });
+            $('.summernote').summernote({
+                placeholder: 'Hello ! Write something...',
+                tabsize: 2,
+                height: 200,                // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: true,
+                callbacks: {
+        onPaste: function (e) {
+            var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+            e.preventDefault();
+            document.execCommand('insertText', false, bufferText);
+        }
+    }
+              });
 
-            // $('.summernote2').summernote({
-            //   placeholder: 'Enter your response ... ',
-            //   tabsize: 2,
-            //     height: 300,                // set editor height
-            //     minHeight: null,             // set minimum height of editor
-            //     maxHeight: null,             // set maximum height of editor
-            //     focus: true,
-            //     toolbar: [],
-            //     callbacks: {
-            //       onPaste: function (e) {
-            //         var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-            //         e.preventDefault();
-            //         document.execCommand('insertText', false, bufferText);
-            //       }
-            //     }
+            $('.summernote2').summernote({
+              placeholder: 'Enter your response ... ',
+              tabsize: 2,
+                height: 300,                // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: true,
+                toolbar: [],
+                callbacks: {
+                  onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    document.execCommand('insertText', false, bufferText);
+                  }
+                }
 
-            //   });
+              });
 
             $('.summernote4').summernote({
               placeholder: 'Enter your response ... ',
@@ -238,27 +239,27 @@ $(document).ready(function() {
 
           });
 
-      // $(document).on("keyup", function(){
+      $(document).on("keyup", function(){
 
-      //   if($(".summernote2").length){
-      //   var text = $(".summernote2").summernote("code");
-      //   text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
-      //   var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
-      //   //Update Count value
-      //   $(".word-count").text(words);
-      // }
+        if($(".summernote2").length){
+        var text = $(".summernote2").summernote("code");
+        text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
+        var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
+        //Update Count value
+        $(".word-count").text(words);
+      }
 
 
-      // if($(".summernote4").length){
-      //   var text = $(".summernote4").summernote("code");
+      if($(".summernote4").length){
+        var text = $(".summernote4").summernote("code");
         
-      //   text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
-      //   var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
-      //   //Update Count value
-      //   $(".word-count").text(words);
-      // }
+        text = text.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, ' ');
+        var words = countWords(text.replace(/<\/?[^>]+(>|$)/g, ""));
+        //Update Count value
+        $(".word-count").text(words);
+      }
 
-      // });
+      });
 
       
 

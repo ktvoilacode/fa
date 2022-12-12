@@ -73,7 +73,7 @@
           <div class="form-group">
         <label for="formGroupExampleInput " class="mb-0">Instructions (optional)</label>
         <small id="" class="form-text text-muted mb-3">Empty instructions will skip the instruction screen</small>
-        <textarea class="form-control summernote2" name="instructions"  rows="5">
+        <textarea class="form-control summernote" name="instructions"  rows="5">
             @if($stub=='Create')
             {{ (old('instructions')) ? old('instructions') : '' }}
             @else
