@@ -6,7 +6,7 @@
               <tr>
                 <th scope="col">#({{$objs->total()}})</th>
                 <th scope="col">Name </th>
-                <th scope="col">Tests</th>
+                <th scope="col">Client</th>
                 <th scope="col">Under Review</th>
                 <th scope="col">Evaluated</th>
                 <th scope="col">Attempts</th>
@@ -24,10 +24,7 @@
                   </a>
                 </td>
                 <td>
-                Test Slug 1 - {{$obj->t1}}<br>
-                Test Slug 2 - {{$obj->t2}}<br>
-                Test Slug 3 - {{$obj->t3}}<br>
-                Test Slug 4 - {{$obj->t4}}<br>
+                {{$obj->client_slug}}
                 </td>
                 <td>
                   @if(isset($attempts_review[$obj->id]))

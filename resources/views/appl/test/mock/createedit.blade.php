@@ -3,6 +3,12 @@
 @section('content')
 
 @include('flash::message')
+
+@if($stub=='Create')
+      <form method="post" action="{{route($app->module.'.store')}}" enctype="multipart/form-data">
+      @else
+      <form method="post" action="{{route($app->module.'.update',$obj->id)}}" enctype="multipart/form-data">
+      @endif  
   <div class="card">
     <div class="card-body">
       <h1 class="p-3 border bg-light mb-3">
@@ -11,15 +17,13 @@
         @else
           Update {{ $app->module }}
         @endif  
+
+       <button type="submit" class="btn btn-primary btn-lg float-right">Save</button>
        </h1>
       
-      @if($stub=='Create')
-      <form method="post" action="{{route($app->module.'.store')}}" enctype="multipart/form-data">
-      @else
-      <form method="post" action="{{route($app->module.'.update',$obj->id)}}" enctype="multipart/form-data">
-      @endif  
+      
       <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-4">
       <div class="form-group">
         <label for="formGroupExampleInput ">{{ ucfirst($app->module)}} Name</label>
         <input type="text" class="form-control" name="name" id="formGroupExampleInput" 
@@ -31,7 +35,7 @@
           >
       </div>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-4">
       <div class="form-group">
         <label for="formGroupExampleInput ">{{ ucfirst($app->module)}} Slug</label>
         <input type="text" class="form-control" name="slug" id="formGroupExampleInput" 
@@ -42,6 +46,18 @@
             @endif
           >
       </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="form-group">
+              <label for="formGroupExampleInput ">Client</label>
+              <select class="form-control" name="client_slug">
+                <option value="prep" @if(isset($obj)) @if($obj->client_slug==="prep") selected @endif @endif>Prep</option>
+                @foreach($clients as $client)
+                <option value="{{$client->slug}}" @if(isset($obj)) @if($obj->client_slug===$client->slug) selected @endif @endif >{{$client->slug}}</option>
+                @endforeach
+              </select>
+            </div>
       </div>
 
       </div>
@@ -179,8 +195,9 @@
         <input type="hidden" name="id" value="{{ $obj->id }}">
       @endif
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-       <button type="submit" class="btn btn-info">Save</button>
-    </form>
+       <button type="submit" class="btn btn-primary btn-lg">Save</button>
+    
     </div>
   </div>
+  </form>
 @endsection

@@ -92,9 +92,15 @@ class ProductController extends Controller
             flash('Product Pages Cache Updated')->success();
         }
             
+        if(subdomain()=='prep')
         $objs = $obj->sortable()->where('name','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));  
+        else
+        $objs = $obj->sortable()->where('name','LIKE',"%{$item}%")
+                    ->where('client_slug',subdomain())
+                    ->orderBy('created_at','desc')
+                    ->paginate(config('global.no_of_records'));    
         
         $view = $search ? 'list': 'index';
 
@@ -365,6 +371,9 @@ class ProductController extends Controller
     public function show($id)
     {
         $obj = Obj::where('id',$id)->first();
+        if(subdomain()!='prep' && $obj->client_slug!=subdomain()){
+            abort(403,'Unauthorized Access');
+        }
         $this->authorize('view', $obj);
         $settings = json_decode($obj->settings);
         if($obj)

@@ -5,11 +5,12 @@
             <thead>
               <tr>
                 <th scope="col">#({{$objs->total()}})</th>
-                <th scope="col">Code </th>
-                <th scope="col">Usage</th>
-                <th scope="col">Client</th>
+                <th scope="col">Transaction </th>
+                <th scope="col">Client </th>
+                <th scope="col">Payment mode</th>
+                <th scope="col">Credits</th>
                 <th scope="col">Status</th>
-                <th scope="col">Created at</th>
+                <th scope="col">Created </th>
               </tr>
             </thead>
             <tbody>
@@ -17,20 +18,21 @@
               <tr>
                 <th scope="row">{{ $objs->currentpage() ? ($objs->currentpage()-1) * $objs->perpage() + ( $key + 1) : $key+1 }}</th>
                 <td>
+                  TA{{$obj->id}}
+               
+                   </td>
+               
+                <td>
                   <a href=" {{ route($app->module.'.show',$obj->id) }} ">
-                  {{ $obj->code }}
+                  {{ $obj->client_slug }}
                   </a>
                 </td>
                 <td>
-                <a href="{{ route('order.index')}}?coupon={{$obj->code}}">
-                  @if(isset($orders[$obj->code]))
-                 {{ count($orders[$obj->code]) }}
-                 @else
-                 0
-                 @endif
-                </a>
+               {{$obj->payment_mode}}
                 </td>
-                <td><a href="{{ route('coupon.index')}}?client_slug={{$obj->client_slug}}">{{ $obj->client_slug}}</a></td>
+                <td>
+                  {{$obj->credit}}
+                </td>
                 <td>
                   @if($obj->status==0)
                     <span class="badge badge-danger">Used</span>

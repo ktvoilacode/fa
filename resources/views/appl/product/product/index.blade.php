@@ -6,7 +6,7 @@
   <ol class="breadcrumb border bg-light">
     <li class="breadcrumb-item"><a href="{{ url('/home')}}">Home</a></li>
     <li class="breadcrumb-item"><a href="{{ url('/admin')}}">Admin</a></li>
-    <li class="breadcrumb-item">{{ ucfirst($app->module) }}</li>
+    <li class="breadcrumb-item">Test Packs</li>
   </ol>
 </nav>
 
@@ -18,20 +18,21 @@
     <div class="card mb-3 mb-md-0">
       <div class="card-body mb-0">
         <nav class="navbar navbar-light bg-light justify-content-between border mb-3">
-          <a class="navbar-brand"><i class="fa fa-bars"></i> {{ ucfirst($app->module) }} </a>
+          <a class="navbar-brand"><i class="fa fa-bars"></i> Test Packs </a>
           
 
           <form class="form-inline" method="GET" action="{{ route($app->module.'.index') }}">
 
-            <a href="{{route($app->module.'.index')}}?refresh=1">
-              <button type="button" class="btn btn-outline-secondary my-2 my-sm-2 mr-sm-3">Refresh Cache</button>
-            </a>
+            
             <a href="{{route($app->module.'.upload')}}">
               <button type="button" class="btn btn-outline-secondary my-2 my-sm-2 mr-sm-3">Attach</button>
             </a>
             @can('create',$obj)
+            <a href="{{route($app->module.'.index')}}?refresh=1">
+              <button type="button" class="btn btn-outline-secondary my-2 my-sm-2 mr-sm-3">Refresh Cache</button>
+            </a>
             <a href="{{route($app->module.'.create')}}">
-              <button type="button" class="btn btn-outline-success my-2 my-sm-2 mr-sm-3">Create {{ ucfirst($app->module) }}</button>
+              <button type="button" class="btn btn-outline-success my-2 my-sm-2 mr-sm-3">Create Test Pack</button>
             </a>
             @endcan
             <div class="input-group ">

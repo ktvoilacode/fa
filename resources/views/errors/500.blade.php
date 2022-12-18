@@ -1,7 +1,7 @@
 
 
 @extends('layouts.cover')
-@section('title', 'Server Error | First Academy')
+@section('title', 'Server Error ')
 @section('content')
 
 <div class=" p-3">

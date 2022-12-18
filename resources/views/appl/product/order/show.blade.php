@@ -20,9 +20,11 @@
       <div class="card bg-light mb-3">
         <div class="card-body text-secondary">
           <p class="h2 mb-0"><i class="fa fa-th "></i> {{ $obj->order_id }} 
+            @if(\auth::user()->admin==1)
             <a href="{{ route('order.edit',$obj->id) }}">
               <button class="btn btn-primary float-right">Edit</button>
             </a>
+            @endif
           </p>
         </div>
       </div>
@@ -72,7 +74,7 @@
             </div>
           </div>
           <div class="row mb-2">
-            <div class="col-md-4"><b>Bank Name  </b></div>
+            <div class="col-md-4"><b>Ref Name / Client  </b></div>
             <div class="col-md-8">
                 {{ $obj->bank_name }}
             </div>

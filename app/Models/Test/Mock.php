@@ -15,6 +15,7 @@ class Mock extends Model
         't2',
         't3',
         't4',
+        'client_slug',
         'status',
         'settings',
         // add all other fields

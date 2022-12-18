@@ -29,7 +29,7 @@ class CouponPolicy
      */
     public function create(User $user)
     { 
-        if($user->admin==1)
+        if($user->admin==1 || $user->admin==5)
         return true;
     }
 

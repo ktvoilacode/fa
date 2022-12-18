@@ -107,16 +107,24 @@ class AdminController extends Controller
         $data['duolingo'] = $d2;
 
 
+        $data['balance']  = 0;
         if(subdomain()=='prep')
         $attempts = Cache::remember('att_users_'.$subdomain, 240, function(){
             return Attempt::where('user_id','!=',0)->orderBy('created_at','desc')->with('user')->with('test')->limit(100)->get();
         });
-        else
+        else{
+            $credits = Cache::get('credits_'.subdomain());
+            if($credits)
+            $data['balance'] = $credits['unused'];
             $attempts = [];
+        }
 
-        $data['duo_orders'] = Order::where('product_id',43)->orderBy('created_at','desc')->get();
+        if(subdomain()=='prep'){
+            $data['duo_orders'] = [];//Order::where('product_id',43)->orderBy('created_at','desc')->get();
         $data['new'] = User::where('admin','0')->orderBy('lastlogin_at','desc')->limit(5)->get();
         $data['form'] = Form::orderBy('id','desc')->limit(5)->get();
+        }
+        
 
         $latest = [];$count=0;
         foreach($attempts as $a){

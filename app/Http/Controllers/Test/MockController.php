@@ -10,6 +10,8 @@ use App\Models\Test\Attempt;
 use App\Models\Test\Test;
 use App\Models\Product\Order;
 use Illuminate\Support\Facades\Cache;
+
+use App\Models\Product\Client;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -33,9 +35,16 @@ class MockController extends Controller
     {
         $search = $request->search;
         $item = $request->item;
-        $objs = $obj->where('name','LIKE',"%{$item}%")
+        if(subdomain()=='prep')
+            $objs = $obj->where('name','LIKE',"%{$item}%")
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records'));  
+        else
+            $objs = $obj->where('name','LIKE',"%{$item}%")
+                    ->where('client_slug',subdomain())
+                    ->orderBy('created_at','desc')
+                    ->paginate(config('global.no_of_records'));  
+
         $attempts = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->get()->groupBy('mock_id'); 
         $attempts_review = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',-1)->get()->groupBy('mock_id'); 
         $attempts_completed = Mock_Attempt::whereIn('mock_id',$objs->pluck('id')->toArray())->where('status',1)->get()->groupBy('mock_id'); 
@@ -51,6 +60,29 @@ class MockController extends Controller
                 ->with('app',$this);
     }
 
+    /** Mock History **/
+    public function history(Request $request)
+    {
+        if(subdomain()!='prep')
+        $mocks = Obj::where('client_slug',subdomain())->get()->keyBy('id');
+        else
+            $mocks = Obj::get()->keyBy('id');
+        $mockids = $mocks->pluck('id');
+      
+
+        $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
+                ->with('user')
+                 ->paginate(config('global.no_of_records'));  
+        
+        $view = 'history';
+        return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
+                ->with('objs',$objs)
+                ->with('mocks',$mocks)
+                ->with('app',$this);
+
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -59,10 +91,12 @@ class MockController extends Controller
     public function create()
     {
         $obj = new Obj();
+        $clients = Client::get();
         $this->authorize('create', $obj);
 
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
+                ->with('clients',$clients)
                 ->with('obj',$obj)
                 ->with('editor',true)
                 ->with('app',$this);
@@ -126,19 +160,28 @@ class MockController extends Controller
     public function show($id)
     {
         $obj = Obj::where('id',$id)->first();
+
+        if(subdomain()!=$obj->client_slug && subdomain()!='prep')
+            abort(403,'Unauthorized Access');
+
         $this->authorize('view', $obj);
         $attempts = Mock_Attempt::where('mock_id',$obj->id)->with('user')->get();
-        $t = $obj->t3;
-        $t3= Cache::remember('mtest_'.$obj->t3,60, function() use($t){
+        $attempt_test = [];
+        if($obj->t3){
+            $t = $obj->t3;
+            $t3= Cache::remember('mtest_'.$obj->t3,60, function() use($t){
                 return Test::where('slug',$t)->first();
               });
-        $t = $obj->t4;
-        $t4 = Cache::remember('mtest_'.$obj->t4,60, function() use($t){
-                return Test::where('slug',$t)->first();
-              });
-
-        $attempt_test[$t3->id] = Attempt::where('test_id',$t3->id)->get();
-        $attempt_test[$t4->id] = Attempt::where('test_id',$t4->id)->get();
+            $attempt_test[$t3->id] = Attempt::where('test_id',$t3->id)->get();
+        }
+       
+       if($obj->t4){
+            $t = $obj->t4;
+            $t4 = Cache::remember('mtest_'.$obj->t4,60, function() use($t){
+                    return Test::where('slug',$t)->first();
+                  });
+            $attempt_test[$t4->id] = Attempt::where('test_id',$t4->id)->get();
+       }
 
         if(request()->get('validate'))
         foreach($attempts as $attempt){
@@ -209,6 +252,17 @@ class MockController extends Controller
             $attempt->status =0;
         }
 
+        if($attempt->t1==-1){
+            $test = Test::where('slug',$obj->t1)->first();
+            $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
+            
+            if($attempt_done->sum('status') == $attempt_done->count('id')){
+                $attempt->t1 = 1;
+                $attempt->t1_score = $attempt_done->sum('score');
+                $attempt->save();
+            }
+        }
+
         if($attempt->t3==-1){
             $test = Test::where('slug',$obj->t3)->first();
             $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
@@ -255,32 +309,39 @@ class MockController extends Controller
         $t3slug = $obj->t3;
         if(request()->get('refresh'))
             Cache::forget('t3_'.$obj->t3.'_'.$user->id);
+        $comments = [];
 
-        $comments['t3'] =Cache::remember('t3_'.$obj->t3.'_'.$user->id, 60, function() use($t3slug,$user){
-            $t3= Test::where('slug',$t3slug)->first();
-           
-            $com = Attempt::where('test_id',$t3->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
-            foreach($com as $c){
-                if($c->comment !='')
-                    return $c;
-            }
-        });
+        if($obj->t3){
+            $comments['t3'] =Cache::remember('t3_'.$obj->t3.'_'.$user->id, 60, function() use($t3slug,$user){
+                $t3= Test::where('slug',$t3slug)->first();
+               
+                $com = Attempt::where('test_id',$t3->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
+                foreach($com as $c){
+                    if($c->comment !='')
+                        return $c;
+                }
+            });
+        }
+        
+        if($obj->t4){
+            $t4slug = $obj->t4;
+            if(request()->get('refresh'))
+                Cache::forget('t4_'.$obj->t4.'_'.$user->id);
 
-        $t4slug = $obj->t4;
-        if(request()->get('refresh'))
-            Cache::forget('t4_'.$obj->t4.'_'.$user->id);
+            $comments['t4'] =Cache::remember('t4_'.$obj->t4.'_'.$user->id, 60, function() use($t4slug,$user){
+                $t4= Test::where('slug',$t4slug)->first();
+                $com = Attempt::where('test_id',$t4->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
+                foreach($com as $c){
+                    if($c->comment !='')
+                        return $c;
+                }
+               
+            });
 
-        $comments['t4'] =Cache::remember('t4_'.$obj->t4.'_'.$user->id, 60, function() use($t4slug,$user){
-            $t4= Test::where('slug',$t4slug)->first();
-            $com = Attempt::where('test_id',$t4->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
-            foreach($com as $c){
-                if($c->comment !='')
-                    return $c;
-            }
-           
-        });
-
-      
+        }
+        
+        if(!$obj->products->first())
+            abort(403,'Product has not been attached');
 
 
         if($obj)
@@ -322,15 +383,15 @@ class MockController extends Controller
                 session()->put('current_test', $obj->t1);
                 $url = route('test.instructions',$obj->t1)."?grantaccess=1&mock=1";
                 return redirect()->to($url);
-            }else if(!$attempt->t2){
+            }else if(!$attempt->t2 && $attempt->t2!=-2){
                 session()->put('current_test', $obj->t2);
                 $url = route('test.instructions',$obj->t2)."?grantaccess=1&mock=1";
                 return redirect()->to($url);
-            }else if(!$attempt->t3){
+            }else if(!$attempt->t3 && $attempt->t3!=-2){
                 session()->put('current_test', $obj->t3);
                 $url = route('test.instructions',$obj->t3)."?grantaccess=1&mock=1";
                 return redirect()->to($url);
-            }else if(!$attempt->t4){
+            }else if(!$attempt->t4 && $attempt->t4!=-2){
                 session()->put('current_test', $obj->t4);
                 $url = route('test.instructions',$obj->t4)."?grantaccess=1&mock=1";
                 return redirect()->to($url);
@@ -362,6 +423,21 @@ class MockController extends Controller
         if($test_slug == $obj->t1){
             $attempt->t1 = 1;
             $attempt->t1_score = $score;
+            
+
+            if(!$obj->t2){
+                $attempt->t2 = -2;
+                $attempt->t3 = -2;
+                $attempt->t4 = -2;
+                if($attempt_done->sum('status')==$attempt_done->count('id')){
+                    $attempt->t1 = 1;
+                    $attempt->status =1;
+                }else{
+                    $attempt->t1 = -1;
+                    $attempt->status =-1;
+                }
+                
+            }
         }else if($test_slug == $obj->t2){
             $attempt->t2 = 1;
             $attempt->t2_score = $score;
@@ -397,6 +473,7 @@ class MockController extends Controller
     public function edit($id)
     {
         $obj= Obj::where('id',$id)->first();
+        $clients = Client::get();
 
         $settings = json_decode($obj->settings);
         $this->authorize('update', $obj);
@@ -406,6 +483,7 @@ class MockController extends Controller
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Update')
                 ->with('obj',$obj)
+                ->with('clients',$clients)
                 ->with('settings',$settings)
                 ->with('editor',true)
                 ->with('app',$this);
@@ -482,16 +560,25 @@ class MockController extends Controller
             $t1 = Test::where('slug',$obj->t1)->first();
             Attempt::where('user_id',$user_id)->where('test_id',$t1->id)->delete();
 
-            $t2 = Test::where('slug',$obj->t2)->first();
-           
-            Attempt::where('user_id',$user_id)->where('test_id',$t2->id)->delete();
+            if($obj->t2){
+                $t2 = Test::where('slug',$obj->t2)->first();
+                Attempt::where('user_id',$user_id)->where('test_id',$t2->id)->delete();
+            }
+            
 
-            $t3 = Test::where('slug',$obj->t3)->first();
-            Attempt::where('user_id',$user_id)->where('test_id',$t3->id)->delete();
+            if($obj->t3){
 
-            $t4 = Test::where('slug',$obj->t4)->first();
-            Attempt::where('user_id',$user_id)->where('test_id',$t4->id)->delete();
+                $t3 = Test::where('slug',$obj->t3)->first();
+                Attempt::where('user_id',$user_id)->where('test_id',$t3->id)->delete();
+            }
 
+            if($obj->t4){
+                $t4 = Test::where('slug',$obj->t4)->first();
+                Attempt::where('user_id',$user_id)->where('test_id',$t4->id)->delete();
+
+            }
+
+            
             Mock_Attempt::where('mock_id',$obj->id)->where('user_id',$user_id)->delete();
 
             flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();

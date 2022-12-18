@@ -4,7 +4,9 @@ namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product\Product;
+use App\Models\Product\Credit;
 use App\Models\Test\Test;
+use Illuminate\Support\Facades\Cache;
 
 class Order extends Model
 {
@@ -19,6 +21,7 @@ class Order extends Model
         'bank_txn_id',
         'bank_name',
         'txn_amount',
+        'txn_value',
         'details',
         'expiry',
         'status',
@@ -70,13 +73,16 @@ class Order extends Model
             if(!$user)
                 $user = \auth::user();
             
+            $value  = null;
             if($product_id){
               $product = Product::where('id',$product_id)->first();
               $validity = $product->validity;
+              $value  = $product->price;
             }
             else
               $product = null;
 
+         
             if($test_id){
               $test = Test::where('id',$test_id)->first();
               $validity = $test->validity;
@@ -96,10 +102,9 @@ class Order extends Model
                   break;
               }
 
-
-
               $order->user_id = $user->id;
               $order->txn_amount = 0;
+              $order->txn_value= $value;
               $order->status=1;
               $order->txn_id = '';
               $order->payment_mode = 'COUPON';
@@ -118,9 +123,6 @@ class Order extends Model
                     $order->txn_id = $coupon;
                 }
                 
-                
-              
-
               //product check
             if($product_id){
               $p_check = Order::where('user_id',$user->id)->where('product_id',$product_id)->orderBy('created_at','desc')->first();
@@ -155,11 +157,22 @@ class Order extends Model
               $valid_till = date('Y-m-d H:i:s', strtotime(date("Y-m-d H:i:s") .' + '.($validity*31).' days'));
               $order->expiry = $valid_till;
               
+              
+              
+                
 
-
-                   //dd($order);
               if(!$p_check && !$t_check)
               $order->save();
+
+            if(subdomain()!='prep'){
+                $credits['total'] = Credit::where('client_slug',subdomain())->sum('credit');
+                $pids = Product::where('client_slug',subdomain())->pluck('id')->toArray();
+                $credits['used'] = Order::whereIn('product_id',$pids)->sum('txn_value');
+                $credits['unused'] =  $credits['total'] - $credits['used'];
+                Cache::forever('credits_'.subdomain(),$credits);
+              }
+              
+
               return 1;
 
           

@@ -25,6 +25,23 @@
 
                 <a href="{{ route('user.index')}}"><button class="btn btn-outline-light btn-sm mt-3">view all</button></a>
             </div>
+
+            @if(subdomain()!='prep')
+            <div class="bg- text-light rounded p-4 mb-4" style="background: #ff9800;">
+                <h5><i class="fa fa-rupee"></i> Credit Balance 
+                    @if($data['balance']>-10000)
+                    <span class="badge badge-success float-right">Site: Active</span>
+                    @else
+                    <span class="badge badge-danger float-right">Site: Frozen</span>
+                    @endif
+
+                </h5>
+                <div class="h1 mb-0">{{ $data['balance']}}</div>
+                <div class=""></div>
+            </div>
+
+            @endif
+
              @if(subdomain()=='prep')
             <div class="bg-secondary text-light rounded p-4 mb-4">
                 <h3 class="mb-0"><i class="fa fa-file-o"></i> Writing <span class="badge badge-warning">new</span> <Span class="float-right ">{{ count($data['writing']) }}</Span></h3>
@@ -141,7 +158,7 @@
             <div class="border bg-white p-3 rounded mb-3 mr-2">
                 <div>
                     <img src="{{ asset('images/admin/products.png') }}" class="w-100 mb-3" >
-                    <div class="text-center">Products</div>
+                    <div class="text-center">Test Packs</div>
                 </div>
             </div>
             </a>
@@ -160,8 +177,18 @@
         @endif
 
         @if(\auth::user()->admin==5)
+         <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('mock.index') }}">
+            <div class="border bg-white p-4 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/exam_mock.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Mocks</div>
+                </div>
+            </div>
+            </a>
+        </div>
         <div class="col-4 col-md-3 col-lg-2">
-            <a href="{{ route('order.index') }}">
+            <a href="{{ route('mhistory') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
                 <div>
                     <img src="{{ asset('images/admin/menu.png') }}" class="w-100 mb-3" >
@@ -170,6 +197,17 @@
             </div>
             </a>
         </div>
+         <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('file.index') }}?type=writing">
+            <div class="border bg-white p-4 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/verify.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Evaluations</div>
+                </div>
+            </div>
+            </a>
+        </div>
+         
         <div class="col-4 col-md-3 col-lg-2">
             <a href="{{ route('order.index') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
@@ -185,6 +223,16 @@
 
         @if(\auth::user()->admin!=4)
         
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('credit.index') }}">
+            <div class="border bg-white p-4 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/rupee_.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Credits</div>
+                </div>
+            </div>
+            </a>
+        </div>
         <div class="col-4 col-md-3 col-lg-2">
             <a href="{{ route('user.index') }}">
             <div class="border bg-white p-3 rounded mb-3 mr-2">
@@ -202,6 +250,26 @@
                 <div>
                     <img src="{{ asset('images/admin/email.png') }}" class="w-100 mb-3" >
                     <div class="text-center">Forms</div>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('mhistory') }}">
+            <div class="border bg-white p-3 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/menu.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Test History</div>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('mock.index') }}">
+            <div class="border bg-white p-4 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/exam_mock.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Mocks</div>
                 </div>
             </div>
             </a>
@@ -253,26 +321,8 @@
             </div>
             </a>
         </div>
-        <div class="col-4 col-md-3 col-lg-2">
-            <a href="{{ route('mock.index') }}">
-            <div class="border bg-white p-4 rounded mb-3 mr-2">
-                <div>
-                    <img src="{{ asset('images/admin/exam_mock.png') }}" class="w-100 mb-3" >
-                    <div class="text-center">Mocks</div>
-                </div>
-            </div>
-            </a>
-        </div>
-        <div class="col-4 col-md-3 col-lg-2">
-            <a href="{{ route('blog.index') }}">
-            <div class="border bg-white p-4 rounded mb-3 mr-2">
-                <div>
-                    <img src="{{ asset('images/admin/blog.png') }}" class="w-100 mb-3" >
-                    <div class="text-center">Blog</div>
-                </div>
-            </div>
-            </a>
-        </div>
+       
+        
         @endif
 
         @if(\auth::user()->admin==4 ||\auth::user()->admin==1)

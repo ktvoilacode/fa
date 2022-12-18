@@ -4,28 +4,23 @@ namespace App\Http\Controllers\Product;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Product\Coupon as Obj;
-use App\Models\Product\Product;
+use App\Models\Product\Credit as Obj;
 use App\Models\Product\Order;
-use App\Models\Test\Test;
-use App\Models\Test\Attempt;
+use App\Models\Product\Product;
 use Illuminate\Support\Facades\Cache;
 
-use App\Exports\ScoreExport;
-use Maatwebsite\Excel\Facades\Excel;
-
-class CouponController extends Controller
+class CreditController extends Controller
 {
     /*
-        Coupon Controller
+        Credit Controller
     */
 
     public function __construct(){
         $this->app      =   'product';
-        $this->module   =   'coupon';
+        $this->module   =   'credit';
     }
 
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -38,26 +33,33 @@ class CouponController extends Controller
         $item = $request->item;
         $client_list = Cache::get('client_list');
         $client_slug = request()->get('client_slug');
-        
-        if(subdomain()!='prep')
-        $objs = $obj->where('code','LIKE',"%{$item}%")->where('client_slug',subdomain())
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));   
-        else
-        $objs = $obj->where('code','LIKE',"%{$item}%")
+        $credits = array("total"=>0,"used"=>0,"unused"=>0);
+        if(subdomain()!='prep'){
+            $objs = $obj->where('client_slug',subdomain())
                     ->orderBy('created_at','desc')
                     ->paginate(config('global.no_of_records')); 
+            $credits['total'] = Obj::where('client_slug',subdomain())->sum('credit');
+            $pids = Product::where('client_slug',subdomain())->pluck('id')->toArray();
+            $credits['used'] = Order::whereIn('product_id',$pids)->sum('txn_value');
+            $credits['unused'] =  $credits['total'] - $credits['used'];
+            Cache::forever('credits_'.subdomain(),$credits);
+        }
+        else{
+            $objs = $obj->orderBy('created_at','desc')
+                    ->paginate(config('global.no_of_records'));  
+        }
 
-        $obj_codes = $objs->pluck('code')->toArray();
-        $orders = Order::whereIn('txn_id',$obj_codes)->get()->groupBy('txn_id');
 
+        
+
+        
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
                 ->with('client_list',$client_list)
                 ->with('client_slug',$client_slug)
-                ->with('orders',$orders)
+                ->with('credits',$credits)
                 ->with('obj',$obj)
                 ->with('app',$this);
     }
@@ -71,24 +73,14 @@ class CouponController extends Controller
     {
         $obj = new Obj();
         $this->authorize('create', $obj);
-
         $client_list = Cache::get('client_list');
-
         $client_slug = request()->get('client_slug');
-
-        $products  = Product::where('status',1)->where('client_slug',$client_slug)->get();
-        $tests  = Test::where('status',1)->where('client_slug',$client_slug)->get();
-
-        $obj->code = strtoupper(\str_random(5));
-        $obj->expiry = date("Y-m-d H:i:s",strtotime("+6 month"));
 
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
                 ->with('obj',$obj)
                 ->with('editor',true)
-                ->with('products',$products)
                 ->with('client_list',$client_list)
-                ->with('tests',$tests)
                 ->with('app',$this);
     }
 
@@ -105,21 +97,13 @@ class CouponController extends Controller
             /* create a new entry */
             $obj = $obj->create($request->except(['products']));
 
-            // attach the products
-            $products = $request->get('products');
-            if($products)
-            foreach($products as $product){
-                $obj->products()->attach($product);
-            }
+            $credits['total'] = Obj::where('client_slug',subdomain())->sum('credit');
+            $pids = Product::where('client_slug',subdomain())->pluck('id')->toArray();
+            $credits['used'] = Order::whereIn('product_id',$pids)->sum('txn_value');
+            $credits['unused'] =  $credits['total'] - $credits['used'];
+            Cache::forever('credits_'.subdomain(),$credits);
 
-            // attach the test
-            $tests = $request->get('tests');
-            if($tests)
-            foreach($tests as $test){
-                $obj->tests()->attach($test);
-            }
-
-            flash('A new ('.$this->app.'/'.$this->module.') item is created!')->success();
+            flash('Successfully added credits')->success();
             return redirect()->route($this->module.'.index');
         }
         catch (QueryException $e){
@@ -131,53 +115,6 @@ class CouponController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function try()
-    {
-        return view('appl.product.coupon.try');
-    }
-
-    public function use()
-    {
-        $code = request()->get('code');
-
-        if(!$code)
-            abort('403','Coupon code cannot be empty');
-
-
-        $client_slug = $request->session()->get('client')->slug;
-        $coupon = Obj::where('code',$code)->where('client_slug',$client_slug)->first();
-         
-
-        if($coupon->status==0){
-            abort('403','Coupon code expired');
-        }else if(\carbon\Carbon::parse($coupon->expiry)->lte(\carbon\Carbon::now())){
-                 abort('403','Coupon code expired');
-        }
-
-        if($coupon->enrolled==1 ){
-            if(\auth::user()->enrolled!=1)
-                abort('403','This coupon can only be used by enrolled students');
-        }
-
-        $order = new Order();
-        foreach($coupon->products as $p){
-            $order->coupon($p->id,null,$coupon);
-        }
-
-        foreach($coupon->tests as $t){
-            $order->coupon(null,$t->id,$coupon);
-        }
-        //dd($coupon->tests);
-  
-        flash('Successfully activated products/tests')->success();
-        return redirect()->route('home');
-    }
 
     /**
      * Display the specified resource.
@@ -269,28 +206,7 @@ class CouponController extends Controller
 
 
             $this->authorize('update', $obj);
-            
-            // attach the tags
-            $products = $request->get('products');
-            if($products){
-                $obj->products()->detach();
-                foreach($products as $product){
-                $obj->products()->attach($product);
-                }
-            }else{
-                $obj->products()->detach();
-            }
-
-            // attach the tags
-            $tests = $request->get('tests');
-            if($tests){
-                $obj->tests()->detach();
-                foreach($tests as $test){
-                $obj->tests()->attach($test);
-                }
-            }else{
-                $obj->tests()->detach();
-            }
+           
 
             $obj = $obj->update($request->except(['products'])); 
 

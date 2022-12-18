@@ -86,7 +86,7 @@ function random_color() {
 if (! function_exists('lmband')) {
     function lmband($score) {
        
-        if($score>19 && $score <=2040)
+        if($score>19 && $score <=20)
             $band = 9;
         else if($score>17 && $score <=19)
             $band = 8.5;

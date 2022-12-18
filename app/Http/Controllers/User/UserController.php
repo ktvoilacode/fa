@@ -343,6 +343,13 @@ class UserController extends Controller
     {
         $obj = Obj::where('id',$id)->with('orders')->first();
 
+        $user = \auth::user();
+
+
+        if(subdomain()!='prep'){
+            if($user->client_slug!=$obj->client_slug)
+                abort(403,'Unauthorized Access');
+        }
         if($request->get('resend_email')){
             $obj['password_string'] = $obj->auto_password;
             Mail::to($obj->email)->send(new usercreate($obj));

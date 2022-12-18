@@ -125,11 +125,12 @@ class OrderController extends Controller
 
             $user = \auth::user();
            
-
+            $value = null;
             if($request->get('product_id')){
               $product = Product::where('id',$request->get('product_id'))->first();
               $validity = $product->validity;
               $purpose = $product->name;
+              $value = $product->price;
             }
             else
               $product = null;
@@ -173,8 +174,10 @@ class OrderController extends Controller
 
               $order->user_id = $user->id;
               $order->txn_amount = $request->txn_amount;
+              $order->txn_value= $value;
               $valid_till = date('Y-m-d H:i:s', strtotime(date("Y-m-d H:i:s") .' + '.($validity*31).' days'));
               $order->expiry = $valid_till;
+              $order->bank_name = subdomain();
               $order->status=0;
               $order->product_id = $request->get('product_id');
               $order->test_id = $request->get('test_id');
@@ -208,9 +211,11 @@ class OrderController extends Controller
             $user = \auth::user();
            
 
+            $value=null;
             if($request->get('product_id')){
               $product = Product::where('id',$request->get('product_id'))->first();
               $validity = $product->validity;
+              $value = $product->price;
             }
             else
               $product = null;
@@ -299,6 +304,8 @@ class OrderController extends Controller
 
               $order->user_id = $user->id;
               $order->txn_amount = 0;
+              $order->txn_value= $value;
+              $order->bank_name = subdomain();
               $order->status=1;
               $order->txn_id = '';
               if($request->get('coupon') == 'FREE')
@@ -354,22 +361,51 @@ class OrderController extends Controller
         $search = $request->search;
         $item = $request->item;
         
-        if($request->get('coupon'))
-        {
-          $coupon = strtoupper($request->get('coupon'));
-          $objs = $obj->where('txn_id',$coupon)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records')); 
-        }else if($request->get('product_id')){
-             $objs = $obj->where('product_id',$request->get('product_id'))
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records')); 
+        if(subdomain()=='prep'){
+             if($request->get('coupon'))
+            {
+              $coupon = strtoupper($request->get('coupon'));
+              $objs = $obj->where('txn_id',$coupon)
+              ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->paginate(10); 
+            }else if($request->get('product_id')){
+                 $objs = $obj->where('product_id',$request->get('product_id'))
+                 ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->paginate(10); 
+            }
+            else{
+                $objs = $obj->where('order_id','LIKE',"%{$item}%")
+                ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->paginate(10); 
+            }
+        }else{
+             if($request->get('coupon'))
+            {
+              $coupon = strtoupper($request->get('coupon'));
+              $objs = $obj->where('txn_id',$coupon)
+                        ->where('bank_name',subdomain())
+                        ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->paginate(10); 
+            }else if($request->get('product_id')){
+                 $objs = $obj->where('product_id',$request->get('product_id'))
+                        ->where('bank_name',subdomain())
+                        ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->paginate(10); 
+            }
+            else{
+                $objs = $obj->where('order_id','LIKE',"%{$item}%")
+                        ->where('bank_name',subdomain())
+                        ->with('user')
+                        ->orderBy('created_at','desc')
+                        ->paginate(10); 
+            }
         }
-        else{
-            $objs = $obj->where('order_id','LIKE',"%{$item}%")
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records')); 
-        }
+       
 
 
           
@@ -429,7 +465,11 @@ class OrderController extends Controller
      */
     public function show($id)
     {
+
         $obj = Obj::where('id',$id)->first();
+        if(subdomain()!='prep' && $obj->bank_name!=subdomain()){
+            abort('403','Unauthorized Access');
+        }
         $this->authorize('view', $obj);
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')

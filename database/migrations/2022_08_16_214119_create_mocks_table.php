@@ -22,6 +22,7 @@ class CreateMocksTable extends Migration
             $table->string('t2')->nullable();
             $table->string('t3')->nullable();
             $table->string('t4')->nullable();
+            $table->string('client_slug')->nullable();
             $table->integer('status');
             $table->longText('settings')->nullable();
             $table->timestamps();

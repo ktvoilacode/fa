@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Policies\Test;
+namespace App\Policies\Product;
 
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class MockPolicy
+class CreditPolicy
 {
     use HandlesAuthorization;
 
-    /**
+     /**
      * Create a new policy instance.
      *
      * @return void
@@ -29,7 +29,7 @@ class MockPolicy
      */
     public function create(User $user)
     { 
-        if($user->admin==1)
+        if($user->admin==1 || $user->admin==5)
         return true;
     }
 

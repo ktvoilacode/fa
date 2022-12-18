@@ -99,6 +99,7 @@
           </div>
           @endif
 
+          @if(subdomain()=='prep')
           @if(count($obj->tests))
           <div class="row mb-2">
             <div class="col-md-4"><b>Tests</b></div>
@@ -110,6 +111,7 @@
               @endforeach
             </div>
           </div>
+          @endif
           @endif
           <div class="row mb-2">
             <div class="col-md-4"><b>Status</b></div>
@@ -139,7 +141,7 @@
       </div>
 
 
-      <h3>Recent Product Orders</h3>
+      <h3>Recent Product Orders <a href="{{ route('order.index')}}?product_id={{$obj->id}}">(view all)</a></h3>
       <div class="table-responsive">
         <table class="table table-bordered">
           <tr>

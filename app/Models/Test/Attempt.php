@@ -317,18 +317,36 @@ class Attempt extends Model
                 if($request->get('mock'))
                 {
                     $mock = Mock::where('id',$request->get('mock'))->first();
+                    $t1 = Test::where('slug',$mock->t1)->first();
+                    $t2 = Test::where('slug',$mock->t2)->first();
                     $t3 = Test::where('slug',$mock->t3)->first();
                     $t4 = Test::where('slug',$mock->t4)->first();
 
                     $mattempt = Mock_Attempt::where('mock_id',$request->get('mock'))->where('user_id',$request->get('user_id'))->first();
 
                    
+                    if($t1)
+                    if($r->test_id == $t1->id){
+                        $mattempt->t1 = 1;
+                        $mattempt->t1_score = $r->score;
+                        $mattempt->save();
+                    }
+
+                    if($t2)
+                    if($r->test_id == $t2->id){
+                        $mattempt->t2 = 1;
+                        $mattempt->t2_score = $r->score;
+                        $mattempt->save();
+                    }
+
+                    if($t3)
                     if($r->test_id == $t3->id){
                         $mattempt->t3 = 1;
                         $mattempt->t3_score = $r->score;
                         $mattempt->save();
                     }
 
+                    if($t4)
                     if($r->test_id == $t4->id){
                         $mattempt->t4 = 1;
                         $mattempt->t4_score = $r->score;
@@ -339,19 +357,16 @@ class Attempt extends Model
                         $mattempt->status =1;
                         $mattempt->save();
                     }
+
+                    if(!$mock->t2){
+                        $mattempt->status =1;
+                        $mattempt->save();
+                    }
                  
                     
                 }
-
-
               
             }
-
-
-
-        
-
-
 
     }
 

@@ -47,6 +47,12 @@
               <a href="{{ route('mockpage',$obj->slug) }}" target="_blank">{{ $obj->slug }}</a>
             </div>
           </div>
+          <div class="row mb-2">
+            <div class="col-md-4"><b>Client</b></div>
+            <div class="col-md-8">
+              {{ $obj->client_slug }}
+            </div>
+          </div>
 
           <div class="row mb-2">
             <div class="col-md-4"><b>Description</b></div>
@@ -60,10 +66,14 @@
           <div class="row mb-2">
             <div class="col-md-4"><b>Tests</b></div>
             <div class="col-md-8">
+              @if(!$obj->t2)
+                {{$obj->t1}}
+              @else
                 Test 1 - {{$obj->t1}}<br>
                 Test 2 - {{$obj->t2}}<br>
                 Test 3 - {{$obj->t3}}<br>
                 Test 4 - {{$obj->t4}}<br>
+              @endif
             </div>
           </div>
          
@@ -94,10 +104,13 @@
             <th scope="col">#</th>
             <th scope="col">User</th>
             <th scope="col">T1</th>
+            @if($obj->t2)
             <th scope="col">T2</th>
             <th scope="col">T3</th>
             <th scope="col">T4</th>
-            <th scope="col">Score / Band</th>
+            @endif
+            <th scope="col">Score / Status</th>
+            <th scope="col">Timestamp</th>
             <th scope="col">Details</th>
           </tr>
         </thead>
@@ -110,16 +123,21 @@
               @if($a->t1==1)
                 {{lmband($a->t1_score)}}
               @elseif($a->t1==-1)
+              <a href="{{ route('test.analysis',$obj->t1)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
+              </a>
               @else
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
             </td>
+            @if($obj->t2)
             <td>
               @if($a->t2==1)
                 {{rmband($a->t2_score)}}
               @elseif($a->t2==-1)
+              <a href="{{ route('test.analysis',$obj->t2)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
+              </a>
               @else
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
@@ -150,6 +168,7 @@
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
             </td>
+            @endif
             <td>
               @if($a->status==1)
                 <span class="badge badge-success">{{
@@ -161,9 +180,10 @@
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
             </td>
+             <td> {{ ($a->created_at) ? $a->created_at->diffForHumans() : '' }}</td>
             <td>
-                <a href="{{ route('mockpage',$obj->slug)}}?user_id={{$a->user_id}}" class="btn btn-outline-primary mr-3 btn-sm" >View Report</a>
-                <a href="#" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModal_{{$a->id}}" data-tooltip="tooltip" data-placement="top" title="Delete" >Delete Attempt</a>
+                <a href="{{ route('mockpage',$obj->slug)}}?user_id={{$a->user_id}}" class="btn btn-outline-primary mr-2 btn-sm" >View </a>
+                <a href="#" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModal_{{$a->id}}" data-tooltip="tooltip" data-placement="top" title="Delete" >Delete </a>
             
 
                 <!-- Modal -->

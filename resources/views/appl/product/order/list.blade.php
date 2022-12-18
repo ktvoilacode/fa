@@ -10,7 +10,7 @@
                 <th scope="col">Product/Tests</th>
                 <th scope="col">Type</th>
                 <th scope="col">Status</th>
-                <th scope="col">Created At</th>
+                <th scope="col">Created </th>
               </tr>
             </thead>
             <tbody>

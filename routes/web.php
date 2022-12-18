@@ -147,6 +147,7 @@ Route::get('/test/{test}/analytics','Test\TestController@analytics')->name('test
 Route::get('/test/{test}/solutions','Test\AttemptController@solutions')->middleware('auth')->name('test.solutions');
 Route::get('/test/{test}/answers','Test\AttemptController@view')->middleware('auth')->name('test.answers');
 
+Route::get('/admin/mock/history','Test\MockController@history')->name('mhistory');
 Route::resource('/admin/mock', 'Test\MockController')->middleware('auth');
 Route::get('/mock/{mock}','Test\MockController@public')->name('mockpage');
 Route::get('/mock/{mock}/start','Test\MockController@start')->name('mockpage.start');
@@ -158,6 +159,7 @@ Route::post('/admin/product/upload', 'Product\ProductController@upload')->middle
 Route::resource('/admin/product', 'Product\ProductController')->middleware('auth');
 
 Route::resource('/admin/coupon', 'Product\CouponController')->middleware('auth');
+Route::resource('/admin/credit', 'Product\CreditController')->middleware('auth');
 Route::resource('/admin/order', 'Product\OrderController')->middleware('auth');
 Route::resource('/admin/client', 'Product\ClientController')->middleware('auth');
 Route::get('/orders', 'Product\OrderController@myorders')->middleware('auth')->name('myorders');

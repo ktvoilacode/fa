@@ -40,6 +40,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\Product\Product::class => \App\Policies\Product\ProductPolicy::class,
         \App\Models\Product\Order::class => \App\Policies\Product\OrderPolicy::class,
         \App\Models\Product\Coupon::class => \App\Policies\Product\CouponPolicy::class,
+        \App\Models\Product\Credit::class => \App\Policies\Product\CreditPolicy::class,
         \App\Models\Product\Client::class => \App\Policies\Product\ClientPolicy::class,
 
          \App\Models\Admin\Form::class => \App\Policies\Admin\FormPolicy::class,

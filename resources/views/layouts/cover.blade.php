@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Online Test engine for GRE, IELTS, TOEFL, PTE and OTE by First Academy">
+    <meta name="description" content="">
     <meta name="author" content="Krishna Teja G S">
-    <title>First Academy Online Tests for GRE, IELTS, TOEFL, PTE, OTE</title>
+    <title>@yield('title')</title>
 
    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
    <link href="{{ asset('css/cover.css') }}" rel="stylesheet">

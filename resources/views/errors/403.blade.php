@@ -1,7 +1,7 @@
 
 
 @extends('layouts.cover')
-@section('title', 'Disclaimer | First Academy')
+@section('title', '403 Error')
 @section('content')
 
 <div class=" p-3">

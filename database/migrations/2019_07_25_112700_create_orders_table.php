@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->string('bank_txn_id')->nullable();
             $table->string('bank_name')->nullable();
             $table->integer('txn_amount');
+            $table->integer('txn_value')->nullable();
             $table->longText('details')->nullable();
             $table->integer('status'); 
             $table->timestamps();

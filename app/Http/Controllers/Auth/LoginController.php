@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -84,11 +85,25 @@ class LoginController extends Controller
         if($user->admin==1)
             return redirect()->intended($this->redirectPath());
         */
+
+        $credits['unused'] =10000; 
+        if(subdomain()!='prep'){
+             $credits = Cache::get('credits_'.subdomain());
+             if($credits['unused']<-10000 && \auth::user()->admin!=5){
+                auth()->logout();
+                return back()->with('warning', 'Your website is frozen. Kindly contact the administrator for the access.');
+             }
+
+        }
+       
+        
         
         if ($user->status==0) {
             auth()->logout();
             return back()->with('warning', 'Your account is in blocked state. Kindly contact the administrator for the access.');
         }
+
+
 
         if(session('link'))
             return redirect(session('link')); 
