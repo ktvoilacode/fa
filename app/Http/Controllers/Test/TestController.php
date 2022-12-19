@@ -1076,6 +1076,8 @@ class TestController extends Controller
         $categories = Category::where('status',1)->get();
         $groups = Group::where('status',1)->orderBy('id','desc')->get();
         $settings = json_decode($obj->settings);
+        $client_list = Cache::get('client_list');
+
 
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.createedit')
@@ -1083,6 +1085,7 @@ class TestController extends Controller
                 ->with('obj',$obj)
                 ->with('editor',true)
                 ->with('types',$types)
+                ->with('client_list',$client_list)
                 ->with('categories',$categories)
                 ->with('settings',$settings)
                 ->with('groups',$groups)

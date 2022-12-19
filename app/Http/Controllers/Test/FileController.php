@@ -82,7 +82,9 @@ class FileController extends Controller
             {
 
                 $tests = [];
-                $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
+                $attempt_ids = Writing::where('user_id',\auth::user()->id)->where('client_slug',subdomain())->pluck('attempt_id');
+
+
                 $objs = Obj2::whereIn('id',$attempt_ids)->paginate(30);
 
 
@@ -96,7 +98,7 @@ class FileController extends Controller
                                       ->paginate(100);
                                      
                 }elseif($item){
-                        $users = User::where('name','like','%'.$item.'%')->get();
+                        $users = User::where('name','like','%'.$item.'%')->where('client_slug',subdomain())->get();
                         $uids = $users->pluck('id')->toArray();
                         $objs = $obj2->whereIn('user_id',$uids)
                                 ->with('user')
@@ -113,6 +115,7 @@ class FileController extends Controller
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
 
                               return  $obj2->whereIn('test_id',$tests)
+
                                       ->orderBy('created_at','desc')
                                       ->paginate(30);
                                     });

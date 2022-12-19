@@ -27,7 +27,7 @@
 
 
       <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
           <div class="form-group">
             <label for="formGroupExampleInput ">{{ ucfirst($app->module)}} Name</label>
             <input type="text" class="form-control" name="name" id="formGroupExampleInput" placeholder="Enter the Name" 
@@ -39,7 +39,7 @@
               >
           </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
           <div class="form-group">
             <label for="formGroupExampleInput ">Slug <i class="fa fa-info-circle" data-toggle="tooltip" title="A slug is the part of a URL which identifies a particular page on a website in an easy to read form. Example - https://example.com/slug"></i></label>
             <input type="text" class="form-control" name="slug" id="formGroupExampleInput" placeholder="Enter the unique identifier" 
@@ -50,6 +50,19 @@
                 @endif
               >
           </div>
+        </div>
+         <div class="col-12 col-md-4">
+          <div class="form-group">
+              <label for="formGroupExampleInput ">Client</label>
+              <select class="form-control" name="client_slug">
+                <option value="prep" @if(isset($obj)) @if($obj->client_slug==="prep") selected @endif @endif>Prep</option>
+                @foreach($client_list as $client)
+                <option value="{{$client->slug}}" @if(isset($obj)) @if($obj->client_slug===$client->slug) selected @endif @endif >{{$client->slug}}</option>
+                @endforeach
+              </select>
+            </div>
+
+
         </div>
       </div>
 
@@ -332,8 +345,6 @@
         <input type="hidden" name="id" value="{{ $obj->id }}">
       @endif
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        
-        <input type="hidden" name="client_slug" value="{{ subdomain() }}">
        <button type="submit" class="btn btn-primary btn-lg">Save</button>
     </form>
     </div>
