@@ -283,6 +283,7 @@ class TestController extends Controller
         $types = Type::all();
         $categories = Category::where('status',1)->get();
         $groups = Group::where('status',1)->orderBy('id','desc')->get();
+         $client_list = Cache::get('client_list');
 
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
@@ -290,6 +291,7 @@ class TestController extends Controller
                 ->with('editor',true)
                 ->with('types',$types)
                 ->with('categories',$categories)
+                ->with('client_list',$client_list)
                 ->with('groups',$groups)
                 ->with('app',$this);
     }
