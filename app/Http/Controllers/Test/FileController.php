@@ -82,7 +82,7 @@ class FileController extends Controller
             {
 
                 $tests = [];
-                $attempt_ids = Writing::where('user_id',\auth::user()->id)->where('client_slug',subdomain())->pluck('attempt_id');
+                $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
 
 
                 $objs = Obj2::whereIn('id',$attempt_ids)->paginate(30);
