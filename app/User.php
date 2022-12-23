@@ -414,8 +414,10 @@ class User extends Authenticatable
                     "8"=> array("name"=>"Very good user ","value"=>"Has full operational command of the language except in a few unfamiliar situations. Occasional unsystematic inaccuracies. Complex and detailed argumentation handled well."),
                     "9"=> array("name"=>"Expert user","value"=>"Shows complete understanding of English. Uses language appropriately and with fluency and accuracy. Full operational command. ")
                     );
-
-        return $bands[$score];
+        if(isset($bands[$score]))
+            return $bands[$score];
+        else 
+            return "-";
     }
 
 
