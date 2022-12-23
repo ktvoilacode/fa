@@ -90,7 +90,7 @@
           
           <div class="row mb-2">
             <div class="col-md-4"><b>Response</b></div>
-            <div class="col-md-8"><div class="p-3 border mb-3 bg-light">{!! $obj->response !!}</div>
+            <div class="col-md-8"><div class="p-3 border mb-3 bg-light" style="white-space: pre-wrap;">{!! $obj->response !!}</div>
           <a href="{{route($app->module.'.download',[$obj->id])}}" >
                 <button type="button" class="btn btn btn-primary float-left mr-2 mb-2">Download Response PDF</button>
               </a>

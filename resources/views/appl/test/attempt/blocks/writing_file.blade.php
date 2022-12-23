@@ -31,7 +31,7 @@
 	@endif
 
 	<h4 class="mb-3 text-primary">Your Response </h4>
-	<div class="bg-light border rounded p-3 mb-3">
+	<div class="bg-light border rounded p-3 mb-3" style="white-space: pre-wrap;">
 	{!! $attempt->response !!}
 	</div>
 	
