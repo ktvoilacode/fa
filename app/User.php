@@ -417,7 +417,7 @@ class User extends Authenticatable
         if(isset($bands[$score]))
             return $bands[$score];
         else 
-            return "-";
+            return array("name"=>"","value"=>"");
     }
 
 
