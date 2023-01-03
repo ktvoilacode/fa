@@ -58,11 +58,13 @@
                   {{ $obj->phone }}
                 </td>
                 <td>
+                  @if(isset($referrals[$obj->user_id]))
                   @if($obj->user_id)
                     <span class="badge badge-success">{{ $referrals[$obj->user_id]->name }}</span>
                 
                   @else
                     <span class="badge badge-primary"> None</span>
+                  @endif
                   @endif
                 </td>
                 <td>{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</td>
