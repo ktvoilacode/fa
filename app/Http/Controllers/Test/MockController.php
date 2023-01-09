@@ -134,6 +134,11 @@ class MockController extends Controller
             else
                 $settings['testtype'] = null;
 
+            if($request->scoring)
+                $settings['scoring'] = $request->scoring;
+            else
+                $settings['scoring'] = null;
+
             $request->merge(['settings' => json_encode($settings)]);
             
             /* create a new entry */
@@ -160,6 +165,8 @@ class MockController extends Controller
     public function show($id)
     {
         $obj = Obj::where('id',$id)->first();
+
+        $settings = json_decode($obj->settings);
 
         if(subdomain()!=$obj->client_slug && subdomain()!='prep')
             abort(403,'Unauthorized Access');
@@ -222,7 +229,7 @@ class MockController extends Controller
         if($obj)
             return view('appl.'.$this->app.'.'.$this->module.'.show')
                     ->with('attempts',$attempts)
-                    
+                    ->with('settings',$settings)
                     ->with('obj',$obj)->with('app',$this);
         else
             abort(404);
@@ -520,6 +527,11 @@ class MockController extends Controller
                 $settings['noreport'] = 0;
             }elseif($request->noreport==2)
                 $settings['noreport'] = 2;
+
+            if($request->scoring)
+                $settings['scoring'] = $request->scoring;
+            else
+                $settings['scoring'] = null;
 
             if($request->testtype)
                 $settings['testtype'] = $request->testtype;

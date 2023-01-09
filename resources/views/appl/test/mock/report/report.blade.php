@@ -35,13 +35,39 @@
                   <div class="col-6 col-md-3">
                 <div class="rounded p-4 mb-3 mb-md-0" style="border:1px solid #84c39b;">
                   <h5> <b>Listening</b><br><small style="color:#40a264">Band Score</small></h5>
-                  <div class="display-4">{{lmband($attempt->t1_score)}}</div>
+                  <div class="display-4">
+                    @if(isset($settings['scoring']))
+                      @if($settings['scoring']=='academic')
+                      {{lband($attempt->t1_score)}}
+                      @elseif($settings['scoring']=='general')
+                        {{lband($attempt->t1_score)}}
+                      @elseif($settings['scoring']=='mini')
+                        {{lmband($attempt->t1_score)}}
+                      @else
+                        {{ $attempt->t1_score }}
+                      @endif
+                    @endif
+
+
+                     </div>
                 </div>
               </div>
               <div class="col-6 col-md-3">
                 <div class="rounded p-4" style="border:1px solid #84c39b;">
                   <h5> <b>Reading</b><br><small style="color:#40a264">Band Score</small></h5>
-                  <div class="display-4">{{rmband($attempt->t2_score)}}</div>
+                  <div class="display-4">
+                    @if(isset($settings['scoring']))
+                      @if($settings['scoring']=='academic')
+                      {{raband($attempt->t2_score)}}
+                      @elseif($settings['scoring']=='general')
+                        {{rgband($attempt->t2_score)}}
+                      @elseif($settings['scoring']=='mini')
+                        {{rmband($attempt->t2_score)}}
+                      @else
+                        {{ $attempt->t2_score }}
+                      @endif
+                    @endif
+                  </div>
                 </div>
               </div>
               <div class="col-6 col-md-3">
@@ -67,7 +93,13 @@
               <div class=" col-12 col-md-3">
                  <div class=" rounded p-4" style="background: #b2e6c5;border:1px solid #a2ddb8;">
                   <h5> <b>Overall</b><br><small style="color:#40a264">Band Score</small></h5>
-                  <div class="display-4">{{ overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score)}} </div>
+                  <div class="display-4">
+                     @if(isset($settings['scoring']))
+                      {{ overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score,$settings['scoring'])}} 
+                    @else
+                      {{ overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score)}} 
+                    @endif
+                  </div>
                 </div>
               </div>
               

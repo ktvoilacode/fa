@@ -121,7 +121,15 @@
             <td>{{$a->user->name}}</td>
             <td>
               @if($a->t1==1)
-                {{lmband($a->t1_score)}}
+                @if(isset($settings->scoring))
+                  @if($settings->scoring=='academic' || $settings->scoring=='general')
+                    {{lband($a->t1_score)}}
+                  @elseif($settings->scoring=='mini')
+                    {{lmband($a->t1_score)}}
+                  @else
+                    {{$a->t1_score}}
+                  @endif
+                @endif
               @elseif($a->t1==-1)
               <a href="{{ route('test.analysis',$obj->t1)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
@@ -133,7 +141,17 @@
             @if($obj->t2)
             <td>
               @if($a->t2==1)
-                {{rmband($a->t2_score)}}
+                @if(isset($settings->scoring))
+                  @if($settings->scoring=='academic')
+                  {{raband($a->t2_score)}}
+                  @elseif($settings->scoring=='general')
+                    {{rgband($a->t2_score)}}
+                  @elseif($settings->scoring=='mini')
+                    {{rmband($a->t2_score)}}
+                  @else
+                    {{ $a->t2_score }}
+                  @endif
+                @endif
               @elseif($a->t2==-1)
               <a href="{{ route('test.analysis',$obj->t2)}}?user_id={{$a->user_id}}&admin=1&mock={{$obj->id}}" target="_blank">
                 <span class="badge badge-warning">Under Review</span>
@@ -171,9 +189,13 @@
             @endif
             <td>
               @if($a->status==1)
-                <span class="badge badge-success">{{
-                    overallband($a->t1_score,$a->t2_score,$a->t3_score,$a->t4_score)
-                }}</span>
+                <span class="badge badge-success">
+                   @if(isset($settings->scoring))
+                   {{ overallband($a->t1_score,$a->t2_score,$a->t3_score,$a->t4_score,$settings->scoring) }}
+                  @else
+                     {{ overallband($a->t1_score,$a->t2_score,$a->t3_score,$a->t4_score) }}
+                  @endif
+                </span>
               @elseif($a->status==-1)
                 <span class="badge badge-primary">Evaluation Pending</span>
               @else

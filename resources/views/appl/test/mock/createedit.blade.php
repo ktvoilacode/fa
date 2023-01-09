@@ -186,6 +186,17 @@
               >
           </div>
         </div>
+         <div class="col-12 col-md-3">
+          <div class="form-group">
+            <label for="formGroupExampleInput ">Scoring</label>
+            <select class="form-control" name="scoring">
+              <option value="default" @if(isset($settings->scoring)) @if($settings->scoring=="default") selected @endif @endif >Default</option>
+              <option value="mini" @if(isset($settings->scoring)) @if($settings->scoring=="mini") selected @endif @endif >Mini</option>
+              <option value="academic" @if(isset($settings->scoring)) @if($settings->scoring=="academic") selected @endif @endif >Academic</option>
+              <option value="general" @if(isset($settings->scoring)) @if($settings->scoring=="general") selected @endif @endif >General</option>
+            </select>
+          </div>
+        </div>
       </div>
 
        

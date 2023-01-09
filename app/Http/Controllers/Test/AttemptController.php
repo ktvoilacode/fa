@@ -467,6 +467,9 @@ class AttemptController extends Controller
       $price = $product->price;
     }
     
+    if($test->status==0){
+      abort(403,'Test is inactive');
+    }
     $user = null;
     if(\auth::user()){
       $user = \auth::user();
