@@ -441,14 +441,12 @@ function domain() {
         $parsed = parse_url($url);
         $exploded = explode('.', $parsed["host"]);
         $domain = $exploded[1];
-        
      }
      else{
          $parsed = parse_url($url);
         $exploded = explode('.', $parsed["host"]);
         $domain = $exploded[0];
      }
-
 
     if($domain == 'gradable' || $domain== 'fa')
             $domain  = 'prep';

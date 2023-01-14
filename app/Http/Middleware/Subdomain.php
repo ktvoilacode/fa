@@ -18,7 +18,7 @@ class Subdomain
     public function handle($request, Closure $next)
     {
         $domain = request()->getHost();
-        if( $domain!='prep.firstacademy.in' && $domain!='fa.test' && $domain!='project.test' && $domain!='prep.packetprep.com' && $domain!= 'quiz.gradable.in' && $domain!= 'test.p24.in' ){
+        if( $domain!='prep.firstacademy.in' && $domain!='fa.test' && $domain!='project.test' && $domain!='prep.packetprep.com' && $domain!= 'gradable.in' && $domain!= 'test.p24.in' ){
              
              $client = Cache::remember('client_'.$domain,2400,function() use($domain){
                 return Client::where('domains','LIKE',"%{$domain}%")->first();
