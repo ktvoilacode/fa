@@ -58,7 +58,14 @@ class Subdomain
             }
 
             
-        }else{
+        }elseif($domain== 'gradable.in' || $domain== 'fa.test'){
+            $client = new client();
+            $client->slug = 'prep';
+            $client->name = 'Gradable';
+            $client->logo = url('/').'/images/gradable.png';
+            $request->session()->put('client',$client);
+        }
+        else{
             $client = new client();
             $client->slug = 'prep';
             $client->name = 'First Academy';
