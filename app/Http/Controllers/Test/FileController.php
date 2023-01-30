@@ -635,8 +635,8 @@ levels of training.');
         $this->authorize('update', $obj);
 
         // remove file
-        if(Storage::disk('public')->exists($obj->file))
-            Storage::disk('public')->delete($obj->file);
+        // if(Storage::disk('public')->exists($obj->file))
+        //     Storage::disk('public')->delete($obj->file);
 
         $obj->delete();
 

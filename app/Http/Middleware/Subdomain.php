@@ -37,15 +37,6 @@ class Subdomain
                     else{
                         $client->logo = url('/').'/images/gradable.png';
                     } 
-                        
-
-                        //$client = json_decode(file_get_contents($filename));
-                        // if(urlexists($logo_1))
-                        //     $client->logo = $logo_1;
-                        // elseif(urlexists($logo_2))
-                        //     $client->logo = $logo_2;
-                        // else
-                        //     $client->logo = $logo_3;
 
                         if($client->status==0)
                             abort(403,'Site is not published');
