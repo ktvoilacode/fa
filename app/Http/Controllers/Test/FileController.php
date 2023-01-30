@@ -102,6 +102,7 @@ class FileController extends Controller
                                      
                 }elseif($item){
                         $users = User::where('name','like','%'.$item.'%')->where('client_slug',subdomain())->get();
+                         $tests = Test::whereIn('type_id',[3])->where('client_slug',subdomain())->pluck('id');
                         $uids = $users->pluck('id')->toArray();
                         $objs = $obj2->whereIn('user_id',$uids)
                                 ->with('user')
