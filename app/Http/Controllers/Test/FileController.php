@@ -48,6 +48,9 @@ class FileController extends Controller
         $search = $request->search;
         $users = [];
 
+        if(!$request->get('type'))
+            $request->merge(['type'=>'writing']);
+
         $item = $request->item;
         if($request->get('type')=='speaking'){
             $tests = Test::whereIn('type_id',[4])->where('client_slug',subdomain())->pluck('id');
@@ -632,13 +635,16 @@ levels of training.');
     public function destroy($id)
     {
         $obj = Obj::where('id',$id)->first();
+
         $this->authorize('update', $obj);
+
 
         // remove file
         // if(Storage::disk('public')->exists($obj->file))
         //     Storage::disk('public')->delete($obj->file);
 
         $obj->delete();
+
 
         flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
         return redirect()->route($this->module.'.index');
