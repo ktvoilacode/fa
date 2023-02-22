@@ -185,7 +185,6 @@ class AdminController extends Controller
     {
 
 
-        try{
             
             if(isset($request->all()['file'])){
                 
@@ -232,15 +231,7 @@ class AdminController extends Controller
 
             }
 
-           
-        }
-        catch (QueryException $e){
-           $error_code = $e->errorInfo[1];
-            if($error_code == 1062){
-                $alert = 'Some error in updating the record';
-                return redirect()->back()->withInput()->with('alert',$alert);
-            }
-        }
+         
         
         
     }

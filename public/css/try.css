@@ -97,7 +97,7 @@
     /* Reading */
 .panel{ overflow:auto; min-height:200px; }
 .leftpanel{ background: #fffbe6; font-size:18px; }
-.leftpanel b{ color:#b3a454;font-size:18px; }
+.leftpanel b{ color:#b3a454; }
 .rightpanel{background: #fff;font-size:18px; }
 .heading-box{background: #f7f2d6; padding:20px;border:1px solid #e6e1c3;border-radius: 5px; }
 
