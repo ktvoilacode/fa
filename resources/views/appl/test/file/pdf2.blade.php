@@ -38,7 +38,7 @@
             .response{
             	font-family: Arial, Helvetica, sans-serif;
             	font-size:18px;
-            	line-height: 70px;
+            	line-height: 60px;
             }
             .question{
             	font-family: Arial, Helvetica, sans-serif;
@@ -62,7 +62,7 @@
             </div>
             @if(strlen(strip_tags($obj->test->description))>0)
 			<div class="question"><h4>Question</h4>
-			{!!  $obj->test->description  !!}
+			{!!  preg_replace("/<p[^>]*><\\/p[^>]*>/", '', $obj->test->description)  !!}
 			</div>
 			<hr>
 			@endif
