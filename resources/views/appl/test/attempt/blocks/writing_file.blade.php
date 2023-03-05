@@ -1,6 +1,10 @@
 
 
-<div class="rounded p-4 mb-4" style="">
+<div class="pt-3">
+        <a href="/home" class="ml-4 mb-4 "><i class="fa fa-angle-left"></i> back to dashboard</a>
+      </div>
+      <hr>
+<div class="rounded p-4 mb-2" style="">
 	@if($attempt->answer)
 	<div class="alert alert-success alert-important mb-4 border border-success">
 	<h5>Your evaluation is ready!  </h5>

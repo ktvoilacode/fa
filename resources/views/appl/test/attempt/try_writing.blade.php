@@ -145,8 +145,8 @@
       <div  style="margin: 5px auto;max-width: 900px;">
         @include('appl.test.attempt.blocks.writing_file')
 
-        <div class="py-4">
-        <a href="/home" class="ml-4 mb-4">back to dashbaord</a>
+        <div class="py-2">
+        <a href="/home" class="ml-4 mb-4 btn btn-primary ">back to dashboard</a>
       </div>
       </div>
 
