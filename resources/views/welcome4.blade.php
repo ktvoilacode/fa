@@ -18,7 +18,7 @@
 
     @guest
     <a href="{{ route('register')}}">
-    <button class="btn  btn-light  btn-lg p-2 pr-4 pl-4" style="color: #71bce2;font-weight: 900;"><b>Regsiter for Free</b></button>
+    <button class="btn  btn-light  btn-lg p-2 pr-4 pl-4" style="color: #71bce2;font-weight: 900;"><b>Register for Free</b></button>
     </a>
     <a href="{{ route('login')}}">
     <button class="btn   btn-lg p-2 pr-4 pl-4 ml-1" style="color: #fff;font-weight: 900;background: #377392;"><b class="text-white">Login</b></button>
