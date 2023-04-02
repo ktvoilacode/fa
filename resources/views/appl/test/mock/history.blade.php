@@ -56,7 +56,7 @@
               @elseif($mocks[$obj->mock_id]->status==-1)
                 <span class="badge badge-primary">Evaluation Pending</span>
               @else
-                <span class="badge badge-secondary">Not Attempted</span>
+                <span class="badge badge-info">Not Completed</span>
               @endif
               </td>
                <td>{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</td>
