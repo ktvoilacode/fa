@@ -68,12 +68,33 @@ class MockController extends Controller
         else
             $mocks = Obj::get()->keyBy('id');
         $mockids = $mocks->pluck('id');
-      
+        
+        $filter = $request->get('filter');
 
-        $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
+        if($filter=='notcompleted')
+            $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
                 ->with('user')
                 ->orderBy('id','desc')
+                ->where('status',0)
                  ->paginate(config('global.no_of_records'));  
+        elseif($filter=='pending')
+            $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
+                ->with('user')
+                ->orderBy('id','desc')
+                ->where('status',-1)
+                 ->paginate(config('global.no_of_records')); 
+        elseif($filter=='evaluated')
+            $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
+                ->with('user')
+                ->orderBy('id','desc')
+                ->where('status',1)
+                 ->paginate(config('global.no_of_records')); 
+        else
+            $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
+                ->with('user')
+                ->orderBy('id','desc')
+                 ->paginate(config('global.no_of_records')); 
+
         
         $view = 'history';
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)

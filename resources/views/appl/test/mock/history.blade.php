@@ -20,9 +20,17 @@
         <nav class="navbar navbar-light bg-light justify-content-between border mb-3">
           <a class="navbar-brand"><i class="fa fa-bars"></i> Test History </a>
 
-          
-        </nav>
 
+        </nav>
+        <div class="mb-3">
+          Filter: 
+          <a href="{{ route('mhistory') }}"><span class="badge badge-secondary">All</span></a>
+          <a href="{{ route('mhistory') }}?filter=pending"><span class="badge badge-primary">Evaluation Pending</span></a>
+          <a href="{{ route('mhistory') }}?filter=notcompleted">
+          <span class="badge " style="background: pink;">Not completed</span></a>
+          <a href="{{ route('mhistory') }}?filter=evaluated">
+          <span class="badge badge-success" style="">Evaluated</span></a>
+        </div>
         <div id="search-items">
         
  @if($objs->total()!=0)
@@ -49,14 +57,14 @@
                <td>{{$obj->user->name}}</td>
                <td>{{$mocks[$obj->mock_id]->client_slug}}</td>
                <td>
-                @if($mocks[$obj->mock_id]->status==1)
-                <span class="badge badge-success">
+              @if($obj->status==1)
+              <span class="badge badge-success">
                    Evaluated
                 </span>
-              @elseif($mocks[$obj->mock_id]->status==-1)
+              @elseif($obj->status==-1)
                 <span class="badge badge-primary">Evaluation Pending</span>
               @else
-                <span class="badge badge-danger">Not Completed</span>
+                <span class="badge " style="background-color: pink;">Not Completed</span>
               @endif
               </td>
                <td>{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</td>
