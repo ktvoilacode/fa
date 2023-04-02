@@ -72,6 +72,7 @@ class MockController extends Controller
 
         $objs = Mock_Attempt::whereIn('mock_id',$mockids->toArray())
                 ->with('user')
+                ->orderBy('id','desc')
                  ->paginate(config('global.no_of_records'));  
         
         $view = 'history';
@@ -172,7 +173,7 @@ class MockController extends Controller
             abort(403,'Unauthorized Access');
 
         $this->authorize('view', $obj);
-        $attempts = Mock_Attempt::where('mock_id',$obj->id)->with('user')->get();
+        $attempts = Mock_Attempt::where('mock_id',$obj->id)->with('user')->orderBy('id','desc')->get();
         $attempt_test = [];
         if($obj->t3){
             $t = $obj->t3;

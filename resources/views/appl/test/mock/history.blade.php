@@ -34,6 +34,7 @@
                 <th scope="col">Test </th>
                 <th scope="col">User </th>
                 <th scope="col">Client </th>
+                <th scope="col">Status </th>
                 <th scope="col">Created </th>
                 
               </tr>
@@ -43,12 +44,22 @@
               <tr>
                 <td scope="row">{{ $objs->currentpage() ? ($objs->currentpage()-1) * $objs->perpage() + ( $key + 1) : $key+1 }}</td>
                 <td>
-                  {{ $mocks[$obj->mock_id]->name }}
+                  <a href="{{ route('mock.show',$obj->mock_id) }}">{{ $mocks[$obj->mock_id]->name }}</a>
                 </td>
                <td>{{$obj->user->name}}</td>
                <td>{{$mocks[$obj->mock_id]->client_slug}}</td>
-                <td>{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</td>
-             
+               <td>
+                @if($mocks[$obj->mock_id]->status==1)
+                <span class="badge badge-success">
+                   Evaluated
+                </span>
+              @elseif($mocks[$obj->mock_id]->status==-1)
+                <span class="badge badge-primary">Evaluation Pending</span>
+              @else
+                <span class="badge badge-secondary">Not Attempted</span>
+              @endif
+              </td>
+               <td>{{ ($obj->created_at) ? $obj->created_at->diffForHumans() : '' }}</td>
               </tr>
               @endforeach      
             </tbody>

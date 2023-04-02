@@ -183,6 +183,7 @@
                 <span class="badge badge-warning">Under Review</span>
               </a>
               @else
+              
                 <span class="badge badge-secondary">Not Attempted</span>
               @endif
             </td>
