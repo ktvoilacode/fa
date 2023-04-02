@@ -18,6 +18,8 @@ use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Test\Mock;
+use App\Models\Test\Mock_Attempt;
 
 class AdminController extends Controller
 {
@@ -121,8 +123,10 @@ class AdminController extends Controller
 
         if(subdomain()=='prep'){
             $data['duo_orders'] = [];//Order::where('product_id',43)->orderBy('created_at','desc')->get();
-        $data['new'] = User::where('admin','0')->orderBy('lastlogin_at','desc')->limit(5)->get();
-        $data['form'] = Form::orderBy('id','desc')->limit(5)->get();
+            $data['new'] = User::where('admin','0')->orderBy('lastlogin_at','desc')->limit(5)->get();
+            $data['form'] = Form::orderBy('id','desc')->limit(5)->get();
+            $data['mock_attempts'] = Mock_Attempt::where('status','=',0)->get();
+            $data['mocks'] = Mock::select('id','name')->whereIn('id',$data['mock_attempts']->pluck('mock_id')->toArray())->get()->keyBy('id');
         }
         
 
@@ -130,11 +134,9 @@ class AdminController extends Controller
         foreach($attempts as $a){
             if(!in_array($a->test_id, $test_ids))
             if(!isset($latest[$a->test_id.$a->user_id])){
-              
                   $latest[$a->test_id.$a->user_id]['user']= $a->user;
                   $latest[$a->test_id.$a->user_id]['test'] = $a->test;
                   $latest[$a->test_id.$a->user_id]['attempt'] = $a;
-
                 $count++;
                 
             }
@@ -158,6 +160,8 @@ class AdminController extends Controller
             if($user->admin==4)
                 $view = 'appl.admin.bfs.index_trainer';
         }
+
+
 
         // if(subdomain()!='prep')
         //     $view = 'appl.admin.admin.client';

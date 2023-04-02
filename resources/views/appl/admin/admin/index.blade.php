@@ -59,6 +59,30 @@
             </div>
 
 
+            <div class="text-light rounded p-4 mb-4 " style="background: #795548;">
+                <h3 class="mb-0"><i class="fa fa-twitter"></i> Mocks  <Span class="float-right ">{{ count($data['mock_attempts']) }}</Span></h3>
+                @if(count($data['mock_attempts']))
+                <hr class="{{$counter=0}}">
+                @foreach($data['mock_attempts'] as $k=>$w)
+                @if(isset($w->user))
+                <div class="mb-1 {{$counter = $counter +1}}">
+                    <a href="{{ route('mock.show',$w->mock_id) }}"  class="text-white">
+                        {{$data['mocks'][$w->mock_id]->name}} </a><br>
+                    <span style="color:#a9867a">{{$w->user->name}}</span>
+                        
+                    <span class="float-right " style="color:#a9867a">{{ $w->created_at->diffForHumans()}}</span>
+                
+                </div>
+                @endif
+                @if($counter==3)
+                    @break
+                @endif
+                @endforeach
+
+                <a href="{{ route('mhistory') }}"><button class="btn btn-outline-light btn-sm mt-3">view list</button></a>   
+                @endif  
+            </div>
+
             <div class="text-light rounded p-4 mb-4 d-none" style="background: #795548;">
                 <h3 class="mb-0"><i class="fa fa-twitter"></i> Duo Orders  <Span class="float-right ">{{ count($data['duo_orders']) }}</Span></h3>
                 @if(count($data['duo_orders']))
