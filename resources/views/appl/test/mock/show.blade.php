@@ -200,7 +200,7 @@
               @elseif($a->status==-1)
                 <span class="badge badge-primary">Evaluation Pending</span>
               @else
-                <span class="badge badge-info" >Not Completed</span>
+                <span class="badge " style="background: pink;" >Not Completed</span>
               @endif
             </td>
              <td> {{ ($a->created_at) ? $a->created_at->diffForHumans() : '' }}</td>
