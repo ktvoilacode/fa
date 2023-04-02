@@ -125,7 +125,7 @@ class AdminController extends Controller
             $data['duo_orders'] = [];//Order::where('product_id',43)->orderBy('created_at','desc')->get();
             $data['new'] = User::where('admin','0')->orderBy('lastlogin_at','desc')->limit(5)->get();
             $data['form'] = Form::orderBy('id','desc')->limit(5)->get();
-            $data['mock_attempts'] = Mock_Attempt::where('status','=',0)->get();
+            $data['mock_attempts'] = Mock_Attempt::where('status','=',0)->orderBy('id','desc')->get();
             $data['mocks'] = Mock::select('id','name')->whereIn('id',$data['mock_attempts']->pluck('mock_id')->toArray())->get()->keyBy('id');
         }
         
