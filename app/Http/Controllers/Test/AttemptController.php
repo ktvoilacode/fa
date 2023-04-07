@@ -1956,6 +1956,7 @@ class AttemptController extends Controller
               ->with('user',$user)
               ->with('userid',$userid)
               ->with('try',1)
+              ->with('editor',1)
               ->with('points',$points)
               ->with('tags',$tags)
               ->with('secs',$secs)

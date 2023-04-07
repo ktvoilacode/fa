@@ -118,11 +118,19 @@
            <div class="row">
               <div class="col-12  col-md-2 text-center">
                 <h5>Band</h5>
-                <div class="display-4 mb-3">{{ overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score)}}</div>
+                <div class="display-4 mb-3">
+                   @if(isset($settings['scoring']))
+                      {{ $lband = overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score,$settings['scoring'])}} 
+                    @else
+                      {{ $lband = overallband($attempt->t1_score,$attempt->t2_score,$attempt->t3_score,$attempt->t4_score)}} 
+                    @endif
+                </div>
               </div>
               <div class="col-12  col-md-5">
-                  <h4>{{ \auth::user()->scoreExplained(round(($attempt->t1_score+$attempt->t2_score+$attempt->t3_score+$attempt->t4_score)/4,1))['name']}}</h4>
-                  <p>{{ \auth::user()->scoreExplained(round(($attempt->t1_score+$attempt->t2_score+$attempt->t3_score+$attempt->t4_score)/4,1))['value']}}</p>
+                  <h4>
+
+                    {{ \auth::user()->scoreExplained(round($lband,1))['name']}}</h4>
+                  <p>{{ \auth::user()->scoreExplained(round($lband,1))['value']}}</p>
               </div>
            </div>
         </div>
@@ -131,13 +139,13 @@
           @if(isset($comments['t3']->comment))
            <div class="my-1">
             <h5 class="text-primary">Writing</h5>
-           {{$comments['t3']->comment}}
+           {!! $comments['t3']->comment !!}
          </div>
            @endif
            @if(isset($comments['t4']->comment))
            <div class="my-1">
             <h5  class="text-primary">Speaking</h5>
-           {{$comments['t4']->comment}}
+           {!! $comments['t4']->comment !!}
          </div>
            @endif
         </div>
