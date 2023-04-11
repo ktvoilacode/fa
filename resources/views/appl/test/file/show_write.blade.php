@@ -123,12 +123,9 @@
                 <button type="button" class="btn  btn-success float-left mr-2">Download Feedback</button>
               </a>
               
-              <form method="post" action="{{route($app->module.'.update',[$obj->id])}}" class = "form-inline" role = "form">
-                 <input type="hidden" name="_method" value="PUT">
-                 <input type="hidden" name="deletefile" value="1">
-                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <button type="submit" class="btn btn-danger ml-2">Delete Feedback</button>
-              </form>
+              
+               <a href="#" class="btn btn-outline-secondary " data-toggle="modal" data-target="#exampleModal2" data-tooltip="tooltip" data-placement="top" title="Delete" > Delete Feedback</a>
+             
               @else
                <span class="text-muted"><i class="fa fa-exclamation-triangle"></i> file path not found </span>
               @endif
@@ -173,6 +170,34 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Feedback Deletion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This following action is permanent and it cannot be reverted.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+        <form method="post" action="{{route($app->module.'.update',[$obj->id])}}" class = "form-inline" role = "form">
+                 <input type="hidden" name="_method" value="PUT">
+                 <input type="hidden" name="deletefile" value="1">
+                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-danger ml-2">Delete Feedback</button>
+              </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 @endsection

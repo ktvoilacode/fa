@@ -303,7 +303,10 @@ class Attempt extends Model
                 $r->comment = $request->get('comments');
                 $r->dynamic = 1;
                 $r->status = 1;
-                $r->score = $request->get('direct_score');
+                $r->score = (float)$request->get('direct_score');
+               
+                if(!is_float($r->score))
+                    abort('403','Direct Score can be numeric value only');
                 
                 if(isset($data)){
                     foreach($data as $d=>$k){

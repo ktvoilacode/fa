@@ -223,7 +223,7 @@
 @if($test->testtype->name=='DUOLINGO' || $test->testtype->name=='WRITING')
 <div class="form-group mb-1 mt-4">
   <label for="exampleTextarea">Score (optional)</label>
-    <input class="form-control" name="direct_score" value="{{ $score }}" type="number"/>
+    <input class="form-control" name="direct_score" value="{{ $score }}" />
     <input class="form-control" type="hidden" name="mock"  value="{{request()->get('mock')}}"/>
      
    </div>
