@@ -3,7 +3,7 @@
 <h3 >Write your response in the textbox below.</h3>
 <div class="mb-4  mt-3 bg-light p-4 border">
 	
-	<textarea class="summernote2" name="response_2">
+	<textarea class="summernote2 formcontrol" name="response_2">
 		
 	</textarea>
 	<a href="#" class="btn btn-success btn-lg  mt-3" data-toggle="modal" data-target="#exampleModal2" data-tooltip="tooltip" data-placement="top" title="Delete" >Submit </a>

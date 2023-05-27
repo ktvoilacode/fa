@@ -26,8 +26,8 @@
             <span class="btn-group float-right" role="group" aria-label="Basic example">
               <a href="{{ route($app->module.'.edit',$obj->id) }}" class="btn btn-outline-secondary" data-tooltip="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i> edit</a>
               <a href="{{ route('product.view',$obj->slug)}}" class="btn btn-outline-secondary"  target="_blank"><i class="fa fa-eye"></i> view</a>
-              <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal2" data-tooltip="tooltip" data-placement="top" title="Duplicate" ><i class="fa fa-retweet"></i> duplicate</a>
-              <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i> delete</a>
+              <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" data-tooltip="tooltip" data-placement="top" title="Duplicate" ><i class="fa fa-retweet"></i> duplicate</a>
+              <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal2" data-tooltip="tooltip" data-placement="top" title="Delete" ><i class="fa fa-trash"></i> delete</a>
             </span>
             @endcan
           </p>
@@ -174,7 +174,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Duplicate Product</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -200,7 +200,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Duplicate Product</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -210,14 +210,18 @@
           <label for="exampleFormControlInput1">Name</label>
           <input type="text" class="form-control" id="exampleFormControlInput1" name="name" placeholder="Enter product name">
         </div>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Client</label>
+          <input type="text" class="form-control" id="exampleFormControlInput1" name="name" placeholder="Enter product name">
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         
         <form method="post" action="{{route($app->module.'.destroy',$obj->id)}}">
-        <input type="hidden" name="_method" value="DELETE">
+
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        	<button type="submit" class="btn btn-danger">Delete Permanently</button>
+        	<button type="submit" class="btn btn-danger">Delete PRoduct </button>
         </form>
       </div>
     </div>
