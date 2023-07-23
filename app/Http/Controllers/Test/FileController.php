@@ -81,15 +81,12 @@ class FileController extends Controller
         }else if($request->get('type')=='writing' || $request->get('writing')==1){
 
 
+
             if(\auth::user()->admin==4)
             {
-
                 $tests = [];
                 $attempt_ids = Writing::where('user_id',\auth::user()->id)->pluck('attempt_id');
-
-
                 $objs = Obj2::whereIn('id',$attempt_ids)->paginate(30);
-
 
             }
             else{
@@ -109,15 +106,16 @@ class FileController extends Controller
                                 ->orderBy('created_at','desc')
                                 ->whereIn('test_id',$tests)->paginate(30);
                 }else{
+
                     if(!Cache::get('files_'))
                         $tests = Test::whereIn('type_id',[3])->where('client_slug',subdomain())->pluck('id');
                         else
                             $tests = [];
 
+                        
 
                         if(!$request->get('page'))
                         $objs = Cache::remember('files_', 240, function() use($obj2,$tests){
-
                               return  $obj2->whereIn('test_id',$tests)
 
                                       ->orderBy('created_at','desc')
@@ -130,15 +128,28 @@ class FileController extends Controller
                                   ->orderBy('created_at','desc')
                                   ->paginate(30);
                         }
+
+                        if(request()->get('removeduplicates')){
+                             foreach($objs as $k=>$item){
+                            $objs[$k]->unique = $item->user_id.$item->test_id;
+                            }
+                            $items = $objs->groupBy('unique');
+                            foreach($items as $item){
+                                if(count($item)>1){
+                                    $item[0]->delete();
+                                    Cache::forget('files_');
+                                }
+                            }
+
+                            flash('Duplicates removed from this page')->success();
+                        }
+                       
                 }
                  
 
             }
 
             //$tests = Test::whereIn('type_id',[3])->pluck('id');
-
-
-
 
 
         }else{

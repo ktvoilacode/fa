@@ -1854,6 +1854,7 @@ class AttemptController extends Controller
 
       $score = 0;
       $review = false;
+   
       foreach($result as $r){
         if($r->accuracy==1)
           $score = $score + $r->score;
