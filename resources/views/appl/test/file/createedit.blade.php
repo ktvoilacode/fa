@@ -20,7 +20,7 @@
       @endif  
       <div class="form-group">
         <label for="formGroupExampleInput ">File</label>
-        <input type="text" class="form-control" name="name" value="{{ $obj->user->name}} response file" disabled 
+        <input type="text" class="form-control" name="name" value="{{ $obj->user->name}} - {{$obj->test->name}}" disabled 
           >
       </div>
       
