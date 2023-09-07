@@ -66,7 +66,7 @@
 			</div>
 			<hr>
 			@endif
-           <div class="">{!! $obj->response !!}</div>
+           <div class="">{!! nl2br($obj->response) !!}</div>
         </main>
         <div class="page-break"></div>
         <footer>

@@ -57,7 +57,7 @@
             </div>
 <div style="color:silver;">User Response:</div>
 
-           {!! $obj->response !!}
+           {!! nl2br($obj->response) !!}
 
 
         </main>

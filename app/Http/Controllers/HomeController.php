@@ -273,6 +273,8 @@ class HomeController extends Controller
                     $view = 'appl.admin.bfs.index_student';
             }
 
+            if(request()->segment(1)=='home2')
+                $view = 'appl.pages.home2';
 
             return view($view)
                     ->with('tests',$tests)

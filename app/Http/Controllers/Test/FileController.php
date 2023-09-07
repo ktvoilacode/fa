@@ -258,7 +258,22 @@ class FileController extends Controller
         $obj = Obj::where('id',$id)->first();
         $test = $obj->test;
         $user = $obj->user;
-        $name ='response_'.$test->slug.'_'.str_replace(' ', '',$user->name);
+        $prefix = $test->slug;
+        //naming
+        if (strpos($prefix, 'writing') !== false) {
+            $prefix = str_replace('writing','W',$prefix);
+        }
+        if (strpos($prefix, 'academic') !== false) {
+            $prefix = str_replace('academic','AC',$prefix);
+        }
+        if (strpos($prefix, 'general') !== false) {
+            $prefix = str_replace('general','GT',$prefix);
+        }
+        if (strpos($prefix, '-evaluation') !== false) {
+            $prefix = str_replace('-evaluation','',$prefix);
+        }
+       
+        $name =$prefix.'_'.str_replace(' ', '',$user->name);
 
         $info = pathinfo(Storage::url($obj->response));
 
