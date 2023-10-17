@@ -13,7 +13,7 @@
         <div class="row">
           <div class="col-12 col-md-6">
             <h3 class="text-center text-md-left mb-md-4 mt-2  p-4">
-              <i class="fa fa-bar-chart"></i> {{ $test->name}} - Report
+              <i class="fa fa-bar-chart"></i> {{ $test->name}} - Report 
 
               <br>
               @if(isset($admin))
@@ -74,6 +74,8 @@
             </h3>
 
           </div>
+          @if(json_decode($test->settings))
+          @if(!json_decode($test->settings)->noreport)
           <div class="col-12 col-md-6">
              <div class="text-center  mt-3 mb-3 mt-md-0 mb-md-0 float-md-right border bg-light p-3 rounded ">
               
@@ -97,13 +99,15 @@
                 
     
               @else
-                <div class="">Score </div>
+                
+                  <div class="">Score </div>
 
-                @if(!$review)
-                <div class="display-4">{{ $score }} / {{ $test->marks}} </div>
-                @else
-                <div class="h5 badge badge-warning mt-3">Under Review</div>
-                @endif
+                  @if(!$review)
+                  <div class="display-4">{{ $score }} / {{ $test->marks}} </div>
+                  @else
+                  <div class="h5 badge badge-warning mt-3">Under Review</div>
+                  @endif
+               
               @endif
             </div>
             @if($band)
@@ -120,6 +124,8 @@
             @endif
             @endif
           </div>
+           @endif
+          @endif
         </div>
 
 
@@ -170,6 +176,8 @@
         @endif
         @endif
 
+@if(json_decode($test->settings))
+@if(!json_decode($test->settings)->noreport)
 
        @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
        <form action="{{ url()->current() }}?evaluate=1&admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
@@ -217,6 +225,12 @@
       @endif
     </div>
   </div>
+@else
+<div class="bg-light p-3 rounded mt-3 "> Your responses are recorded for internal evaluation
+  </div>
+
+@endif
+@endif
 </div>
 
 @endsection
