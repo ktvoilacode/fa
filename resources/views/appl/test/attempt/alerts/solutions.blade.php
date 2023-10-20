@@ -76,55 +76,11 @@
           </div>
           @if(json_decode($test->settings))
           @if(!json_decode($test->settings)->noreport)
-          <div class="col-12 col-md-6">
-             <div class="text-center  mt-3 mb-3 mt-md-0 mb-md-0 float-md-right border bg-light p-3 rounded ">
-              
-              @if($test->testtype->name=='DUOLINGO')
-                <div class="">Score </div>
-                @if(!request()->get('session_id'))
-                  @if(is_numeric($score))
-                    <div class="display-4">{{ $user->duolingoRange($score) }}</div>
-                  @else
-                   <div class="h3 text-primary">{{ $user->duolingoRange($score) }}</div>
-                  @endif
-                @else
-                <div class="display-4">{{$score}}</div>
-                @endif
-              
-               @elseif($test->testtype->name=='WRITING')
-                <div class="">Score </div>
-                
-                <div class="display-4">{{$score}}</div>
-                
-                
-    
-              @else
-                
-                  <div class="">Score </div>
-
-                  @if(!$review)
-                  <div class="display-4">{{ $score }} / {{ $test->marks}} </div>
-                  @else
-                  <div class="h5 badge badge-warning mt-3">Under Review</div>
-                  @endif
-               
-              @endif
-            </div>
-            @if($band)
-            <div class="text-center  mt-3 mb-3 mt-md-0 mb-md-0 float-md-right border bg-light p-3 rounded mr-0 mr-md-4">
-              <div class="">&nbsp;&nbsp;&nbsp; Band &nbsp;&nbsp;&nbsp;</div>
-              <div class="display-4">{{ $band }} </div>
-            </div>
-            @elseif($points)
-            @if($test->testtype->name!='DUOLINGO')
-            <div class="text-center  mt-3 mb-3 mt-md-0 mb-md-0 float-md-right border bg-light p-3 rounded mr-0 mr-md-4">
-              <div class="">&nbsp;&nbsp;&nbsp; Points &nbsp;&nbsp;&nbsp;</div>
-              <div class="display-4">{{ $points }} </div>
-            </div>
-            @endif
-            @endif
-          </div>
+            @include('appl.test.attempt.alerts.scorecard')
            @endif
+          @else
+          @include('appl.test.attempt.alerts.scorecard')
+
           @endif
         </div>
 
@@ -176,13 +132,21 @@
         @endif
         @endif
 
-@if(json_decode($test->settings))
-@if(!json_decode($test->settings)->noreport)
+
 
        @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
        <form action="{{ url()->current() }}?evaluate=1&admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
-        @include('appl.test.attempt.blocks.solutions')
 
+        @if(json_decode($test->settings))
+          @if(!json_decode($test->settings)->noreport)
+            @include('appl.test.attempt.blocks.solutions')
+          @else
+          <div class="bg-light p-3 rounded mt-3 "> Your responses are recorded for internal evaluation
+            </div>
+          @endif
+        @else
+          @include('appl.test.attempt.blocks.solutions')
+        @endif
 
         @if(\auth::user())
           @if(\auth::user()->isAdmin() )
@@ -225,12 +189,7 @@
       @endif
     </div>
   </div>
-@else
-<div class="bg-light p-3 rounded mt-3 "> Your responses are recorded for internal evaluation
-  </div>
 
-@endif
-@endif
 </div>
 
 @endsection
