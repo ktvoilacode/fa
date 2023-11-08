@@ -32,6 +32,7 @@
                   </a>
                 </td>
                 <td>
+                 
                   @if($obj->answer || Storage::disk('public')->exists('feedback/feedback_'.$obj->id.'.pdf'))
                     <span class="badge badge-success">Reviewed</span>
                   @else

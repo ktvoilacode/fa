@@ -440,6 +440,7 @@ class AttemptController extends Controller
             ->with('product',$product)
             ->with('user',$user)
             ->with('timer',1)
+            ->with('hide_player',0)
             ->with('answers',$answers)
             ->with('time',$test->test_time);
     

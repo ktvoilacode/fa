@@ -630,6 +630,7 @@ levels of training.');
                 $path = Storage::disk('public')->putFileAs('feedback', $request->file('file'),$filename);
             }
 
+            
             //update writing notifier
             $writing = Writing::where('attempt_id',$id)->first();
             if(!$writing)
