@@ -76,6 +76,8 @@ class FormController extends Controller
         $obj = new Obj();
         $tests = Test::where('price',0)->where('status',1)->get()->random(3);
 
+        dd('404');
+        
         return view('appl.'.$this->app.'.'.$this->module.'.createedit')
                 ->with('stub','Create')
                 ->with('tests',$tests)
