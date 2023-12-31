@@ -1811,6 +1811,7 @@ class AttemptController extends Controller
       if(!count($result)){
         if(request()->get('json') || request()->get('jsonfull')){
           echo json_encode(['total'=>0,'score'=>0,'attempt'=>0]);
+          exit();
         }else
           abort('403','Test not attempted');
       }
