@@ -1914,6 +1914,11 @@ class AttemptController extends Controller
         exit();
       }
 
+      if($request->get('jsonfull')){
+       echo json_encode(['total'=>$test->marks,'score'=>$score]);
+        exit();
+      }
+
      $tags = null;//Attempt::tags($result);
      $secs = null;//$this->graph($tags);
 
