@@ -1809,7 +1809,10 @@ class AttemptController extends Controller
      
 
       if(!count($result)){
-        abort('403','Test not attempted');
+        if(request()->get('json') || request()->get('jsonfull')){
+          echo json_encode(['total'=>0,'score'=>0,'attempt'=>0]);
+        }else
+          abort('403','Test not attempted');
       }
       $attempt = new Attempt();
       $marking = [];
@@ -1915,7 +1918,7 @@ class AttemptController extends Controller
       }
 
       if($request->get('jsonfull')){
-       echo json_encode(['total'=>$test->marks,'score'=>$score]);
+       echo json_encode(['total'=>$test->marks,'score'=>$score,'attempt'=>1]);
         exit();
       }
 
