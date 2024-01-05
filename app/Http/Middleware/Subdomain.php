@@ -53,7 +53,7 @@ class Subdomain
             $client = new client();
             $client->slug = 'prep';
             $client->name = 'Piofx Media';
-            $client->logo = url('/').'/images/piofx.png';
+            $client->logo = url('/').'/images/piofx_logo.png';
             $request->session()->put('client',$client);
         }
         elseif($domain== 'gradable.in' || $domain== 'fa.test'){

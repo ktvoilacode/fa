@@ -83,9 +83,7 @@ class TestController extends Controller
     public function index(Obj $obj,Request $request)
     {
 
-        if(domainname()=='piofx'){
-            abort('404','Access not allowed');
-        }
+        
         $this->authorize('view', $obj);
 
         $search = $request->search;
@@ -127,6 +125,9 @@ class TestController extends Controller
     public function public(Obj $obj,Request $request)
     {
 
+        if(domainname()=='piofx'){
+            abort('404','Access not allowed');
+        }
         $search = $request->search;
         $item = $request->item;
         $category = $request->category;
