@@ -1793,6 +1793,9 @@ class AttemptController extends Controller
 
 
       if(request()->get('result')){
+        echo "Testid:".$test->id."<br>";
+        echo "Sess id:".$session_id."<br>";
+        echo "user:".$user."<br>";
         dd($result);
       }
       //check for duplicates
