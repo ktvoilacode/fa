@@ -1774,8 +1774,10 @@ class AttemptController extends Controller
         $user=null;
       }
       else{
-        if($request->get('source') && $request->get('id'))
+        if($request->get('source') && $request->get('id')){
           $session_id = $request->get('source').'_'.$request->get('id').'_'.$request->get('product');
+          $user=null;
+        }
         else
           $session_id = $request->session()->getID();
       }
@@ -1790,6 +1792,9 @@ class AttemptController extends Controller
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
 
+      if(request()->get('result')){
+        dd($result);
+      }
       //check for duplicates
       $qnos = $result->groupBy('qno');
       if(request()->get('duplicates')){
