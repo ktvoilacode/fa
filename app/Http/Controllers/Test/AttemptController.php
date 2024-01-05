@@ -1792,12 +1792,7 @@ class AttemptController extends Controller
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
 
-      if(request()->get('result')){
-        echo "Testid:".$test->id."<br>";
-        echo "Sess id:".$session_id."<br>";
-        echo "user:".$user."<br>";
-        dd($result);
-      }
+
       //check for duplicates
       $qnos = $result->groupBy('qno');
       if(request()->get('duplicates')){
@@ -1817,6 +1812,9 @@ class AttemptController extends Controller
       if(!count($result)){
         if(request()->get('json') || request()->get('jsonfull')){
           echo json_encode(['total'=>0,'score'=>0,'attempt'=>0]);
+          exit();
+        elseif(request()->get('deletescore')){
+          echo json_encode(['attempt'=>0]);
           exit();
         }else
           abort('403','Test not attempted');
@@ -1860,8 +1858,10 @@ class AttemptController extends Controller
 
 
 
-      if(count($result)==0)
+      if(count($result)==0){
+
         abort('404','No test analysis found');
+      }
 
       $score = 0;
       $review = false;
