@@ -90,11 +90,13 @@
                                 @endif
                                 @endif
                                 @else
+                                 @if(domainname()!='piofx')
                                 <div class="mb-4">
                                     <a class="" href="{{ route('password.request') }}">
                                          Reset password via email
                                     </a>
                                 </div>
+                                @endif
                                 @endif
                            
                             </div>
