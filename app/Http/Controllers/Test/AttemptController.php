@@ -1813,7 +1813,7 @@ class AttemptController extends Controller
         if(request()->get('json') || request()->get('jsonfull')){
           echo json_encode(['total'=>0,'score'=>0,'attempt'=>0]);
           exit();
-        elseif(request()->get('deletescore')){
+        }elseif(request()->get('deletescore')){
           echo json_encode(['attempt'=>0]);
           exit();
         }else
