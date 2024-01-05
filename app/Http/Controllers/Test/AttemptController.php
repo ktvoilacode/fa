@@ -1780,6 +1780,9 @@ class AttemptController extends Controller
           $session_id = $request->session()->getID();
       }
 
+      if(request()->get('session_id')){
+        dd($session_id);
+      }
 
       if($user)
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('user_id',$user->id)->get();
