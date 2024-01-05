@@ -56,9 +56,13 @@
               <label for="formGroupExampleInput ">Client</label>
               <select class="form-control" name="client_slug">
                 <option value="prep" @if(isset($obj)) @if($obj->client_slug==="prep") selected @endif @endif>Prep</option>
+                @if(isset($client_list))
+                @if($client_list)
                 @foreach($client_list as $client)
                 <option value="{{$client->slug}}" @if(isset($obj)) @if($obj->client_slug===$client->slug) selected @endif @endif >{{$client->slug}}</option>
                 @endforeach
+                @endif
+                @endif
               </select>
             </div>
 
