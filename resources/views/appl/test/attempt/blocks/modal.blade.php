@@ -25,6 +25,8 @@
         <input type="hidden" name="id" value="{{ request()->get('id') }}">
         <input type="hidden" name="uri" value="{{ request()->get('uri') }}">
         <input type="hidden" name="source" value="{{ request()->get('source') }}">
+        <input type="hidden" name="source_product" value="{{ request()->get('product') }}">
+        
         <input type="hidden" name="private" value="{{ request()->get('private') }}">
         <input type="hidden" name="open" value="1">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -109,7 +111,7 @@
         <input type="hidden" name="username" value="{{ request()->get('username') }}">
         <input type="hidden" name="id" value="{{ request()->get('id') }}">
         <input type="hidden" name="uri" value="{{ request()->get('uri') }}">
-        <input type="hidden" name="source" value="{{ request()->get('source') }}">
+        <input type="hidden" name="source" value="{{ request()->get('source') }}"><input type="hidden" name="source_product" value="{{ request()->get('product') }}">
         <input type="hidden" name="private" value="{{ request()->get('private') }}">
         <input type="hidden" name="open" value="1">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

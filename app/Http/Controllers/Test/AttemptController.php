@@ -472,10 +472,8 @@ class AttemptController extends Controller
       abort(403,'Test is inactive');
     }
     $user = null;
-    if(\auth::user()){
+    if(\auth::user() && !request()->get('source')){
       $user = \auth::user();
-      
-      
       if(!$user->testAccess($id)){
          if($price!=0){
                 return view('appl.product.product.purchase')
@@ -486,18 +484,17 @@ class AttemptController extends Controller
 
     }
     else{
+      if(!request()->get('source'))
       if($price!=0 && $test->status!=3){
           return view('appl.product.product.purchase')
                         ->with('test',$test)
                         ->with('product',$product);
           }
-
-
       
     }
     
-    if($test->status==3 && $request->get('id') && $request->get('username')){
-          $session_id = $request->get('source').'_'.$request->get('id');
+    if(request()->get('source') && $request->get('id') && $request->get('username')){
+          $session_id = $request->get('source').'_'.$request->get('id').'_'.$request->get('product');
           $user = new User;
           $user->email = $request->get('source').'_'.$request->get('id');
           $user->username = $request->get('username');
@@ -506,7 +503,7 @@ class AttemptController extends Controller
       }
 
 
-    if($test->status==3 && $request->get('id')){
+    if(request()->get('source') && $request->get('id')){
       $session = Session::where('id',$session_id)->first();
           if(!$session){
               $session = new Session();
@@ -535,7 +532,7 @@ class AttemptController extends Controller
 
 
 
-
+    if(!request()->get('source'))
     /* Pre validation */
     $this->precheck($request);
 
@@ -550,7 +547,7 @@ class AttemptController extends Controller
     else
       $attempt = null;
 
-    if($attempt && $session_id && $test->status==3){
+    if($attempt && $session_id && request()->get('source')){
       $u = $url."?status=0&reference=".$session_id."&test=".$this->test->id;
 
         if($test->status==3)
@@ -1099,20 +1096,18 @@ class AttemptController extends Controller
       
       //dd($request->all());
       if($request->get('source'))
-        $session_id = $request->get('source').'_'.$request->get('id');
+        $session_id = $request->get('source').'_'.$request->get('id').'_'.request()->get('source_product');
       else
         $session_id = null;
 
       $open = $request->get('open');
-
 
       $url = $request->get('uri');
       if(!$url && session()->get('current_test')==$slug){
         $url = session()->get('uri');
       }
 
-      
-
+    
       $result = array();
       $score =0;
       $test = $this->test;
@@ -1142,7 +1137,7 @@ class AttemptController extends Controller
 
       if($attempt){
 
-        if($test->status==3){
+        if($request->get('source')){
             return redirect()->to($url."?status=0&reference=".$session_id."&test=".$this->test->id);
         }else{
             if($product)
