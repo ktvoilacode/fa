@@ -1775,7 +1775,7 @@ class AttemptController extends Controller
       }
       else{
         if($request->get('source') && $request->get('id'))
-          $session_id = $request->get('source').'_'.$request->get('id');
+          $session_id = $request->get('source').'_'.$request->get('id').'_'.$request->get('product');
         else
           $session_id = $request->session()->getID();
       }
