@@ -456,6 +456,27 @@ function domain() {
 }
 }
 
+if (! function_exists('domainname')) {
+function domainname() {
+    $url = url()->full();
+    $parsed = parse_url($url);
+    $exploded = explode('.', $parsed["host"]);
+     if(count($exploded) > 2){
+        $parsed = parse_url($url);
+        $exploded = explode('.', $parsed["host"]);
+        $domain = $exploded[1];
+     }
+     else{
+         $parsed = parse_url($url);
+        $exploded = explode('.', $parsed["host"]);
+        $domain = $exploded[0];
+     }
+
+    return $domain;
+
+}
+}
+
 if (! function_exists('startsWithNumber')) {
 function startsWithNumber($string) {
     return strlen($string) > 0 && ctype_digit(substr($string, 0, 1));

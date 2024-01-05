@@ -49,7 +49,14 @@ class Subdomain
             }
 
             
-        }elseif($domain== 'gradable.in' || $domain== 'fa.test'){
+        }elseif($domain== 'test.piofx.com'){
+            $client = new client();
+            $client->slug = 'prep';
+            $client->name = 'Piofx Media';
+            $client->logo = url('/').'/images/piofx.png';
+            $request->session()->put('client',$client);
+        }
+        elseif($domain== 'gradable.in' || $domain== 'fa.test'){
             $client = new client();
             $client->slug = 'prep';
             $client->name = 'Gradable';

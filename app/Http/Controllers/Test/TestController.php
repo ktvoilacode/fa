@@ -30,6 +30,10 @@ class TestController extends Controller
 
      /* The public view page for test */
    public function details($slug,Request $request){
+
+        if(domainname()=='piofx'){
+            abort('404','Access not allowed');
+        }
         //load from cache, else from database
         $obj = Cache::get('test_'.$slug);
         if(!$obj){
@@ -78,6 +82,10 @@ class TestController extends Controller
      */
     public function index(Obj $obj,Request $request)
     {
+
+        if(domainname()=='piofx'){
+            abort('404','Access not allowed');
+        }
         $this->authorize('view', $obj);
 
         $search = $request->search;

@@ -81,11 +81,13 @@
                                 
                                 @if(request()->session()->get('config'))
                                 @if(request()->session()->get('config')->change_password)
+                                @if(domainname()!='piofx')
                                 <div class="mb-4">
                                     <a class="" href="{{ route('password.request') }}">
                                          Reset password via email
                                     </a>
                                 </div>
+                                @endif
                                 @endif
                                 @else
                                 <div class="mb-4">
