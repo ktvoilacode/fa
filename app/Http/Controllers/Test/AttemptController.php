@@ -1780,7 +1780,7 @@ class AttemptController extends Controller
           $session_id = $request->session()->getID();
       }
 
-      if(request()->get('session_id')){
+      if(request()->get('sess_id')){
         dd($session_id);
       }
 
