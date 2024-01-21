@@ -608,6 +608,7 @@ levels of training.');
         try{
             $obj = Obj::where('id',$id)->first();
             $obj->answer = $request->answer;
+            $obj->comment = $request->answer;
 
             /* delete file request */
             if($request->get('deletefile')){

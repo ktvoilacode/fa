@@ -220,7 +220,7 @@
   </tbody>
 </table>
 
-@if($test->testtype->name=='DUOLINGO' || $test->testtype->name=='WRITING')
+@if(($test->testtype->name=='DUOLINGO' || $test->testtype->name=='WRITING') && !request()->get('open') && !request()->get('source'))
 <div class="form-group mb-1 mt-4">
   <label for="exampleTextarea">Score (optional)</label>
     <input class="form-control" name="direct_score" value="{{ $score }}" />
@@ -230,5 +230,15 @@
     <label for="exampleTextarea">Comments </label>
 <textarea class="form-control summernote" id="exampleTextarea" name="comments" rows="3">@if(!is_array($result)) @if($result->where('comment','!=',NULL)->first()) {!! $result->where('comment','!=',NULL)->first()->comment !!}@endif @endif</textarea>
    </div>
+   @else
+   <div class="bg-light border my-3 p-3 rounded">
+      @if(!is_array($result)) 
+        @if($result->where('comment','!=',NULL)->first()) 
+        {!! $result->where('comment','!=',NULL)->first()->comment !!}
+        @endif 
+      @endif
    @endif
+ </div>
+
+
 </div>
