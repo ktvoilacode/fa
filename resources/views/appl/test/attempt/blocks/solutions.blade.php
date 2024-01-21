@@ -237,8 +237,8 @@
       <div class="bg-light border my-3 p-3 rounded">
         <h3 class="my-2">Comments</h3>
         <div>{!! $result->where('comment','!=',NULL)->first()->comment !!}  </div>
-        @if(Storage::disk('public')->exists('feedback/feedback_'.$obj->id.'.pdf'))
-              <a href="{{route($app->module.'.download',[$obj->id])}}?pdf=1" >
+        @if(Storage::disk('public')->exists('feedback/feedback_'.$result->first()->id.'.pdf'))
+              <a href="{{route($app->module.'.download',[$result->first()->id])}}?pdf=1" >
                 <button type="button" class="btn btn-sm btn-outline-success float-left mr-2">Detailed Feedback</button>
               </a>
         @endif
