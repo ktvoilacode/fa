@@ -123,6 +123,16 @@
             </div>
           </div>
           <div class="row mb-2">
+            <div class="col-md-4"><b>Score</b></div>
+            <div class="col-md-8">
+              @if($obj->score)
+              <div class="p-3 bg-light border">{!! $obj->score !!}</div>
+              @else
+                - NA -
+              @endif
+            </div>
+          </div>
+          <div class="row mb-2">
             <div class="col-md-4"><b>PDF Doc</b></div>
             <div class="col-md-8">
               @if(Storage::disk('public')->exists('feedback/feedback_'.$obj->id.'.pdf'))
