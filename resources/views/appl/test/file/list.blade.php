@@ -16,9 +16,15 @@
               <tr>
                 <th scope="row">{{ $objs->currentpage() ? ($objs->currentpage()-1) * $objs->perpage() + ( $key + 1) : $key+1 }}</th>
                 <td>
+                  @if($obj->user)
                   <a href="{{ route('user.show',$obj->user->id) }}">
                   {{ $obj->user->idno}}
                   </a>
+                  @else
+                  {{$obj->session_id}}
+                  @endif
+                  
+                  
                 </td>
                 <td>
                   @if(request()->get('type')=='duolingo')
