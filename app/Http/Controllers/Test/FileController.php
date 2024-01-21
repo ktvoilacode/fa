@@ -273,7 +273,10 @@ class FileController extends Controller
             $prefix = str_replace('-evaluation','',$prefix);
         }
        
+       if($user)
         $name =$prefix.'_'.str_replace(' ', '',$user->name);
+        else
+        $name = $prefix.'_'.str_replace(' ', '',$obj->session_id);
 
         $info = pathinfo(Storage::url($obj->response));
 
