@@ -44,7 +44,10 @@ class Attempt extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        if($this->belongsTo('App\User'))
+            return $this->belongsTo('App\User');
+        else
+            return null;
     }
 
     public function session()
