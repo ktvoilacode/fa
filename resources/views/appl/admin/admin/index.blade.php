@@ -49,7 +49,7 @@
                 <hr>
                 @foreach($data['writing'] as $k=>$w)
                 <div class="mb-2"><a href="{{ route('file.show',$w->id) }}" class="text-white">
-                    @if($w->user->name)
+                    @if($w->user)
                     {{$w->user->name}}
                     @else
                     {{$w->session_id}}
