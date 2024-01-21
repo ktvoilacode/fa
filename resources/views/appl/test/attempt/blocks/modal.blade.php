@@ -1,6 +1,6 @@
 @auth
 
-  @if($test->status==3)
+  @if($test->status==3 || request()->get('source'))
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -62,32 +62,8 @@
   @endif
 @else
 
-@if($test->status==2)
-<div class="modal fade f2" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm Submission</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Select the below checkbox to confirm your test submission</p>
-       
-        
-        <div class="p-3 rounded bg-warning">
-       <input type="checkbox" name="accept" class="accept" id="c1" /> &nbsp;<b><label class="form-check-label" for="c1">I Confirm</label> </b>
-     </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="submit" id="submit_btn" class="btn btn-success submit">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-@elseif($test->status==3 || request()->get('source'))
+
+@if($test->status==3 || request()->get('source'))
 
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -116,6 +92,31 @@
         <input type="hidden" name="open" value="1">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <button type="submit" id="submit_btn" class="btn btn-success">Confirm Submission</button>
+      </div>
+    </div>
+  </div>
+</div>
+@elseif($test->status==2)
+<div class="modal fade f2" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Submission</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Select the below checkbox to confirm your test submission</p>
+       
+        
+        <div class="p-3 rounded bg-warning">
+       <input type="checkbox" name="accept" class="accept" id="c1" /> &nbsp;<b><label class="form-check-label" for="c1">I Confirm</label> </b>
+     </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" id="submit_btn" class="btn btn-success submit">Submit</button>
       </div>
     </div>
   </div>
