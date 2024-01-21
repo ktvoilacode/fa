@@ -232,6 +232,8 @@
    </div>
    @else
    <div class="bg-light border my-3 p-3 rounded">
+    <h3 class="my-2">Comments</h3>
+
       @if(!is_array($result)) 
         @if($result->where('comment','!=',NULL)->first()) 
         {!! $result->where('comment','!=',NULL)->first()->comment !!}
