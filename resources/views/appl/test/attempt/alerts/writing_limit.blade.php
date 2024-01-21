@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.clean')
 @section('title', 'Writing Limit - '.$test->name)
 @section('description', 'These are the test instructions of the test '.$test->name)
 
