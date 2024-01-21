@@ -999,7 +999,21 @@ class AttemptController extends Controller
         flash('Response cannot be empty!')->error();
         return redirect()->back()->withInput();
       }
+
+      $source = $request->get('source');
+      if($request->get('source'))
+        $session_id = $request->get('source').'_'.$request->get('id').'_'.request()->get('source_product');
+      else
+        $session_id = null;
+
       $user = \auth::user();
+      if(!$user){
+          $user = new User();
+          $user->id = 0;
+      }
+
+      $attempt = null;
+
       $type = $request->get('type');
       $product_slug = $request->get('product');
       /* upload the file to server */
@@ -1023,13 +1037,21 @@ class AttemptController extends Controller
           $path = Storage::disk('public')->putFileAs('response', $request->file('file_'), $filename);
       }
 
+      $exists =null;
+      if(!$source)
       $exists = Attempt::where('test_id',$test->id)->where('user_id',\auth::user()->id)->first();
+      
+
       if($exists){
           return redirect()->route($this->module.'.try',['test'=>$this->test->slug,'product'=>$product_slug]);
       }
 
       $model = new Attempt();
       $model->user_id = $user->id;
+      if($session_id){
+        $model->session_id = $session_id;
+      }
+
       $model->qno = 1;
       if(!$request->get('response') && !$request->get('response_2'))
 
@@ -1048,10 +1070,7 @@ class AttemptController extends Controller
       }
       $model->test_id = $test->id;
 
-
       $model->save();
-
-
 
         if($url){
           $model->status = 0;

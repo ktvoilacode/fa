@@ -79,6 +79,8 @@
           <input type="hidden" name="source" value="{{ request()->get('source') }}"><input type="hidden" name="source_product" value="{{ request()->get('product') }}">
           <input type="hidden" name="private" value="{{ request()->get('private') }}">
           <input type="hidden" name="open" value="1">
+
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <button type="submit" id="submit_btn" class="btn btn-success">Confirm Submission</button>
         </div>
