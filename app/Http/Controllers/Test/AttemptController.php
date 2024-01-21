@@ -1244,7 +1244,7 @@ class AttemptController extends Controller
         $data[$i]['status'] = $res['status'];
         $data[$i]['accuracy'] =$res['accuracy'];
 
-        if ($request->session()->has('open') && ($test->status==2 || $test->status==3 ) )
+        if (($request->session()->has('open') && ($test->status==2 || $test->status==3 )) || $source)
           $data[$i]['session_id'] = $session_id;
 
         $resp = $request->get($qno);
