@@ -43,6 +43,11 @@
         </textarea>
       </div>
 
+      <div class="form-group">
+        <label for="formGroupExampleInput ">Score</label>
+        <input type="text" class="form-control" name="score" value="{{ $obj->score}}">
+      </div>
+
        <div class="form-group">
         <label for="formGroupExampleInput ">PDF Doc</label>
         <input type="file" class="form-control" name="file" id="formGroupExampleInput" placeholder="Enter the pdf path" 
