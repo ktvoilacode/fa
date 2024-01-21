@@ -32,7 +32,13 @@
                   @else
                   <a href=" {{ route($app->module.'.show',$obj->id) }} ">
                   @endif
-                  {{ $obj->user->name}} - {{ $obj->test->name }} - Response
+
+                  @if($obj->user)
+                  {{ $obj->user->name}} 
+                  @else
+                  {{ $obj->session_id}} 
+                  @endif
+                  - {{ $obj->test->name }} - Response
 
                   @if($obj->premium)<span class="badge badge-primary">pro</span>@endif
                   </a>
