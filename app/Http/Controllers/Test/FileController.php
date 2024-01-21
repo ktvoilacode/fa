@@ -637,12 +637,13 @@ levels of training.');
             $writing = new Writing();
             $writing->attempt_id = $id;
             $writing->user_id = \auth::user()->id;
-            $writing->score = $request->score;
-            $writing->accuracy = 1;
-            $writing->status = 1;
+
             $writing->save();
 
 
+            $obj->score = $request->score;
+            $obj->accuracy = 1;
+            $obj->status = 1;
             $obj->save();
 
             flash('('.$this->app.'/'.$this->module.') item is updated!')->success();
