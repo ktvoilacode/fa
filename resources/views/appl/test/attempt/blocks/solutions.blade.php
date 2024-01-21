@@ -238,9 +238,9 @@
         <h3 class="my-2">Comments</h3>
         <div>{!! $result->where('comment','!=',NULL)->first()->comment !!}  </div>
         @if(Storage::disk('public')->exists('feedback/feedback_'.$result->first()->id.'.pdf'))
-        <div class="my-2">
+        <div class="mt-3 ">
               <a href="{{route('file.download',[$result->first()->id])}}?pdf=1" >
-                <button type="button" class="btn btn-sm btn-outline-success float-left mr-2">Detailed Feedback</button>
+                <button type="button" class="btn btn-sm btn-success ">Detailed Feedback</button>
               </a>
             </div>
 
