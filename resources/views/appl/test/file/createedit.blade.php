@@ -20,8 +20,13 @@
       @endif  
       <div class="form-group">
         <label for="formGroupExampleInput ">File</label>
+        @if($obj->user)
         <input type="text" class="form-control" name="name" value="{{ $obj->user->name}} - {{$obj->test->name}}" disabled 
           >
+          @else
+<input type="text" class="form-control" name="name" value="{{ $obj->session_id}} - {{$obj->test->name}}" disabled 
+          >
+          @endif
       </div>
       
 
