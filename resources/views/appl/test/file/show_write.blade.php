@@ -21,7 +21,13 @@
         <div class="card-body text-secondary">
           <div class="row">
             <div class="col-12 col-md-6">
-              <h2><i class="fa fa-file-o "></i> {{ $obj->test->name }} - {{ $obj->user->name }} </h2>
+              <h2><i class="fa fa-file-o "></i> {{ $obj->test->name }} - 
+                @if($obj->user)
+                {{ $obj->user->name }} 
+                @else
+                {{ $obj->session_id}}
+                @endif
+              </h2>
             </div>
             <div class="col-12 col-md-6">
                    <div class="btn-group">
