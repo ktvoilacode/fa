@@ -4,7 +4,7 @@
 
 
 @section('content')
-<div  class="row ">
+<div  class="row p-3">
   <div class="col-md-12">
     <div class=" bg-light p-3 border mb-3 " style="word-wrap: break-word;
     "><div class="h4 mt-2" style="word-wrap: break-word;
