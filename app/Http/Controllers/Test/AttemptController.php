@@ -530,7 +530,7 @@ class AttemptController extends Controller
 
 
 
-
+    $source = request()->get('source');
 
     if(!request()->get('source'))
     /* Pre validation */
@@ -539,7 +539,7 @@ class AttemptController extends Controller
 
     /* If Attempted show report */
     
-    if($test->status==2 || $test->status==3){
+    if($test->status==2 || $test->status==3 || $source){
       $attempt = Attempt::where('test_id',$this->test->id)->where('session_id',$session_id)->first();
     }
     else if($user)
@@ -550,7 +550,7 @@ class AttemptController extends Controller
     if($attempt && $session_id && request()->get('source')){
       $u = $url."?status=0&reference=".$session_id."&test=".$this->test->id;
 
-        if($test->status==3)
+        if($url)
           return redirect()->to($u);
     }
    
@@ -590,8 +590,6 @@ class AttemptController extends Controller
       // limit writing submissions to 2 in 24 hours
       if($testtype == 'writing'){
         //$type = Type::where('name','writing')->first();
-        
-
         $test_ids = Test::where('type_id',3)->get()->pluck('id');
         
         $wattempt =[];

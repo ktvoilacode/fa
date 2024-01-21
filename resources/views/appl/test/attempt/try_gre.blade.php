@@ -5,7 +5,7 @@
 @section('content')
 
 @guest
-@if($test->status!=2)
+@if(($test->status!=2 && $test->status!=3) && !request()->get('source'))
 <div class="alert alert-warning alert-dismissible alert-important fade show" role="alert">
   <strong>Note:</strong> Only registered users can submit the test and view the result. 
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
