@@ -236,7 +236,12 @@
         @if(strip_tags($result->where('comment','!=',NULL)->first())) 
       <div class="bg-light border my-3 p-3 rounded">
         <h3 class="my-2">Comments</h3>
-        {!! $result->where('comment','!=',NULL)->first()->comment !!}  
+        <div>{!! $result->where('comment','!=',NULL)->first()->comment !!}  </div>
+        @if(Storage::disk('public')->exists('feedback/feedback_'.$obj->id.'.pdf'))
+              <a href="{{route($app->module.'.download',[$obj->id])}}?pdf=1" >
+                <button type="button" class="btn btn-sm btn-outline-success float-left mr-2">Detailed Feedback</button>
+              </a>
+        @endif
       </div>
         @endif 
       @endif
