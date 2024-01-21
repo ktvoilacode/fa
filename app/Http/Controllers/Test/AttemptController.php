@@ -1781,6 +1781,7 @@ class AttemptController extends Controller
       $private = $request->get('private');
 
 
+      $review = false;
 
       if($request->get('user_id'))
         $user = User::where('id',$request->get('user_id'))->first();
@@ -1809,7 +1810,11 @@ class AttemptController extends Controller
       else
         $result = Attempt::where('test_id',$test->id)->with('mcq')->with('fillup')->where('session_id',$session_id)->get();
 
-
+      if($result){
+        if($result->where('status',0)->first()){
+          $review = 1;
+        }
+      }
 
       //check for duplicates
       $qnos = $result->groupBy('qno');
@@ -1851,9 +1856,6 @@ class AttemptController extends Controller
 
       
 
-
-     
-
       if($request->get('delete') && $request->get('session_id'))
         if(\auth::user()->isAdmin()){
           Attempt::where('test_id',$test->id)->where('session_id',$session_id)->delete();
@@ -1882,7 +1884,6 @@ class AttemptController extends Controller
       }
 
       $score = 0;
-      $review = false;
    
       foreach($result as $r){
         if($r->accuracy==1)

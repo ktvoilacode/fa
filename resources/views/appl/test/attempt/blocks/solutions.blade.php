@@ -103,7 +103,7 @@
           <span class="text-danger"><i class="fa fa-times-circle"></i></span>
         @endif
       @else
-          <span class="text-info"><i class="fa fa-circle-o"></i> Manual Evaluation</span>
+          <span class="text-info"><i class="fa fa-circle-o"></i> Under Review</span>
 
       @endif
       </td>
@@ -231,14 +231,16 @@
 <textarea class="form-control summernote" id="exampleTextarea" name="comments" rows="3">@if(!is_array($result)) @if($result->where('comment','!=',NULL)->first()) {!! $result->where('comment','!=',NULL)->first()->comment !!}@endif @endif</textarea>
    </div>
    @else
-   <div class="bg-light border my-3 p-3 rounded">
-    <h3 class="my-2">Comments</h3>
 
       @if(!is_array($result)) 
-        @if($result->where('comment','!=',NULL)->first()) 
-        {!! $result->where('comment','!=',NULL)->first()->comment !!}
+        @if(strip_tags($result->where('comment','!=',NULL)->first())) 
+      <div class="bg-light border my-3 p-3 rounded">
+        <h3 class="my-2">Comments</h3>
+        {!! $result->where('comment','!=',NULL)->first()->comment !!}  
+      </div>
         @endif 
       @endif
+
    @endif
  </div>
 
