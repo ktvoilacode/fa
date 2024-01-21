@@ -1093,6 +1093,7 @@ class AttemptController extends Controller
    public function store($slug,Request $request){
       
       //dd($request->all());
+    $source = $request->get('source');
       if($request->get('source'))
         $session_id = $request->get('source').'_'.$request->get('id').'_'.request()->get('source_product');
       else
@@ -1125,7 +1126,7 @@ class AttemptController extends Controller
 
       $attempt = null;
       if(!request()->get('apitest'))
-      if($test->status==2 || $test->status==3)
+      if($test->status==2 || $test->status==3 || $source)
         $attempt = Attempt::where('test_id',$this->test->id)->where('session_id',$session_id)->first();
       else  
         $attempt = Attempt::where('test_id',$this->test->id)->where('user_id',$user->id)->first();
