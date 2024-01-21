@@ -50,7 +50,12 @@
             
    <a href="{{ route($app->module.'.edit',$obj->id) }}" class="btn btn-primary " data-tooltip="tooltip" data-placement="top" title="Edit"> Edit</a>
 
+              @if($obj->user)
               <a href="{{ route('test.review',$obj->test->slug) }}?user_id={{$obj->user->id}}" class="btn btn-outline-secondary " data-tooltip="tooltip" data-placement="top" title="review"> Review</a>
+              @else
+ <a href="{{ route('test.review',$obj->test->slug) }}?session_id={{$obj->session_id}}" class="btn btn-outline-secondary " data-tooltip="tooltip" data-placement="top" title="review"> Review</a>
+             
+              @endif
               @if(\auth::user()->admin!=4)
               <a href="{{ route('file.assign',$obj->id) }}" class="btn btn-outline-secondary " data-tooltip="tooltip" data-placement="top" title="review"> Assign</a>
               
