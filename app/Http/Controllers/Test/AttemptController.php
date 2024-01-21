@@ -1943,7 +1943,7 @@ class AttemptController extends Controller
       }
 
       if($request->get('jsonfull')){
-       echo json_encode(['total'=>$test->marks,'score'=>$score,'attempt'=>1]);
+       echo json_encode(['total'=>$test->marks,'score'=>$score,'attempt'=>1,'status'=>$result->first()->status]);
         exit();
       }
 
