@@ -44,7 +44,7 @@ class McqController extends Controller
                     })
                     ->orderBy('extract_id','asc')
                     ->orderBy('qno','asc')
-                    ->paginate(config('global.no_of_records'));   
+                    ->paginate(120);   
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
