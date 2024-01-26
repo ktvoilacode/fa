@@ -48,7 +48,7 @@
                @endif
               @endif
 
-              @if($test->testtype->name=='LISTENING' || $test->testtype->name=='READING')
+              @if($test->test_id ==1 || $test->test_id==2)
               <a href="{{ route('test.answers',$test->slug)}}">
                 <button class="btn btn-sm btn-primary mt-3 ">
                   <i class="fa fa-bars"></i> View Question Paper & Answers</button>
@@ -56,7 +56,7 @@
               @endif
 
              
-              @if($test->testtype->name=='DUOLINGO')
+              @if($test->test_id ==9)
               @if(is_numeric($score))
               @if(!is_array($result))
                 @if(request()->get('user_id'))
@@ -134,7 +134,7 @@
 
 
 
-       @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
+       @if($test->test_id!=9 || request()->get('admin'))
        <form action="{{ url()->current() }}?evaluate=1&admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">
 
         @if(json_decode($test->settings))
@@ -150,7 +150,7 @@
 
         @if(\auth::user())
           @if(\auth::user()->isAdmin() )
-            @if( $test->testtype->name=='DUOLINGO'  || $test->testtype->name=='WRITING')
+            @if( $test->test_id==9  || $test->test_id==3)
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn-primary btn-lg mt-4">Save</button>
             @endif

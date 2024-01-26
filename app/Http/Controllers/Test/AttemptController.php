@@ -94,14 +94,25 @@ class AttemptController extends Controller
 
             }
 
+            if(request()->get('refresh')){
+              Cache::forget('test_mcq_'.$this->test->id);
+              Cache::forget('test_fillup_'.$this->test->id);
+            }
+
             if(!$this->test->qcount){
                if(!$this->test->qcount){
-                  foreach($this->test->mcq_order as $q){
+                  $mcq_order = Cache::remember('test_mcq_'.$this->test->id, 360, function(){
+                    return $this->test->mcq_order;
+                  });
+                  foreach($mcq_order as $q){
                         if($q->qno)
                           if($q->qno!=-1)
                           $this->test->qcount++;
                   }
-                  foreach($this->test->fillup_order as $q){
+                  $fillup_order = Cache::remember('test_fillup_'.$this->test->id, 360, function(){
+                    return $this->test->fillup_order;
+                  });
+                  foreach($fillup_order as $q){
                         if($q->qno)
                           if($q->qno!=-1)
                           $this->test->qcount++;
@@ -575,23 +586,35 @@ class AttemptController extends Controller
       }
     }
 
+    if(request()->get('refresh')){
+      Cache::forget('testtype_'.$this->test->id);
+      Cache::forget('category_'.$this->test->id);
+      Cache::forget('test_sections_'.$this->test->id);
+    }
 
 
     (isset($test->qcount))?$qcount = $test->qcount : $qcount=0;
 
-   
+    $testtype_cache = Cache::remember('testtype_'.$this->test->id,360, function() use($test){
+      return $test->testtype;
+    });
+
+    $cat_cache = Cache::remember('category_'.$this->test->id,360, function() use($test){
+      return $test->category;
+    });
+
 
     $pte = 0;
-    if(!$test->testtype)
+    if(!$testtype_cache)
       abort('403','Test Type not defined');
     else{
-      $testtype = strtolower($test->testtype->name);
-      if($test->category->name=='PTE' && ($testtype=='listening' || $testtype=='reading')){
+      $testtype = strtolower($testtype_cache->name);
+      if($cat_cache->name=='PTE' && ($testtype=='listening' || $testtype=='reading')){
         $view =  'pte_'.strtolower($test->testtype->name);
         $pte=1;
       }
       else
-      $view = strtolower($test->testtype->name);
+      $view = strtolower($testtype_cache->name);
 
       // limit writing submissions to 2 in 24 hours
       if($testtype == 'writing'){
@@ -661,7 +684,10 @@ class AttemptController extends Controller
       }
 
       if(!$sidebox){
-         foreach($test->sections as $s=>$section){
+        $tsections = Cache::remember('test_sections_'.$test->id,360,function() use($test){
+          return $test->sections;
+        });
+         foreach($tsections as $s=>$section){
           foreach($section->extracts as $k=>$extract ){
 
             foreach($extract->mcq_order as $k=>$m){
@@ -1524,8 +1550,11 @@ class AttemptController extends Controller
       $test = $this->test;
       $result =array();
       $sec = null;
-      if(isset($test->sections)){
-          foreach($test->sections as $section){
+      $sections = Cache::remember('test_sections_'.$test->id,360,function() use($test){
+        return $test->sections;
+      });
+      if(isset($sections)){
+          foreach($sections as $section){
             $mcqs = $section->mcq_order;
             foreach($mcqs as $mcq_order){
                 $result[$mcq_order->qno] = $section->id;
@@ -1785,7 +1814,7 @@ class AttemptController extends Controller
    /* Function to display the analysis of the test */
    public function analysis($slug,Request $request){
 
-      $test = Test::where('slug',$slug)->first();
+      $test = $this->test;//Test::where('slug',$slug)->first();
 
       $open = $request->get('open');
       $private = $request->get('private');
@@ -1903,7 +1932,7 @@ class AttemptController extends Controller
       }
 
 
-      if(strtoupper($test->category->name)=='DUOLINGO'){
+      if($test->test_id==9){
         $param_percent = $attempt->scoreDuolingo($result);
         $score = $param_percent['score'];
       }
@@ -1922,8 +1951,18 @@ class AttemptController extends Controller
 
       $band =0;
       $points =0;
-      $type = strtolower($test->testtype->name);
-      if(strtoupper($test->category->name)=='IELTS'){
+      $testtype = Cache::remember('testtype_'.$this->test->id,360, function() use($test){
+          return $test->testtype;
+        });
+      
+
+      $category = Cache::remember('category_'.$this->test->id,360, function() use($test){
+        return $test->category;
+      });
+      
+      if($testtype)
+      $type = strtolower($testtype->name);
+      if(strtoupper($category->name)=='IELTS'){
       if($type=='listening' || $type=='reading'){
         $function_name = $type.'_band';
         $attempt = new Attempt;
@@ -1935,7 +1974,7 @@ class AttemptController extends Controller
       }
       }
 
-      if(strtoupper($test->category->name)=='PTE'){
+      if(strtoupper($category->name)=='PTE'){
           $points =10;
           if($type=='listening' || $type=='reading'){
             if($test->marks)
@@ -1965,7 +2004,7 @@ class AttemptController extends Controller
       /* sectional score */
      $section_score = $this->section_score($result);
       
-      if($test->testtype->name=='SURVEY')
+      if($testtype->name=='SURVEY')
           $view = 'thankyou';
       else
           $view = 'solutions';

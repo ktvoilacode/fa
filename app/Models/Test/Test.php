@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 use App\Models\Test\Attempt;
 use App\Models\Admin\Session;
+use Illuminate\Support\Facades\Cache;
 
 class Test extends Model
 {
@@ -37,6 +38,8 @@ class Test extends Model
     {
         return $this->belongsTo('App\Models\Test\Type','type_id');
     }
+
+    
 
     public function category()
     {
@@ -70,6 +73,7 @@ class Test extends Model
 
     public function mcq()
     {
+        
         return $this->hasMany('App\Models\Test\Mcq');
     }
 
@@ -97,13 +101,28 @@ class Test extends Model
         return null;
     }
 
-    public function fillup_order() {
-        return $this->fillup()->orderBy('sno','asc');
+    public function fillup_order($data=null) {
+        if($data){
+            $data = Cache::remember('t_fill_order'.$this->id,360,function(){
+            return $this->fillup()->orderBy('sno','asc')->get();
+            });
+        return $data;
+        }else{
+            return $this->fillup()->orderBy('sno','asc');
+        }
+        
     }
 
-    public function mcq_order() {
+    public function mcq_order($data=null) {
+        if($data){
+            $data = Cache::remember('t_mcq_order'.$this->id,360,function(){
+            return $this->mcq()->orderBy('sno','asc')->get();
+            });
+        return $data;
+        }else{
+            return $this->mcq()->orderBy('sno','asc');
+        }
         
-        return $this->mcq()->orderBy('sno','asc');
     }
 
     public function fillup_q1() {

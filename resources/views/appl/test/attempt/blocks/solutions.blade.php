@@ -3,15 +3,15 @@
 <table class="table table-bordered mb-0">
   <thead>
     <tr>
-      <th scope="col" style="width:10%">Qno</th>
-      <th scope="col" style="width:20%">Question</th>
+      <th scope="col" style="width:5%">Qno</th>
+      <th scope="col" style="width:25%">Question</th>
       <th scope="col" style="width:20%">Your Response</th>
       
       <th scope="col" style="width:10%">Result</th>
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
-        @if($test->testtype->name=='DUOLINGO' )
+        @if($test->test_id==9 )
       <th scope="col" style="width:10%">Score</th>
       <th scope="col" style="width:30%">Evaluate</th>
       @endif
@@ -36,35 +36,38 @@
         @else
 
           @if(isset($item['mcq']->question))
-            @if($item['mcq']->question)<b class='h6' style="line-height: 1.5">{!! $item['mcq']->question !!}</b> @endif
+            @if($item['mcq']->question)<b class='h5' style="line-height: 1.5">{!! $item['mcq']->question !!}</b> @endif
           @elseif( $test->testtype->name=='WRITING')
            {!! $test->description !!}
           @endif
           <div>
 
-           @if(isset($item['mcq']->layout))
-          @if($item['mcq']->layout!='gre_numeric' && $item['mcq']->layout!='gre_fraction' && $item['mcq']->layout!='gre_sentence')
-          @foreach(['a','b','c','d','e','f','g','h','i'] as $opt)
-            @if(isset($item['mcq']->$opt))
-            @if($item['mcq']->$opt || $item['mcq']->$opt==='0' )<div class="@if(strpos($item['mcq']->answer, strtoupper($opt)) !== FALSE) text-success @endif  p-1 mb-1 rounded" >({{strtoupper($opt)}}){!!$item['mcq']->$opt!!} </div> @endif
+          @if(isset($item['mcq']->layout))
+            @if($item['mcq']->layout!='gre_numeric' && $item['mcq']->layout!='gre_fraction' && $item['mcq']->layout!='gre_sentence')
+              @foreach(['a','b','c','d','e','f','g','h','i'] as $opt)
+                @if(isset($item['mcq']->$opt))
+                @if($item['mcq']->$opt || $item['mcq']->$opt==='0' )<div class="@if(strpos($item['mcq']->answer, strtoupper($opt)) !== FALSE) text-success font-weight-bold fw-bold @endif  p-1 mb-1 rounded" > ({{strtoupper($opt)}}) {!!$item['mcq']->$opt!!} </div> @endif
+                @endif
+              @endforeach
+            @elseif($item['mcq']->layout=='gre_numeric')
+            <div class="p-1">Answer: &nbsp;<b>{{$item['mcq']['a']}}</b></div>
+            @elseif($item['mcq']->layout=='gre_fraction')
+            <div class="p-1">Answer: &nbsp;<b>{{$item['mcq']['a']}}/{{$item['mcq']['b']}}</b></div>
             @endif
 
-          @endforeach
-          @elseif($item['mcq']->layout=='gre_numeric')
-          <div class="p-1">Answer: &nbsp;<b>{{$item['mcq']['a']}}</b></div>
-          @elseif($item['mcq']->layout=='gre_fraction')
-          <div class="p-1">Answer: &nbsp;<b>{{$item['mcq']['a']}}/{{$item['mcq']['b']}}</b></div>
-          @endif
+            @if($item['mcq']->explanation)
+            <div class="bg-light rounded p-3 mt-3">
+            <div><b>Explanation</b></div>
+            <div>{!! $item['mcq']->explanation !!}</div>
+            </div>
+            @endif
+          @else
 
-
-
-          @if($item['mcq']->explanation)
-          <div class="bg-light rounded p-3 mt-3">
-          <div><b>Explanation</b></div>
-          <div>{!! $item['mcq']->explanation !!}</div>
-        </div>
-          @endif
-
+            @foreach(['a','b','c','d','e','f','g','h','i'] as $opt)
+                @if(isset($item['mcq']->$opt))
+                @if($item['mcq']->$opt || $item['mcq']->$opt==='0' )<div class="@if(strpos($item['mcq']->answer, strtoupper($opt)) !== FALSE) text-success @endif  p-1 mb-1 rounded" > ({{strtoupper($opt)}}) {!!$item['mcq']->$opt!!} </div> @endif
+                @endif
+              @endforeach
            @endif
 
          
@@ -85,6 +88,8 @@
             Your browser does not support the audio element.
             </audio>
           @endif
+        @else
+        -
         @endif
         @endif
 
@@ -113,7 +118,7 @@
         @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
-         @if($test->testtype->name=='DUOLINGO')
+         @if($test->test_id==9)
          <td>
         {{ $item->score }}
       </td>
@@ -194,7 +199,7 @@
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
-         @if($test->testtype->name=='DUOLINGO')
+         @if($test->test_id==9)
          <td>
           @if(isset($item['score']))
         {{ $item['score'] }}
@@ -220,7 +225,7 @@
   </tbody>
 </table>
 
-@if(($test->testtype->name=='DUOLINGO' || $test->testtype->name=='WRITING') && !request()->get('open') && !request()->get('source'))
+@if(($test->test_id==9 || $test->test_id==3) && !request()->get('open') && !request()->get('source'))
 <div class="form-group mb-1 mt-4">
   <label for="exampleTextarea">Score (optional)</label>
     <input class="form-control" name="direct_score" value="{{ $score }}" />

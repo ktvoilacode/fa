@@ -513,7 +513,7 @@ $(document).ready(function() {
 
 
   @if(isset($test))
-  @if($test->testtype->name!='DUOLINGO' )
+  @if($test->type_id!=9 )
     $(document).ready(function(){
         const controls = [// Restart playback
         'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'pip', 'airplay', 'fullscreen',]

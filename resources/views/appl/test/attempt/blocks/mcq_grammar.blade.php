@@ -1,4 +1,4 @@
-@foreach($test->mcq_order as $k=>$m)
+@foreach($test->mcq_order(1) as $k=>$m)
 
 @if($k!=0)<div class="mb-1 p-1"></div>@endif
 

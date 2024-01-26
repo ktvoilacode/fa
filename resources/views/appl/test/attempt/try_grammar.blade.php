@@ -29,11 +29,11 @@
                 @endif
                 </div>
                 <div class="bg-white border-top p-4">
-                @if(count($test->mcq_order)!=0)
+                @if(count($test->mcq_order(1))!=0)
                     @include('appl.test.attempt.blocks.mcq_grammar')
                 @endif
 
-                @if(count($test->fillup_order)!=0)
+                @if(count($test->fillup_order(1))!=0)
                     @include('appl.test.attempt.blocks.fillup_grammar')
                 @endif
                 </div>
