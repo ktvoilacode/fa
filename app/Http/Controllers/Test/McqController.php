@@ -42,8 +42,8 @@ class McqController extends Controller
                      ->orWhere('b','LIKE',"%{$item}%")
                     ->orWhere('c','LIKE',"%{$item}%");
                     })
-                    ->orderBy('extract_id','asc')
-                    ->orderBy('qno','asc')
+                    ->orderByRaw('CONVERT(qno, SIGNED) asc')
+                    
                     ->paginate(120);   
         $view = $search ? 'list': 'index';
 

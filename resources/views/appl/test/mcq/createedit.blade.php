@@ -47,7 +47,20 @@
             value = "{{ $obj->qno }}"
             @endif
           >
-      </div>
+        </div>
+
+        </div>
+        <div class="col-12 col-md">
+          <div class="form-group">
+        <label for="formGroupExampleInput ">Sno</label>
+        <input type="text" class="form-control" name="sno" id="formGroupExampleInput" placeholder="Enter the Sno" 
+            @if($stub=='Create')
+            value="{{ (old('sno')) ? old('sno') : $app->sno }}"
+            @else
+            value = "{{ $obj->sno }}"
+            @endif
+          >
+        </div>
 
         </div>
         <div class="col-12 col-md-4">
@@ -288,9 +301,7 @@
       @if($stub=='Update')
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="id" value="{{ $obj->id }}">
-        <input type="hidden" name="sno" value="{{ $obj->sno }}">
       @else
-      <input type="hidden" name="sno" value="{{ $app->sno }}">  
       @endif
       
       <input type="hidden" name="test_id" value="{{ $app->test->id }}">
