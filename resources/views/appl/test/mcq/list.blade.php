@@ -20,8 +20,11 @@
                   <b class="text-danger">Section: -</b>
 
                   @endif
-                  </div>
+
+                  <span class="pl-3">Sno: {{$obj->sno}}</span>
                   
+                  </div>
+
                    
                   
     </div>
