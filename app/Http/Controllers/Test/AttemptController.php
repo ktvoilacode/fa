@@ -45,12 +45,15 @@ class AttemptController extends Controller
 
             if(file_exists($filename)){
               $this->test = json_decode(file_get_contents($filename));
+
             }else if($cache){
               $this->test = $cache;
+
             }
             else{
               $this->test = Test::where('slug',request()->route('test'))->first();
               $this->test->sections = $this->test->sections;
+
               $this->test->mcq_order = $this->test->mcq_order;
               $this->test->fillup_order = $this->test->fillup_order;
               $this->test->testtype = $this->test->testtype;
@@ -74,6 +77,8 @@ class AttemptController extends Controller
               }
               foreach($this->test->sections as $section){ 
                   $ids = $section->id ;
+
+                  //dd( 'here');
                   $this->test->sections->$ids = $section->extracts;
                   foreach($this->test->sections->$ids as $m=>$extract){
                       $this->test->sections->$ids->mcq =$extract->mcq_order;
@@ -81,6 +86,7 @@ class AttemptController extends Controller
                   }
                       
               }
+               //dd($this->test->sections,'h');
               $test = $this->test;
               Cache::remember('test_'.request()->route('test'),60, function() use($test){
                 return $test;
@@ -792,6 +798,7 @@ class AttemptController extends Controller
         $answers =  false;
       $test = $this->test;
 
+
       $user = \auth::user();
 
       $product = Product::first();
@@ -827,7 +834,7 @@ class AttemptController extends Controller
       $h=0;
       $sidebox=0;
      
-
+      //dd($test->sections);
       if(isset($test->set->sidebox))
       {
           if($test->set->sidebox){
@@ -835,10 +842,9 @@ class AttemptController extends Controller
               foreach($section->extracts as $k=>$extract ){
                 foreach($extract->mcq_order as $k=>$m){
                   if($m->qno){
-
-                  $g = str_replace(' ','',$m->qno);
-                  $g =str_replace('-','',$g);
-                   $qno[$g] = $m->qno;
+                    $g = str_replace(' ','',$m->qno);
+                    $g =str_replace('-','',$g);
+                    $qno[$g] = $m->qno;
                   }
                  
                 }
@@ -859,7 +865,6 @@ class AttemptController extends Controller
       if(!$sidebox){
          foreach($test->sections as $s=>$section){
           foreach($section->extracts as $k=>$extract ){
-
             foreach($extract->mcq_order as $k=>$m){
               $h++;
               if($m->qno){
@@ -874,6 +879,9 @@ class AttemptController extends Controller
           }
         }
       }
+//test
+      
+//      dd($test->sections->first()->mcq_order[0]);
 
 
     $settings = json_decode($test->settings,true);
@@ -882,6 +890,8 @@ class AttemptController extends Controller
     if(isset($settings['hide_player']))
       if($settings['hide_player'])
         $hide_player = true;
+
+     // dd($test->sections->first()->mcq_order);
 
     if($view == 'listening' || $view == 'grammar' || $view =='english' )
     return view('appl.test.attempt.try_'.$view)

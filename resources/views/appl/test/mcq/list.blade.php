@@ -13,6 +13,13 @@
             <h5><a href=" {{ route($app->module.'.show',[$app->test->id,$obj->id]) }} ">
                   {!! $obj->question !!}
                   </a></h5>
+                  @if(isset($obj->section))
+                  <b>Section: {{$obj->section->name}}</b>
+
+                  @else
+                  <b class="text-danger">Section: -</b>
+                  
+                  @endif
                   </div>
                    
                   
