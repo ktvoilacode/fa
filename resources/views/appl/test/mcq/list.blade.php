@@ -18,9 +18,10 @@
 
                   @else
                   <b class="text-danger">Section: -</b>
-                  
+
                   @endif
                   </div>
+                  
                    
                   
     </div>
