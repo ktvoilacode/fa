@@ -53,6 +53,13 @@
 
   <div class="col-12 col-md-10 mb-4">
        
+       @if(request()->get('section_id'))
+        <div class="bg-warning  p-3 mb-4">
+            Section: <b>{{$sections[request()->get('section_id')]->name}}</b>
+            Count: <b>{{count($scounter[request()->get('section_id')])}}</b>
+
+        </div>
+        @endif
 
         <div id="search-items ">
          @include('appl.'.$app->app.'.'.$app->module.'.list')
@@ -62,6 +69,24 @@
 
   <div class="col-12 col-md-2">
       @include('appl.test.snippets.menu')
+
+
+
+<div class="list-group  mt-3 mb-3">
+  <h4>Sections</h4>
+  
+  @foreach($sections as $s)
+  <a href="{{ route('mcq.index',$app->test->id)}}?section_id={{$s->id}}" class="list-group-item list-group-item-action @if($s->id == request()->get('section_id')) active @endif">
+    {{$s->name}} ({{count($scounter[$s->id])}})
+  </a>
+  @endforeach
+  
+
+</div>
+
+
+
+
     </div>
  
 </div>

@@ -77,8 +77,6 @@ class AttemptController extends Controller
               }
               foreach($this->test->sections as $section){ 
                   $ids = $section->id ;
-
-                  //dd( 'here');
                   $this->test->sections->$ids = $section->extracts;
                   foreach($this->test->sections->$ids as $m=>$extract){
                       $this->test->sections->$ids->mcq =$extract->mcq_order;
@@ -104,6 +102,7 @@ class AttemptController extends Controller
                   $mcq_order = Cache::remember('test_mcq_'.$this->test->id, 360, function(){
                     return $this->test->mcq_order;
                   });
+
                   foreach($mcq_order as $q){
                         if($q->qno)
                           if($q->qno!=-1)
@@ -861,6 +860,7 @@ class AttemptController extends Controller
       $sidebox=0;
      
       //dd($test->sections);
+
       if(isset($test->set->sidebox))
       {
           if($test->set->sidebox){
@@ -890,12 +890,15 @@ class AttemptController extends Controller
 
       if(!$sidebox){
          foreach($test->sections as $s=>$section){
+
           foreach($section->extracts as $k=>$extract ){
+
             foreach($extract->mcq_order as $k=>$m){
               $h++;
               if($m->qno){
                 $qno[$h] = $h;
               }
+
             }
             foreach($extract->fillup_order as $f){
               $h++;
@@ -907,7 +910,6 @@ class AttemptController extends Controller
       }
 //test
       
-//      dd($test->sections->first()->mcq_order[0]);
 
 
     $settings = json_decode($test->settings,true);

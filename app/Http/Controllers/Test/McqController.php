@@ -35,6 +35,7 @@ class McqController extends Controller
 
         $search = $request->search;
         $item = $request->item;
+        $sid = $request->get('section_id');
         
         $objs = $obj->where('test_id',$this->test->id)->where(function ($query) use ($item) {
                 $query->where('question','LIKE',"%{$item}%")
@@ -43,13 +44,29 @@ class McqController extends Controller
                     ->orWhere('c','LIKE',"%{$item}%");
                     })
                     ->orderByRaw('CONVERT(qno, SIGNED) asc')
-                    
-                    ->paginate(120);   
+                    ->paginate(120);  
+        $sections = Section::whereIn('id',$objs->pluck('section_id')->toArray())->get()->keyBy('id');
+        $scounter = $objs->groupBy('section_id');
+
+        if($sid){
+            $objs = $obj->where('test_id',$this->test->id)->where(function ($query) use ($item,$sid) {
+                $query->where('question','LIKE',"%{$item}%")
+                    ->orWhere('a','LIKE',"%{$item}%")
+                     ->orWhere('b','LIKE',"%{$item}%")
+                    ->orWhere('c','LIKE',"%{$item}%");
+                    })
+                    ->where('section_id',$sid)
+                    ->orderByRaw('CONVERT(qno, SIGNED) asc')
+                    ->paginate(120);  
+        }
+
         $view = $search ? 'list': 'index';
 
         return view('appl.'.$this->app.'.'.$this->module.'.'.$view)
                 ->with('objs',$objs)
                 ->with('obj',$obj)
+                ->with('sections',$sections)
+                ->with('scounter',$scounter)
                 ->with('try',true)
                 ->with('app',$this);
     }

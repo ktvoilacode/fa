@@ -37,11 +37,11 @@ class Section extends Model
     }
 
     public function fillup_order() {
-        return $this->fillup()->orderBy('sno','asc');
+        return $this->fillup()->orderByRaw('CONVERT(sno, SIGNED) asc');
     }
 
     public function mcq_order() {
-        return $this->mcq()->orderBy('qno','asc');
+        return $this->mcq()->orderByRaw('CONVERT(qno, SIGNED) asc');
     }
 
 }

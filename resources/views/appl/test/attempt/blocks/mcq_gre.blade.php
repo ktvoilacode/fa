@@ -7,7 +7,15 @@
 <div class="col-12 col-md-6">
   <div class="option rounded p-4 border mb-4">
     <h4 class="mb-3"><i class="fa fa-check-square-o"></i> {{ $m->extract->name }} </h4>
-    {!!$m->extract->text !!}</div>
+    @if(strlen(strip_tags($m->extract->text))>800)
+    <p class="text-danger py-1">The passage is scrollable 
+    </p>
+    @endif
+    <div style="max-height: 500px;overflow-y:scroll;">
+    {!!$m->extract->text !!}
+  </div>
+
+  </div>
     <span class="d-none sentence_holder" data-qno="{{$m->qno}}"></span>
     <input type="hidden" name="{{$m->qno}}" value=""/>
 </div> 
