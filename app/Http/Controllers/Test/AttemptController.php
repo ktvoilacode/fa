@@ -1189,8 +1189,6 @@ class AttemptController extends Controller
         $attempt = Attempt::where('test_id',$this->test->id)->where('user_id',$user->id)->first();
 
 
-       
-
       if($attempt){
 
         if($request->get('source')){
