@@ -11,7 +11,7 @@
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
-        @if($test->test_id==9 )
+        @if($test->type_id==9 )
       <th scope="col" style="width:10%">Score</th>
       <th scope="col" style="width:30%">Evaluate</th>
       @endif
@@ -118,7 +118,7 @@
         @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
-         @if($test->test_id==9)
+         @if($test->type_id==9)
          <td>
         {{ $item->score }}
       </td>
@@ -199,7 +199,7 @@
       @if(\auth::user())
         @if(\auth::user()->isAdmin())
         @if(isset($score_params))
-         @if($test->test_id==9)
+         @if($test->type_id==9)
          <td>
           @if(isset($item['score']))
         {{ $item['score'] }}
@@ -225,7 +225,7 @@
   </tbody>
 </table>
 
-@if(($test->test_id==9 || $test->test_id==3) && !request()->get('open') && !request()->get('source'))
+@if(($test->type_id==9 || $test->type_id==3) && !request()->get('open') && !request()->get('source'))
 <div class="form-group mb-1 mt-4">
   <label for="exampleTextarea">Score (optional)</label>
     <input class="form-control" name="direct_score" value="{{ $score }}" />
