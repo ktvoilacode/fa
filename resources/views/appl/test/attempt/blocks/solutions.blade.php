@@ -230,10 +230,12 @@
   <label for="exampleTextarea">Score (optional)</label>
     <input class="form-control" name="direct_score" value="{{ $score }}" />
     <input class="form-control" type="hidden" name="mock"  value="{{request()->get('mock')}}"/>
-     
+     @csrf
    </div>
     <label for="exampleTextarea">Comments </label>
 <textarea class="form-control summernote" id="exampleTextarea" name="comments" rows="3">@if(!is_array($result)) @if($result->where('comment','!=',NULL)->first()) {!! $result->where('comment','!=',NULL)->first()->comment !!}@endif @endif</textarea>
+<button type="submit" class="btn btn-primary mt-3">Save</button>
+
    </div>
    @else
 
@@ -256,6 +258,7 @@
 
    @endif
  </div>
+
 
 
 </div>
