@@ -13,25 +13,16 @@
 <main class="py-4 container ">
 
 @if(count($obj->tests)!=0)
-
   <div class="row ">
     <div class="col-12 col-md-3">
       @include('appl.product.product.blocks.sideblock')
-    
     </div>
-
-
     <div class="col-12 col-md-9">
-
         @include('appl.product.product.blocks.tests')
         @include('appl.product.product.blocks.mocks')
         @if(count($obj->tests)>3)
-          
           @include('appl.product.product.blocks.viewmore')
-  
         @endif
-
-
         @include('appl.product.product.blocks.why_these_tests')
           @include('appl.product.product.blocks.details')
           @if(subdomain()=='prep')
@@ -39,24 +30,17 @@
           @endif
     </div>
   </div>
-
 @elseif(count($obj->mocks)!=0)
-
   <div class="row ">
     <div class="col-12 col-md-3">
       @include('appl.product.product.blocks.sideblock')
-    
     </div>
-
-
     <div class="col-12 col-md-9">
         @include('appl.product.product.blocks.mocks')
     </div>
   </div>
 @else
-
-@include('appl.product.product.blocks.sideblock')
-
+  @include('appl.product.product.blocks.sideblock')
 @endif
 </main>
 </div>

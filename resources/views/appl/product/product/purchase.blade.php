@@ -17,10 +17,7 @@
 <a href="{{ route('product.view',$product->slug) }}">
 <button class="btn btn-outline-primary btn-lg mt-3"> Buy Now</button>
 </a>
-
-
 @auth
-
 	@if(\auth::user()->sms_token==1)
 	<a href="{{ route('product.checkout-access',$product->slug) }}">
 	<button class="btn btn-lg btn-outline-primary mt-3">Access Code</button>
@@ -28,7 +25,6 @@
 	@else
 	<button type="button" class="btn btn-lg btn-outline-primary mt-3" type="button" data-toggle="modal" data-target="#exampleModal ">Access Code</button>
 	@endif
-
 @else
 	<button type="button" class="btn btn-lg btn-outline-primary mt-3" type="button" data-toggle="modal" data-target="#exampleModal ">Access Code</button>
 @endauth

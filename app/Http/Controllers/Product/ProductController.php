@@ -396,17 +396,14 @@ class ProductController extends Controller
         $filename = $slug.'.json';
         $filepath = $this->cache_path.$filename;
 
-        if(request()->get('refresh'))
-            {
-                Cache::forget($filepath);
-            }
-        
 
-            
+        if(request()->get('refresh')){
+                Cache::forget($filepath);
+        }
+        
         $obj = Cache::get($filepath);
 
-        if(request()->get('l1'))
-        {
+        if(request()->get('l1')){
             dd($obj);
         }
 
@@ -438,7 +435,10 @@ class ProductController extends Controller
         }
 
         if(request()->get('dump'))
-        dd($obj->tests->first());
+            dd($obj->tests->first());
+
+        $mhash = ["xdasd","drwqa","fgdsf","gfdsg"];
+        $this->mhash = $mhash[array_rand($mhash)];
 
         if(\auth::user())
             $obj->order = \auth::user()->orders()

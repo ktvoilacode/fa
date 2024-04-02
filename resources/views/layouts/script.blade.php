@@ -2011,6 +2011,8 @@ $(document).on('click', '.register_api2', function(e){
       $phone = $('input[name="phone"]').val();
       $password = $('input[name="password"]').val();
       $repassword = $('input[name="repassword"]').val();
+      $math = $('input[name="math"]').val();
+      $mhash = $('input[name="mhash"]').val();
       $_token = $('input[name="_token"]').val();
 
       $error =0;
@@ -2055,7 +2057,7 @@ $(document).on('click', '.register_api2', function(e){
         $.ajax({
           type : 'post',
           url : $url,
-          data:{'name':$name,'email':$email,'phone':$phone,'password':$password,'_token':$_token},
+          data:{'name':$name,'email':$email,'phone':$phone,'password':$password,'_token':$_token,'math':$math,'mhash':$mhash},
           success:function(data){
             $('.spinner-border').hide();
             d = JSON.parse(data);

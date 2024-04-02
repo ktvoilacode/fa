@@ -173,6 +173,33 @@ class UserController extends Controller
                 $arr["message"] = 'User('.$email_exists->name.') with email('.$email_exists->email.') already exists in database.Kindly use forgot password option.';
             }
 
+            $math = $request->get('math');
+            $mhash = $request->get('mhash');
+            if (!$math) {
+                $arr["error"] =1;
+                $arr["message"] = 'You have not give the answer for the math calculation!';
+            }else{
+                if($mhash == 'xdasd' && $math != 6){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                if($mhash == 'drwqa' && $math != 9){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                if($mhash == 'fgdsf' && $math != 7){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                if($mhash == 'gfdsg' && $math != 8){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                
+                
+
+            }
+
             if(!$arr["error"]){
                 $user= $obj->create([
                 'name' => $request->get('name'),
