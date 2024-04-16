@@ -28,12 +28,14 @@
     <label for="exampleInputPassword1">Confirm Password</label>
     <input type="password" class="form-control" name="repassword" id="exampleInputPassword1" placeholder="Re-enter Password">
   </div>
+  @if(isset($app->mhash))
   <div class="form-group">
     <label for="exampleInputPassword1">Solve this</label><br>
     <img src="/math/{{ $app->mhash}}.png" width="80px" class="mb-2"/>
     <input type="text" class="form-control" name="math" id="exampleInputPassword1" placeholder="enter your answer">
       <input type="hidden" class="form-control" name="mhash" value="{{$app->mhash}}" >
   </div>
+  @endif
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   
   <button type="button" id="register_api" class="btn btn-primary register_api2" data-url="{{ route('apiregister')}}">Submit</button>

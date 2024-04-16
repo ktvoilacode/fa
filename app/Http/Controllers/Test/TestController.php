@@ -59,6 +59,9 @@ class TestController extends Controller
 
         }
 
+        $mhash = ["xdasd","drwqa","fgdsf","gfdsg"];
+        $this->mhash = $mhash[array_rand($mhash)];
+     
 
         if(!$obj)
             abort('404');
@@ -66,12 +69,14 @@ class TestController extends Controller
         if($active)
         return view('appl.test.test.details')
                 ->with('test',$obj)
-                ->with('obj',$obj);
+                ->with('obj',$obj)
+                ->with('app',$this);
         else
              return view('appl.test.test.inactive')
                 ->with('exam',$obj)
                 ->with('settings',$settings)
-                ->with('obj',$obj);
+                ->with('obj',$obj)
+                ->with('app',$this);
 
    }
 
@@ -182,7 +187,7 @@ class TestController extends Controller
         }
 
 
-        
+
         
         $view = $search ? 'public_list2': 'public_index';
 
