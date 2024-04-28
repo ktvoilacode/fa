@@ -47,9 +47,16 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        
         $this->middleware('guest');
     }
 
+     public function showRegistrationForm()
+    {
+        $mhash = ["xdasd","drwqa","fgdsf","gfdsg"];
+        $this->mhash = $mhash[array_rand($mhash)];
+        return view('auth.register')->with('mhash',$this->mhash);
+    }
 
     protected function redirectTo()
     {
@@ -68,6 +75,37 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         
+        $arr["error"] = 0;
+        $math = $data['math'];
+            $mhash = $data['mhash'];
+            if (!$math) {
+                $arr["error"] =1;
+                $arr["message"] = 'You have not give the answer for the math calculation!';
+            }else{
+                if($mhash == 'xdasd' && $math != 6){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                if($mhash == 'drwqa' && $math != 9){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                if($mhash == 'fgdsf' && $math != 7){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                if($mhash == 'gfdsg' && $math != 8){
+                    $arr["error"] =1;
+                    $arr["message"] = 'Your Math calculation is incorrect! Try Again!';
+                }
+                
+                
+
+            }
+
+            if($arr['error']){
+                abort('402',$arr['message']);
+            }
 
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -86,6 +124,8 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
        
+
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -96,6 +136,8 @@ class RegisterController extends Controller
             'sms_token' => mt_rand(1000,9999),
             'client_slug'=>client('slug')
         ]);
+
+
 
         if(isset($data['code']))
         if($data['code']){

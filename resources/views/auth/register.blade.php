@@ -111,6 +111,20 @@
         {!! client('rform') !!}
     @endif
 
+     @if(isset($mhash))
+     <div class="form-group row">
+        <div class="col-md-4"><label for="exampleInputPassword1">Solve this</label>
+        <img src="/math/{{ $mhash}}.png" width="80px" class="mb-2"/></div>
+
+    
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="math" id="exampleInputPassword1" placeholder="enter your answer">
+      <input type="hidden" class="form-control" name="mhash" value="{{$mhash}}" >
+        </div>
+    </div>
+  
+  @endif
+
     <div class="form-group row text-md-left">
         <div class="col-md-4 col-form-label text-md-left">&nbsp;
         </div>
