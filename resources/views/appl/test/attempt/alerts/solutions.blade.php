@@ -48,7 +48,7 @@
                @endif
               @endif
 
-              @if($test->test_id ==1 || $test->test_id==2)
+              @if($test->type_id ==1 || $test->type_id==2)
               <a href="{{ route('test.answers',$test->slug)}}">
                 <button class="btn btn-sm btn-primary mt-3 ">
                   <i class="fa fa-bars"></i> View Question Paper & Answers</button>
@@ -140,9 +140,11 @@
         @if(json_decode($test->settings))
           @if(!json_decode($test->settings)->noreport)
             @include('appl.test.attempt.blocks.solutions')
-          @else
+          @elseif(!request()->get('admin'))
           <div class="bg-light p-3 rounded mt-3 "> Your responses are recorded for internal evaluation
             </div>
+          @elseif(request()->get('admin'))
+           @include('appl.test.attempt.blocks.solutions')
           @endif
         @else
           @include('appl.test.attempt.blocks.solutions')

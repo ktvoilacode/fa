@@ -1158,8 +1158,11 @@ class TestController extends Controller
                 $settings['deactivation'] = null;
 
             $settings['noreport'] = 0;
-            if($request->noreport){
+            if($request->noreport==1){
                 $settings['noreport'] = 1;
+            }
+            if($request->noreport==2){
+                $settings['noreport'] = 2;
             }
 
             $settings['sidebox'] = 0;
