@@ -20,12 +20,12 @@ class ReaderFactory
     use MapsCsvSettings;
 
     /**
-     * @param object        $import
-     * @param TemporaryFile $file
-     * @param string        $readerType
+     * @param  object  $import
+     * @param  TemporaryFile  $file
+     * @param  string  $readerType
+     * @return IReader
      *
      * @throws Exception
-     * @return IReader
      */
     public static function make($import, TemporaryFile $file, string $readerType = null): IReader
     {
@@ -35,6 +35,10 @@ class ReaderFactory
 
         if (method_exists($reader, 'setReadDataOnly')) {
             $reader->setReadDataOnly(config('excel.imports.read_only', true));
+        }
+
+        if (method_exists($reader, 'setReadEmptyCells')) {
+            $reader->setReadEmptyCells(!config('excel.imports.ignore_empty', false));
         }
 
         if ($reader instanceof Csv) {
@@ -49,6 +53,9 @@ class ReaderFactory
             $reader->setEscapeCharacter(static::$escapeCharacter);
             $reader->setContiguous(static::$contiguous);
             $reader->setInputEncoding(static::$inputEncoding);
+            if (method_exists($reader, 'setTestAutoDetect')) {
+                $reader->setTestAutoDetect(static::$testAutoDetect);
+            }
         }
 
         if ($import instanceof WithReadFilter) {
@@ -64,10 +71,10 @@ class ReaderFactory
     }
 
     /**
-     * @param TemporaryFile $temporaryFile
+     * @param  TemporaryFile  $temporaryFile
+     * @return string
      *
      * @throws NoTypeDetectedException
-     * @return string
      */
     private static function identify(TemporaryFile $temporaryFile): string
     {

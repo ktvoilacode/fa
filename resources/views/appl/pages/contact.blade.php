@@ -17,9 +17,9 @@ src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJx7TARMmQyzsR8BKHn
 <h1>Contact Us</h1><br>
 <div class="row">
   <div class='col-12 col-md-5'>
-    <h3>Ameerpet</h3>
+    <h3>Ameerpet </h3>
     <div class="bg-info pt-1 rounded w-25 mb-4"></div>
-707 - 708, Seventh floor<br>
+707 - 708, Seventh floor.<br>
 Pavani Prestige, <br>
 Ameerpet, Hyderabad,<br>
 Telengana, 500016 <br><br>
