@@ -1761,18 +1761,20 @@ class AttemptController extends Controller
     else
       $result = Attempt::where('test_id', $test->id)->where('session_id', $session_id)->get();
 
-    $mcqs = Cache::remember('mcq_test_' . $test->id, 360, function () use ($test) {
+    $mcqs = Cache::remember('mcqs_test_' . $test->id, 360, function () use ($test) {
       return MCQ::where('test_id', $test->id)->get()->keyBy('id');
     });
     $fillups = Cache::remember('fillup_test_' . $test->id, 360, function () use ($test) {
       return Fillup::where('test_id', $test->id)->get()->keyBy('id');
     });
+    //dd($result->pluck("fillup_id"));
+    //dd($mcqs);
     foreach ($result as $k => $r) {
 
       if ($r->mcq_id)
         $result[$k]->mcq = $mcqs[$r->mcq_id];
       if ($r->fillup_id)
-        $result[$k]->fillup = $mcqs[$r->fillup_id];
+        $result[$k]->fillup = $fillups[$r->fillup_id];
     }
     if ($result) {
       if ($result->where('status', 0)->first()) {
