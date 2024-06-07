@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Test;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Test\MCQ;
+use App\Models\Test\Mcq;
 use App\Models\Test\Fillup;
 use App\Models\Test\Section;
 use App\Models\Test\Extract;
