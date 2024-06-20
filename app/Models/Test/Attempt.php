@@ -37,14 +37,14 @@ class Attempt extends Model
     }
 
     public function getTest($id)
-    {   
-        $test = Test::where('id',$id)->first();
+    {
+        $test = Test::where('id', $id)->first();
         return $test;
     }
 
     public function user()
     {
-        if($this->belongsTo('App\User'))
+        if ($this->belongsTo('App\User'))
             return $this->belongsTo('App\User');
         else
             return null;
@@ -64,75 +64,73 @@ class Attempt extends Model
     {
         return $this->belongsTo('App\Models\Test\Fillup');
     }
-    
+
     public function mcq()
     {
         return $this->belongsTo('App\Models\Test\Mcq');
     }
 
-    public static function  tags($result){
+    public static function  tags($result)
+    {
         $mcq_id = [];
-        $fillup_id =[];
-        if(is_array($result)){
-            foreach($result as $res){
-                if($res['fillup_id']){
+        $fillup_id = [];
+        if (is_array($result)) {
+            foreach ($result as $res) {
+                if ($res['fillup_id']) {
                     array_push($fillup_id, $res['fillup_id']);
-                }
-                elseif($res['mcq_id']){
+                } elseif ($res['mcq_id']) {
                     array_push($mcq_id, $res['mcq_id']);
                 }
             }
-        }else{
+        } else {
             $mcq_id = $result->pluck('mcq_id')->toArray();
             $fillup_id = $result->pluck('fillup_id')->toArray();
         }
-        
-        $mcq_tags = DB::table('mcq_tag')->whereIn('mcq_id',$mcq_id)->get();
+
+        $mcq_tags = DB::table('mcq_tag')->whereIn('mcq_id', $mcq_id)->get();
         $mcq_tag_ids = $mcq_tags->pluck('tag_id')->toArray();
 
-        
-        $fillup_tags = DB::table('fillup_tag')->whereIn('fillup_id',$fillup_id)->get();
-        $fillup_tag_ids =$fillup_tags->pluck('tag_id')->toArray();
-        
 
-        $tags = Tag::whereIn('id',$mcq_tag_ids)->orWhereIn('id',$fillup_tag_ids)->get();
+        $fillup_tags = DB::table('fillup_tag')->whereIn('fillup_id', $fillup_id)->get();
+        $fillup_tag_ids = $fillup_tags->pluck('tag_id')->toArray();
 
-        if(!$tags)
+
+        $tags = Tag::whereIn('id', $mcq_tag_ids)->orWhereIn('id', $fillup_tag_ids)->get();
+
+        if (!$tags)
             return null;
 
         $tags = $tags->groupBy('name');
 
         $data = [];
         $tagdata = [];
-        foreach($tags as $name => $t){
-            foreach($t as $a){
+        foreach ($tags as $name => $t) {
+            foreach ($t as $a) {
 
-              $data[$name][$a->value]['correct'] = 0; 
-              $data[$name][$a->value]['total'] = 0;
-              $data[$name][$a->value]['percent'] = 0;
+                $data[$name][$a->value]['correct'] = 0;
+                $data[$name][$a->value]['total'] = 0;
+                $data[$name][$a->value]['percent'] = 0;
             }
-            
         }
 
         //dd($result);
-        foreach($result as $at){
+        foreach ($result as $at) {
 
 
-            $q=0;
-            if(is_array($result)){
-                if($at['mcq_id'])
-                $q = Mcq::where('id',$at['mcq_id'])->first();
-                else if($at['fillup_id']) 
-                $q = Fillup::where('id',$at['fillup_id'])->first();
-
-            }else{
-                if($at->mcq_id)
-                $q = $at->mcq;
-                else if($at->fillup_id) 
-                $q = $at->fillup;
+            $q = 0;
+            if (is_array($result)) {
+                if ($at['mcq_id'])
+                    $q = Mcq::where('id', $at['mcq_id'])->first();
+                else if ($at['fillup_id'])
+                    $q = Fillup::where('id', $at['fillup_id'])->first();
+            } else {
+                if ($at->mcq_id)
+                    $q = $at->mcq;
+                else if ($at->fillup_id)
+                    $q = $at->fillup;
             }
-            
-            
+
+
 
             // if($q){
             //     if(isset($q->tags))
@@ -145,319 +143,302 @@ class Attempt extends Model
             //             if($at['accuracy']==1)
             //                  $data[$tg->name][$tg->value]['correct']++;
             //         }
-                    
+
             //         $data[$tg->name][$tg->value]['total']++;
-                    
+
             //     }
             // }
         }
 
-        foreach($tags as $name => $t){
-            foreach($t as $a){
-              if($data[$name][$a->value]['total'])
-              $data[$name][$a->value]['percent'] = (round($data[$name][$a->value]['correct']/$data[$name][$a->value]['total'],2))*100;
+        foreach ($tags as $name => $t) {
+            foreach ($t as $a) {
+                if ($data[$name][$a->value]['total'])
+                    $data[$name][$a->value]['percent'] = (round($data[$name][$a->value]['correct'] / $data[$name][$a->value]['total'], 2)) * 100;
             }
-            
         }
 
         return $data;
     }
 
-    public function reading_band($score){
-        if($score==39 || $score ==40)
+    public function reading_band($score)
+    {
+        if ($score == 39 || $score == 40)
             $band = 9;
-        else if($score==37 || $score ==38)
+        else if ($score == 37 || $score == 38)
             $band = 8.5;
-        else if($score==35 || $score ==36)
+        else if ($score == 35 || $score == 36)
             $band = 8;
-        else if($score>=33 && $score <=34)
+        else if ($score >= 33 && $score <= 34)
             $band = 7.5;
-        else if($score>=30 && $score <=32)
+        else if ($score >= 30 && $score <= 32)
             $band = 7;
-        else if($score>=27 && $score <=29)
+        else if ($score >= 27 && $score <= 29)
             $band = 6.5;
-        else if($score>=23 && $score <=26)
+        else if ($score >= 23 && $score <= 26)
             $band = 6;
-        else if($score>=19 && $score <=22)
+        else if ($score >= 19 && $score <= 22)
             $band = 5.5;
-        else if($score>=15 && $score <=18)
+        else if ($score >= 15 && $score <= 18)
             $band = 5;
-        else if($score>=13 && $score <=14)
+        else if ($score >= 13 && $score <= 14)
             $band = 4.5;
-        else if($score>=10 && $score <=12)
+        else if ($score >= 10 && $score <= 12)
             $band = 4;
-        else if($score>=8 && $score <=9)
+        else if ($score >= 8 && $score <= 9)
             $band = 3.5;
-        else if($score>=6 && $score <=7)
+        else if ($score >= 6 && $score <= 7)
             $band = 3;
-        else if($score>=4 && $score <=5)
+        else if ($score >= 4 && $score <= 5)
             $band = 2.5;
-        else if($score>=2 && $score <=3)
+        else if ($score >= 2 && $score <= 3)
             $band = 2;
-        else 
-            $band =0;
+        else
+            $band = 0;
         return $band;
-
     }
 
-    public function listening_band($score){
+    public function listening_band($score)
+    {
 
-        if($score==39 || $score ==40)
+        if ($score == 39 || $score == 40)
             $band = 9;
-        else if($score==37 || $score ==38)
+        else if ($score == 37 || $score == 38)
             $band = 8.5;
-        else if($score==35 || $score ==36)
+        else if ($score == 35 || $score == 36)
             $band = 8;
-        else if($score>=32 && $score <=34)
+        else if ($score >= 32 && $score <= 34)
             $band = 7.5;
-        else if($score>=30 && $score <=31)
+        else if ($score >= 30 && $score <= 31)
             $band = 7;
-        else if($score>=26 && $score <=29)
+        else if ($score >= 26 && $score <= 29)
             $band = 6.5;
-        else if($score>=23 && $score <=25)
+        else if ($score >= 23 && $score <= 25)
             $band = 6;
-        else if($score>=18 && $score <=22)
+        else if ($score >= 18 && $score <= 22)
             $band = 5.5;
-        else if($score>=16 && $score <=17)
+        else if ($score >= 16 && $score <= 17)
             $band = 5;
-        else if($score>=13 && $score <=15)
+        else if ($score >= 13 && $score <= 15)
             $band = 4.5;
-        else if($score>=11 && $score <=12)
+        else if ($score >= 11 && $score <= 12)
             $band = 4;
-        else if($score>=8 && $score <=10)
+        else if ($score >= 8 && $score <= 10)
             $band = 3.5;
-        else if($score>=5 && $score <=7)
+        else if ($score >= 5 && $score <= 7)
             $band = 3;
-        else if($score==3 && $score ==4)
+        else if ($score == 3 && $score == 4)
             $band = 2.5;
-        else if($score==2 )
+        else if ($score == 2)
             $band = 2;
-        else if($score==1)
+        else if ($score == 1)
             $band = 1;
         else
-            $band =0;
+            $band = 0;
         return $band;
-
     }
 
 
-    public function evaluate($request,$result){ 
+    public function evaluate($request, $result)
+    {
 
-        $score_params = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
+        $score_params = ['pronunciation' => 0, 'fluency' => 0, 'understanding-and-completeness' => 0, 'leximic-dextirity' => 0, 'grammatical-proficiency' => 0];
 
         $json = [];
 
-        $co=1;
-        foreach($request->all() as $key =>$value){
-            
-          if(startsWithNumber($key))
-          {
+        $co = 1;
+        foreach ($request->all() as $key => $value) {
+
+            if (startsWithNumber($key)) {
                 $exp = explode('_', $key);
                 $qno = $exp[0];
-               
+
                 $param = $exp[1];
-                $json[$qno][$param]=$value;
-
-               
-          }
-
-
+                $json[$qno][$param] = $value;
+            }
         }
 
-      
-         // if(count($json))
-         // dd($result[0]);
-        $counter=0;
-        foreach($json as $qno =>$data){
-    
-            if(isset($qno))
-                $r = $result->where('qno',$qno)->first();
+
+        // if(count($json))
+        // dd($result[0]);
+        $counter = 0;
+        foreach ($json as $qno => $data) {
+
+            if (isset($qno))
+                $r = $result->where('qno', $qno)->first();
             else
-                $r = $result->where('user_id',$request->get('user_id'))->first();
-            $total = 0; $count = 0;
-            foreach($data as $param=>$sc){
+                $r = $result->where('user_id', $request->get('user_id'))->first();
+            $total = 0;
+            $count = 0;
+            foreach ($data as $param => $sc) {
                 $total = $total + intval($sc);
                 $count++;
             }
-            if($count)
+            if ($count)
                 $r->score = intval($total);
             else
                 $r->score = 0;
 
-            if($qno==1)
+            if ($qno == 1)
                 $r->comment = $request->get('comments');
 
-
-            
-
-            
             $r->marking = json_encode($data);
             $r->status = 1;
             $counter++;
-
+            if (isset($r->fillup))
+                unset($r->fillup);
             $r->save();
         }
 
-         if($request->get('direct_score')!=null){
-                 if(isset($qno))
-                    $r = $result->where('qno',$qno)->first();
-                 else
-                    $r = $result->where('user_id',$request->get('user_id'))->first();
-                $r->comment = $request->get('comments');
-                $r->dynamic = 1;
-                $r->status = 1;
-                $r->score = (float)$request->get('direct_score');
-               
-                if(!is_float($r->score))
-                    abort('403','Direct Score can be numeric value only');
-                
-                if(isset($data)){
-                    foreach($data as $d=>$k){
-                        $data[$d] = round($r->score,3);
-                    }
-                    $r->marking = json_encode($data);
+        if ($request->get('direct_score') != null) {
+            if (isset($qno))
+                $r = $result->where('qno', $qno)->first();
+            else
+                $r = $result->where('user_id', $request->get('user_id'))->first();
+            $r->comment = $request->get('comments');
+            $r->dynamic = 1;
+            $r->status = 1;
+            $r->score = (float)$request->get('direct_score');
+
+            if (!is_float($r->score))
+                abort('403', 'Direct Score can be numeric value only');
+
+            if (isset($data)) {
+                foreach ($data as $d => $k) {
+                    $data[$d] = round($r->score, 3);
                 }
-                $r->save();
+                $r->marking = json_encode($data);
+            }
+            $r->save();
 
 
-                if($request->get('mock'))
-                {
-                    $mock = Mock::where('id',$request->get('mock'))->first();
-                    $t1 = Test::where('slug',$mock->t1)->first();
-                    $t2 = Test::where('slug',$mock->t2)->first();
-                    $t3 = Test::where('slug',$mock->t3)->first();
-                    $t4 = Test::where('slug',$mock->t4)->first();
+            if ($request->get('mock')) {
+                $mock = Mock::where('id', $request->get('mock'))->first();
+                $t1 = Test::where('slug', $mock->t1)->first();
+                $t2 = Test::where('slug', $mock->t2)->first();
+                $t3 = Test::where('slug', $mock->t3)->first();
+                $t4 = Test::where('slug', $mock->t4)->first();
 
-                    $mattempt = Mock_Attempt::where('mock_id',$request->get('mock'))->where('user_id',$request->get('user_id'))->first();
+                $mattempt = Mock_Attempt::where('mock_id', $request->get('mock'))->where('user_id', $request->get('user_id'))->first();
 
-                   
-                    if($t1)
-                    if($r->test_id == $t1->id){
+
+                if ($t1)
+                    if ($r->test_id == $t1->id) {
                         $mattempt->t1 = 1;
                         $mattempt->t1_score = $r->score;
                         $mattempt->save();
                     }
 
-                    if($t2)
-                    if($r->test_id == $t2->id){
+                if ($t2)
+                    if ($r->test_id == $t2->id) {
                         $mattempt->t2 = 1;
                         $mattempt->t2_score = $r->score;
                         $mattempt->save();
                     }
 
-                    if($t3)
-                    if($r->test_id == $t3->id){
+                if ($t3)
+                    if ($r->test_id == $t3->id) {
                         $mattempt->t3 = 1;
                         $mattempt->t3_score = $r->score;
                         $mattempt->save();
                     }
 
-                    if($t4)
-                    if($r->test_id == $t4->id){
+                if ($t4)
+                    if ($r->test_id == $t4->id) {
                         $mattempt->t4 = 1;
                         $mattempt->t4_score = $r->score;
                         $mattempt->save();
                     }
 
-                    if($mattempt->t1==1 && $mattempt->t2==1 && $mattempt->t3==1 && $mattempt->t4==1){
-                        $mattempt->status =1;
-                        $mattempt->save();
-                    }
-
-                    if(!$mock->t2){
-                        $mattempt->status =1;
-                        $mattempt->save();
-                    }
-                 
-                    
+                if ($mattempt->t1 == 1 && $mattempt->t2 == 1 && $mattempt->t3 == 1 && $mattempt->t4 == 1) {
+                    $mattempt->status = 1;
+                    $mattempt->save();
                 }
-              
-            }
 
+                if (!$mock->t2) {
+                    $mattempt->status = 1;
+                    $mattempt->save();
+                }
+            }
+        }
     }
 
-    public function loadMarking($result){
-        foreach($result as $r){
-            $data[$r->qno] = json_decode($r->marking,true);
+    public function loadMarking($result)
+    {
+        foreach ($result as $r) {
+            $data[$r->qno] = json_decode($r->marking, true);
         }
         return $data;
     }
 
-    public function scoreDuolingo($result){
+    public function scoreDuolingo($result)
+    {
 
 
-        $param_count = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
-        $param_score = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
-        $param_percent = ['pronunciation'=>0,'fluency'=>0,'understanding-and-completeness'=>0,'leximic-dextirity'=>0,'grammatical-proficiency'=>0];
+        $param_count = ['pronunciation' => 0, 'fluency' => 0, 'understanding-and-completeness' => 0, 'leximic-dextirity' => 0, 'grammatical-proficiency' => 0];
+        $param_score = ['pronunciation' => 0, 'fluency' => 0, 'understanding-and-completeness' => 0, 'leximic-dextirity' => 0, 'grammatical-proficiency' => 0];
+        $param_percent = ['pronunciation' => 0, 'fluency' => 0, 'understanding-and-completeness' => 0, 'leximic-dextirity' => 0, 'grammatical-proficiency' => 0];
 
         $review = false;
 
 
 
-        foreach($result as $r){
+        foreach ($result as $r) {
 
-            $data = json_decode($r->marking,true);
+            $data = json_decode($r->marking, true);
             // if(!$r->marking){
             //     $review = true;
-                
+
             //     break;
             // }else{
-                
+
             // }
-            foreach($param_count as $p=>$v){
-                if(isset($data[$p])){
-                    $param_score[$p] = $param_score[$p] +$data[$p];
+            foreach ($param_count as $p => $v) {
+                if (isset($data[$p])) {
+                    $param_score[$p] = $param_score[$p] + $data[$p];
                     $param_count[$p]++;
                 }
             }
 
-            if($r->dynamic==1)
-            {
+            if ($r->dynamic == 1) {
                 $param_percent['score'] = $r->score;
                 return $param_percent;
             }
         }
 
-       
 
-        $total =0;
+
+        $total = 0;
         $s = 0;
-        if($review)
-        foreach($result as $r){
-            if($r->status==1){
-                $total++;
-                if($r->accuracy==1)
-                $s = $s+1;
+        if ($review)
+            foreach ($result as $r) {
+                if ($r->status == 1) {
+                    $total++;
+                    if ($r->accuracy == 1)
+                        $s = $s + 1;
+                }
             }
-        }
 
         $score = 0;
 
-        foreach($param_count as $p=>$v){
-               if($param_count[$p]!=0)
-               $param_percent[$p] = round(($param_score[$p]/(5*$param_count[$p])) * 100,2);
-           $score = $score + $param_percent[$p];
-
+        foreach ($param_count as $p => $v) {
+            if ($param_count[$p] != 0)
+                $param_percent[$p] = round(($param_score[$p] / (5 * $param_count[$p])) * 100, 2);
+            $score = $score + $param_percent[$p];
         }
 
-        
-        $score = round($score/5,2);
 
-        if($review){
-            if($total!=0)
-                $score = $s/$total * 160;
+        $score = round($score / 5, 2);
+
+        if ($review) {
+            if ($total != 0)
+                $score = $s / $total * 160;
             else
-                $score=0;
-            if($score<50)
+                $score = 0;
+            if ($score < 50)
                 $score = $score + 20;
-            $param_percent['score'] = round($score,2);
-        }
-        else
+            $param_percent['score'] = round($score, 2);
+        } else
             $param_percent['score'] = $score;
         return $param_percent;
-
-
     }
-
-
 }

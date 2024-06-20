@@ -10,6 +10,7 @@ use App\Models\Product\Product;
 use App\Models\Product\Coupon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 
 class HomeController extends Controller
@@ -30,38 +31,37 @@ class HomeController extends Controller
      */
     public function index()
     {
+        Storage::disk('s3')->put('sample.text', 'hello');
         $view = 'welcome2';
-            $tests = Test::where('status',1)->orderBy('id','desc')->limit(18)->get();
-            return view($view)
-                ->with('tests',$tests);
-
-
-        
+        $tests = Test::where('status', 1)->orderBy('id', 'desc')->limit(18)->get();
+        return view($view)
+            ->with('tests', $tests);
     }
 
-     public function dbUpdate(){
+    public function dbUpdate()
+    {
 
         //update user subdomians
-        if(request()->get('user'))
+        if (request()->get('user'))
             User::query()->update(['client_slug' => 'prep']);
-        if(request()->get('test'))
+        if (request()->get('test'))
             Test::query()->update(['client_slug' => 'prep']);
-        if(request()->get('product'))
+        if (request()->get('product'))
             Product::query()->update(['client_slug' => 'prep']);
-        if(request()->get('coupon'))
+        if (request()->get('coupon'))
             Coupon::query()->update(['client_slug' => 'prep']);
     }
 
-    
+
 
     public function welcome2()
     {
         $view = 'welcome2';
-        
+
         return view($view);
     }
 
-     public function welcome(Request $request)
+    public function welcome(Request $request)
     {
 
         $view = 'welcome4';
@@ -74,257 +74,244 @@ class HomeController extends Controller
         $category = $request->category;
         $type = $request->type;
         $category_id = null;
-        if($category)
-        {
-            $cate = Category::where('slug',$category)->first();
+        if ($category) {
+            $cate = Category::where('slug', $category)->first();
             $category_id = $cate->id;
-            if($type=='free')
-            $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->where('category_id',$category_id)
-                    ->where('price',0)
-                    ->where('status',1)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records')); 
-            else if($type=='premium')
-             $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->where('category_id',$category_id)
-                    ->where('price','!=',0)
-                    ->where('status',1)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));    
+            if ($type == 'free')
+                $objs = $obj->where('name', 'LIKE', "%{$item}%")
+                    ->where('category_id', $category_id)
+                    ->where('price', 0)
+                    ->where('status', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(config('global.no_of_records'));
+            else if ($type == 'premium')
+                $objs = $obj->where('name', 'LIKE', "%{$item}%")
+                    ->where('category_id', $category_id)
+                    ->where('price', '!=', 0)
+                    ->where('status', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(config('global.no_of_records'));
             else
-            $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->where('category_id',$category_id)
-                    ->where('status',1)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records'));   
-        }else{
-            if($type=='free')
-            $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->where('price',0)
-                    ->where('status',1)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records')); 
-            else if($type=='premium')
-            $objs = $obj->where('name','LIKE',"%{$item}%")
-                    ->where('price','!=',0)
-                    ->where('status',1)
-                    ->orderBy('created_at','desc')
-                    ->paginate(config('global.no_of_records')); 
-            else{
+                $objs = $obj->where('name', 'LIKE', "%{$item}%")
+                    ->where('category_id', $category_id)
+                    ->where('status', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(config('global.no_of_records'));
+        } else {
+            if ($type == 'free')
+                $objs = $obj->where('name', 'LIKE', "%{$item}%")
+                    ->where('price', 0)
+                    ->where('status', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(config('global.no_of_records'));
+            else if ($type == 'premium')
+                $objs = $obj->where('name', 'LIKE', "%{$item}%")
+                    ->where('price', '!=', 0)
+                    ->where('status', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(config('global.no_of_records'));
+            else {
 
                 $objs = Cache::get('tests_active');
-                if(!$objs){
-                    $objs = $obj->where('name','LIKE',"%{$item}%")
-                                ->where('status',1)
-                                ->orderBy('created_at','desc')
-                                ->paginate(config('global.no_of_records')); 
-                    Cache::forever('tests_active',$objs);
+                if (!$objs) {
+                    $objs = $obj->where('name', 'LIKE', "%{$item}%")
+                        ->where('status', 1)
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(config('global.no_of_records'));
+                    Cache::forever('tests_active', $objs);
                 }
-                
             }
-            
         }
 
         $categories = Cache::get('categories');
-        if(!$categories){
-            $categories = Category::where('status',1)->get();
-            Cache::forever('categories',$categories);
-        }
-        
-        
-        $view = $search ? 'appl.test.test.public_list': 'welcome4';
-
-       
-        $toast =1;
-        if($_SERVER['HTTP_HOST'] != 'project.test' && $_SERVER['HTTP_HOST'] != 'prep.firstacademy.in'){
-            if(!$search )
-            $view = 'welcome_piofx';
-            $toast =0;
-
+        if (!$categories) {
+            $categories = Category::where('status', 1)->get();
+            Cache::forever('categories', $categories);
         }
 
-        if(\auth::user())
+
+        $view = $search ? 'appl.test.test.public_list' : 'welcome4';
+
+
+        $toast = 1;
+        if ($_SERVER['HTTP_HOST'] != 'project.test' && $_SERVER['HTTP_HOST'] != 'prep.firstacademy.in') {
+            if (!$search)
+                $view = 'welcome_piofx';
+            $toast = 0;
+        }
+
+        if (\auth::user())
             return redirect()->to('/home');
         else
-        return view($view)
-                ->with('tests',$objs)
-                ->with('objs',$objs)
-                ->with('obj',$obj)
-                ->with('toast',$toast)
-                ->with('categories',$categories)
-                ->with('app',$this);
+            return view($view)
+                ->with('tests', $objs)
+                ->with('objs', $objs)
+                ->with('obj', $obj)
+                ->with('toast', $toast)
+                ->with('categories', $categories)
+                ->with('app', $this);
     }
 
-    public function dashboard(Request $request){
+    public function dashboard(Request $request)
+    {
 
 
-        if($_SERVER['HTTP_HOST']!='prep.firstacademy.in' && $_SERVER['HTTP_HOST']!='fa.test')
-        {
+        if ($_SERVER['HTTP_HOST'] != 'prep.firstacademy.in' && $_SERVER['HTTP_HOST'] != 'fa.test') {
             return $this->dashboard_piofx($request);
-        }
-        else{
+        } else {
             $user = \auth::user();
-            $orders = \auth::user()->orders()->where('status',1)->orderBy('expiry','desc')->get();
+            $orders = \auth::user()->orders()->where('status', 1)->orderBy('expiry', 'desc')->get();
 
 
-            if($request->get('refresh')){
-                foreach($orders as $o){
-                Cache::forget('my_tests_'.$user->id.'_'.$o->product_id);
+            if ($request->get('refresh')) {
+                foreach ($orders as $o) {
+                    Cache::forget('my_tests_' . $user->id . '_' . $o->product_id);
                 }
             }
             $test_ids = array();
             $test_ids2 = array();
             $product_ids = array();
-            $tests=array();
-            $status =array();
-            $product_status =array();
+            $tests = array();
+            $status = array();
+            $product_status = array();
             $product_expiry = array();
             $expiry = array();
             $search = $request->search;
             $item = $request->item;
             $item2 = $request->item2;
 
-            $i=0;
+            $i = 0;
 
-            foreach($orders as $o){
-              //if(strtotime($o->expiry) > strtotime(date('Y-m-d'))){
-                if($o->test_id){
-                    if(!in_array($o->test_id, $test_ids)){
-                         array_push($test_ids, $o->test_id);
-                         $expiry[$o->test_id] = $o->expiry;
-                        if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+            foreach ($orders as $o) {
+                //if(strtotime($o->expiry) > strtotime(date('Y-m-d'))){
+                if ($o->test_id) {
+                    if (!in_array($o->test_id, $test_ids)) {
+                        array_push($test_ids, $o->test_id);
+                        $expiry[$o->test_id] = $o->expiry;
+                        if (strtotime($o->expiry) > strtotime(date('Y-m-d')))
                             $status[$o->test_id] = 'Active';
                         else
                             $status[$o->test_id] = 'Expired';
                     }
-                    
                 }
-                
 
-                if($o->product_id){
+
+                if ($o->product_id) {
                     array_push($product_ids, $o->product_id);
-                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                    if (strtotime($o->expiry) > strtotime(date('Y-m-d')))
                         $product_status[$o->product_id] = 'Active';
                     else
                         $product_status[$o->product_id] = 'Expired';
                     $product_expiry[$o->product_id] = $o->expiry;
-                    $tests = Cache::remember('my_tests_'.$user->id.'_'.$o->product_id,240,function() use ($o){
+                    $tests = Cache::remember('my_tests_' . $user->id . '_' . $o->product_id, 240, function () use ($o) {
                         return  $o->product->tests;
                     });
-                    foreach($tests as $t){
-                        if(!in_array($t->id, $test_ids)){
+                    foreach ($tests as $t) {
+                        if (!in_array($t->id, $test_ids)) {
                             array_push($test_ids, $t->id);
                             array_push($test_ids2, $t->id);
                             $expiry[$t->id] = $o->expiry;
-                            if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                            if (strtotime($o->expiry) > strtotime(date('Y-m-d')))
                                 $status[$t->id] = 'Active';
                             else
                                 $status[$t->id] = 'Expired';
                         }
-                        
                     }
-                }    
-            
-            }
-            
-
-
-
-            $tests = Test::whereIn('id',$test_ids)->where('name','LIKE',"%{$item}%")->with('testtype')->orderBy('name')->get();
-            $products = Product::whereIn('id',$product_ids)->where('name','LIKE',"%{$item2}%")->orderBy('name')->get();
-
-            $att= Attempt::where('user_id',\auth::user()->id)->whereIn('test_id',$test_ids)->get();
-            $attempts = $att->pluck('test_id')->toArray();
-            
-            $status2=[];
-            foreach($tests as $k=>$t){
-               $type= $t->testtype->name;
-                if(in_array($t->id, $attempts))
-                    $status[$t->id] = 'Completed';
-
-                if($type=='WRITING'){
-                    $att_w = $att->where('test_id',$t->id)->first();
-                    if($att_w){
-                       if($att_w->answer){
-                        $status2[$t->id] = 'evaluated';
-                       }else{
-                        $status2[$t->id] = 'notevaluated';
-                       }
-                    }
-                    
                 }
             }
 
-           if($search){
-                if($item2)
-                $view = 'appl.pages.blocks.productlist';
-               else   
-                $view = 'appl.pages.blocks.testlist';
-           }
-           else
-            $view = 'appl.pages.dashboard2';
+
+
+
+            $tests = Test::whereIn('id', $test_ids)->where('name', 'LIKE', "%{$item}%")->with('testtype')->orderBy('name')->get();
+            $products = Product::whereIn('id', $product_ids)->where('name', 'LIKE', "%{$item2}%")->orderBy('name')->get();
+
+            $att = Attempt::where('user_id', \auth::user()->id)->whereIn('test_id', $test_ids)->get();
+            $attempts = $att->pluck('test_id')->toArray();
+
+            $status2 = [];
+            foreach ($tests as $k => $t) {
+                $type = $t->testtype->name;
+                if (in_array($t->id, $attempts))
+                    $status[$t->id] = 'Completed';
+
+                if ($type == 'WRITING') {
+                    $att_w = $att->where('test_id', $t->id)->first();
+                    if ($att_w) {
+                        if ($att_w->answer) {
+                            $status2[$t->id] = 'evaluated';
+                        } else {
+                            $status2[$t->id] = 'notevaluated';
+                        }
+                    }
+                }
+            }
+
+            if ($search) {
+                if ($item2)
+                    $view = 'appl.pages.blocks.productlist';
+                else
+                    $view = 'appl.pages.blocks.testlist';
+            } else
+                $view = 'appl.pages.dashboard2';
 
 
             /* code specific to piofx */
-            if($_SERVER['HTTP_HOST'] == 'onlinelibrary.test' || $_SERVER['HTTP_HOST'] == 'piofx.com' )
-            {
-                if($user->role==0)
+            if ($_SERVER['HTTP_HOST'] == 'onlinelibrary.test' || $_SERVER['HTTP_HOST'] == 'piofx.com') {
+                if ($user->role == 0)
                     $view = 'appl.admin.bfs.index_student';
             }
 
-            if(request()->segment(1)=='home2')
+            if (request()->segment(1) == 'home2')
                 $view = 'appl.pages.home2';
 
             return view($view)
-                    ->with('tests',$tests)
-                    ->with('products',$products)
-                    ->with('expiry',$expiry)
-                    ->with('product_expiry',$product_expiry)
-                    ->with('product_status',$product_status)
-                    ->with('status',$status)
-                    ->with('status2',$status2);
+                ->with('tests', $tests)
+                ->with('products', $products)
+                ->with('expiry', $expiry)
+                ->with('product_expiry', $product_expiry)
+                ->with('product_status', $product_status)
+                ->with('status', $status)
+                ->with('status2', $status2);
         }
-        
     }
 
-    public function dashboard_piofx(Request $request){
+    public function dashboard_piofx(Request $request)
+    {
         $user = \auth::user();
-        if($request->get('refresh')){
-            Cache::forget('my_products_'.$user->id);
-                Cache::forget('my_orders_'.$user->id);
+        if ($request->get('refresh')) {
+            Cache::forget('my_products_' . $user->id);
+            Cache::forget('my_orders_' . $user->id);
         }
-        $orders = Cache::remember('my_orders_'.$user->id, 300, function() use($user){
-            return $user->orders()->where('status',1)->orderBy('expiry','desc')->get();
+        $orders = Cache::remember('my_orders_' . $user->id, 300, function () use ($user) {
+            return $user->orders()->where('status', 1)->orderBy('expiry', 'desc')->get();
         });
-        $products = Cache::remember('my_products_'.$user->id, 300, function() use($orders){
+        $products = Cache::remember('my_products_' . $user->id, 300, function () use ($orders) {
             $products =  array();
-            foreach($orders as $o){
-                if($o->product_id)
-                $products[$o->product_id] = $o->product;
+            foreach ($orders as $o) {
+                if ($o->product_id)
+                    $products[$o->product_id] = $o->product;
             }
             return $products;
         });
 
-        $product_status =array();
+        $product_status = array();
         $product_expiry = array();
 
-        foreach($orders as $o){
-                if($o->product_id){
-                    if(strtotime($o->expiry) > strtotime(date('Y-m-d')))
-                        $product_status[$o->product_id] = 'Active';
-                    else
-                        $product_status[$o->product_id] = 'Expired';
-                    $product_expiry[$o->product_id] = $o->expiry;
-                    
-                }    
-            
+        foreach ($orders as $o) {
+            if ($o->product_id) {
+                if (strtotime($o->expiry) > strtotime(date('Y-m-d')))
+                    $product_status[$o->product_id] = 'Active';
+                else
+                    $product_status[$o->product_id] = 'Expired';
+                $product_expiry[$o->product_id] = $o->expiry;
             }
+        }
 
         $view = 'appl.pages.piofx_dashboard';
         return view($view)
-                ->with('products',$products)
-                ->with('product_expiry',$product_expiry)
-                ->with('product_status',$product_status);
+            ->with('products', $products)
+            ->with('product_expiry', $product_expiry)
+            ->with('product_status', $product_status);
     }
 }
