@@ -134,7 +134,7 @@
         @endif
         @endif
 
-        @if($gre_score['quant'])
+        @if(isset($gre_score['quant']) && $gre_score['quant'])
         <div class="mt-3 row gx-3">
           <div class="col-6 ">
             <div class="bg-light p-3 rounded border ">
