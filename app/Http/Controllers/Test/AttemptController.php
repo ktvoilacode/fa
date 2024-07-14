@@ -1784,7 +1784,7 @@ class AttemptController extends Controller
 
     //check for duplicates
     $qnos = $result->groupBy('qno');
-    if (request()->get('duplicates')) {
+    if (request()->get('duplicates') || $test->qcount != count($result)) {
       foreach ($qnos as $q => $da) {
         if (count($da) > 1) {
           foreach ($da as $m => $a)
@@ -1900,7 +1900,10 @@ class AttemptController extends Controller
           $s = $score;
         $band = $attempt->$function_name($s);
       }
-    } elseif ($type == 'gre' && count($result) == 54) {
+    } elseif ($type == 'gre' && $test->qcount == 54) {
+
+      if ($test->qcount != count($result)) {
+      }
       //gre full mock
       $quantids = $verbalids = [];
       $scoreband = [

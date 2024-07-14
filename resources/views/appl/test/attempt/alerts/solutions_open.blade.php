@@ -65,6 +65,23 @@
         @endif
 
 
+        @if(isset($gre_score['quant']) && $gre_score['quant'])
+        <div class="mt-3 row gx-3">
+          <div class="col-6 ">
+            <div class="bg-light p-3 rounded border ">
+              <h3>Quant</h3>
+              <div class="display-4">{{$gre_score['quant']}}</div>
+            </div>
+          </div>
+          <div class="col-6  ">
+            <div class="bg-light p-3 rounded border ">
+              <h3>Verbal</h3>
+              <div class="display-4">{{$gre_score['verbal']}}</div>
+            </div>
+          </div>
+        </div>
+        @endif
+
         @if($test->testtype->name!='DUOLINGO' || request()->get('admin'))
         @include('appl.test.attempt.blocks.solutions')
         @else
