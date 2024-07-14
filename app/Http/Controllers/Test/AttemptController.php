@@ -1888,6 +1888,8 @@ class AttemptController extends Controller
 
     if ($testtype)
       $type = strtolower($testtype->name);
+
+    $gre_score = ["quant" => 0, "verbal" => 0];
     if (strtoupper($category->name) == 'IELTS') {
       if ($type == 'listening' || $type == 'reading') {
         $function_name = $type . '_band';
@@ -1898,6 +1900,35 @@ class AttemptController extends Controller
           $s = $score;
         $band = $attempt->$function_name($s);
       }
+    } elseif ($type == 'gre' && count($result) == 54) {
+      //gre full mock
+      $quantids = $verbalids = [];
+      $scoreband = [
+        "0" => 130, "1" => 130, "2" => 130, "3" => 131, "4" => 135, "5" => 136,
+        "6" => 138, "7" => 140, "8" => 141, "9" => 143, "10" => 144,
+        "11" => 145, "12" => 147, "13" => 148, "14" => 150,
+        "15" => 151, "16" => 153, "17" => 154, "18" => 156, "19" => 157,
+        "20" => 159, "21" => 160, "22", 162, "23" => 163, "24" => 166, "25" => 168,
+        "26" => 170, "27" => 170
+      ];
+
+      foreach ($test->sections as $s) {
+        $ids = $s->mcq->pluck('id')->toArray();
+        if (strpos(strtolower($s->name), 'quant') !== false) {
+          $quantids = array_merge($quantids, $ids);
+        } else {
+          $verbalids = array_merge($verbalids, $ids);
+        }
+      }
+      $quantres = $result->whereIn('mcq_id', $quantids);
+      $verbalres = $result->whereIn('mcq_id', $verbalids);
+      $quantcount = count($quantres->where('accuracy', 1));
+      $verbalcount = count($verbalres->where('accuracy', 1));
+
+      $gre_score['quant'] = $scoreband[$quantcount];
+      $gre_score['verbal'] = $scoreband[$verbalcount];
+
+      $score = $gre_score['quant'] + $gre_score['verbal'];
     }
 
     if (strtoupper($category->name) == 'PTE') {
@@ -1973,6 +2004,7 @@ class AttemptController extends Controller
       ->with('marking', $marking)
       ->with('score', $score)
       ->with('score_params', $score_params)
+      ->with('gre_score', $gre_score)
       ->with('param_percent', $param_percent)
       ->with('review', $review);
   }
