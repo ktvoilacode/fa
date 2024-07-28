@@ -43,14 +43,13 @@ class DayUpdate extends Command
      */
     public function handle()
     {
-       $writings = Writing::where('notify','!=',0)->get();
-       foreach($writings as $w){
-            $h = date('H')+5;
-            if($w->notify==$h)
-            {
+        $writings = Writing::where('notify', '!=', 0)->get();
+        foreach ($writings as $w) {
+            $h = date('H') + 5;
+            if ($w->notify == $h) {
                 $test = $w->attempt->test;
                 $user = $w->attempt->user;
-                Mail::to($user->email)->send(new reviewnotify($user,$test));
+                Mail::to($user->email)->send(new reviewnotify($user, $test));
                 $w->notify = 0;
                 $w->status = 1;
                 $w->save();
@@ -58,22 +57,19 @@ class DayUpdate extends Command
                 //send whatsapp
                 $obj = $user;
                 // send whatsapp
-                $var =[];
-                $var[0]= $obj->name;
-                if(strlen($obj->phone)==10)
-                    $phone = '91'.$obj->phone;
-                else if(strlen($obj->phone)==12)
+                $var = [];
+                $var[0] = $obj->name;
+                if (strlen($obj->phone) == 10)
+                    $phone = '91' . $obj->phone;
+                else if (strlen($obj->phone) == 12)
                     $phone = $obj->phone;
                 $template = 'writing_evaluation';
-                if(strlen($phone)==12){
-                    Admin::sendWhatsapp($phone,$template,$var);
+                if (strlen($phone) == 12) {
+                    Admin::whatsappWriting($phone, $obj->name, $test->name);
+                    //Admin::sendWhatsapp($phone, $template, $var);
                 }
                 $this->info('Hourly Update has been send successfully');
-
-
             }
-            
-       }
-       
+        }
     }
 }

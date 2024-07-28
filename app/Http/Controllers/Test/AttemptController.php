@@ -1927,7 +1927,7 @@ class AttemptController extends Controller
       $verbalres = $result->whereIn('mcq_id', $verbalids);
       $quantcount = count($quantres->where('accuracy', 1));
       $verbalcount = count($verbalres->where('accuracy', 1));
-
+      
       $gre_score['quant'] = $scoreband[$quantcount];
       $gre_score['verbal'] = $scoreband[$verbalcount];
 

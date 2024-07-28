@@ -149,7 +149,6 @@
             </div>
           </div>
         </div>
-
         @endif
         @if($test->test_id!=9 || request()->get('admin'))
         <form action="{{ url()->current() }}?evaluate=1&admin=1&@if(request()->get('session_id'))session_id={{request()->get('session_id')}} @elseif(request()->get('user_id'))user_id={{request()->get('user_id')}} @endif" method="post">

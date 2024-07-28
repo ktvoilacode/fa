@@ -77,6 +77,41 @@ class Admin extends Model
     return $data;
   }
 
+  public static function whatsappWriting($phone, $name, $testname)
+  {
+    $curl = curl_init();
+
+    // $phone = '919515125110';
+    // $name = 'Ramesh';
+    // $testname  = 'ABCD';
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => 'https://api.gupshup.io/wa/api/v1/template/msg',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => 'channel=whatsapp&source=919885817700&destination=' . $phone . '&src.name=tITI15zxQDfbob88gw58EkAS&template=%7B%22id%22%3A%22a9e7a658-018c-4e5d-ad90-77a0fbc803ec%22%2C%22params%22%3A%5B%22' . $name . '%22%2C%22' . $testname . '%22%5D%7D',
+      CURLOPT_HTTPHEADER => array(
+        'Cache-Control: no-cache',
+        'Content-Type: application/x-www-form-urlencoded',
+        'apikey: akhyhj14tf3w1aaspgvcqyn4xhio9g2l',
+        'cache-control: no-cache'
+      ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    //echo $response;
+    return 1;
+  }
+
   public static function whatsappUserDetails($phone, $email, $pass)
   {
     $curl = curl_init();
