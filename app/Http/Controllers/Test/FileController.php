@@ -9,6 +9,7 @@ use App\Models\Test\Attempt as Obj2;
 use App\Models\Test\Test;
 use App\Models\Test\Writing;
 use App\Models\Product\Order;
+use App\Models\Admin\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Admin\Admin;
 use App\User;
@@ -187,9 +188,7 @@ class FileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -197,9 +196,7 @@ class FileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Obj $obj, Request $request)
-    {
-    }
+    public function store(Obj $obj, Request $request) {}
 
     /**
      * Display the specified resource.
@@ -211,6 +208,11 @@ class FileController extends Controller
     {
         $obj = Obj::where('id', $id)->first();
         $writing = Writing::where('attempt_id', $id)->first();
+
+        $obj->session = null;
+        if ($obj->session_id) {
+            $obj->session = Session::where('id', $obj->session_id)->first();
+        }
 
         $this->authorize('view', $obj);
 
