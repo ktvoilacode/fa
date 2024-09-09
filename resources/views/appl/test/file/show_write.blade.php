@@ -26,7 +26,8 @@
               {{ $obj->user->name }}
               @else
               @if($obj->session)
-              <br>{{$obj->session->name}} - {{$obj->session->phone}}
+              <br>{{$obj->session->name}} - {{$obj->session->phone}} -
+              <br>{{ $obj->session_id}}
               @else
               {{ $obj->session_id}}
               @endif
