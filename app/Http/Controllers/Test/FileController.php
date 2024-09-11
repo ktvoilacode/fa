@@ -250,6 +250,12 @@ class FileController extends Controller
     public function download($id, Request $request)
     {
         $obj = Obj::where('id', $id)->first();
+
+        $obj->session = null;
+        if ($obj->session_id) {
+            $obj->session = Session::where('id', $obj->session_id)->first();
+        }
+
         $test = $obj->test;
         $user = $obj->user;
         $prefix = $test->slug;
