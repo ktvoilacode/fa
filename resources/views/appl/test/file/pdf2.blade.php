@@ -83,7 +83,7 @@
  <body>
      <main>
          <div class="head">
-             <div style="padding-bottom: 10px"><span class="">Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> @if($obj->session) {{$obj->session->name}} @else {{$obj->user->name }} @endif</div>
+             <div style="padding-bottom: 10px"><span class="">Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{$obj->user->name }} </div>
              <div><span class="">Test date: &nbsp;&nbsp;&nbsp;&nbsp;</span>{{ date("F j, Y, g:i a",strtotime($obj->created_at))}}</div>
          </div>
          @if(strlen(strip_tags($obj->test->description))>0)

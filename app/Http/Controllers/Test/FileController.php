@@ -251,14 +251,17 @@ class FileController extends Controller
     {
         $obj = Obj::where('id', $id)->first();
 
-        $obj->session = null;
-        if ($obj->session_id) {
-            $obj->session = Session::where('id', $obj->session_id)->first();
-        }
+
 
         $test = $obj->test;
         $user = $obj->user;
         $prefix = $test->slug;
+
+        if ($obj->session_id) {
+            $session = Session::where('id', $obj->session_id)->first();
+            $obj->user = new User();
+            $obj->user->name = $session->name;
+        }
         //naming
         if (strpos($prefix, 'writing') !== false) {
             $prefix = str_replace('writing', 'W', $prefix);
