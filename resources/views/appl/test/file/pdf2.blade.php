@@ -89,7 +89,7 @@
          @if(strlen(strip_tags($obj->test->description))>0)
          <div class="question">
              <h4>Question</h4>
-             {!! preg_replace("/<p[^>]*><\\ /p[^>]*>/", '', $obj->test->description) !!}
+             {!! preg_replace("/<p[^>]*><\\/p[^>]*>/", '', $obj->test->description) !!}
          </div>
          <hr>
          @endif
