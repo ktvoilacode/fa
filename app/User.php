@@ -233,33 +233,30 @@ class User extends Authenticatable
     }
 
     public function attempt($id){
-
+        // OPTIMIZED: Use more efficient caching and lookup
+        $cache_key = 'user_attempts_'.$this->id;
+        
         if(request()->get('refresh'))
         {
-            Cache::forget('mytests_'.$this->id);
+            Cache::forget($cache_key);
         }
 
-        $allattempts = Cache::get('mytests_'.$this->id);
+        $attempted_test_ids = Cache::remember($cache_key, 300, function () {
+            $ids = Attempt::where('user_id', $this->id)
+                ->select('test_id')
+                ->distinct()
+                ->pluck('test_id');
+            
+            // FIXED: Ensure we always cache an array, never a collection
+            return $ids instanceof \Illuminate\Support\Collection ? $ids->toArray() : (array) $ids;
+        });
 
-
-        if(!$allattempts){
-            $allattempts = Attempt::where('user_id',$this->id)->get()->groupBy('test_id');
-            Cache::put('mytests_'.$this->id,$allattempts,60);
+        // FIXED: Double-check we always have an array, even if cache returns an object
+        if (!is_array($attempted_test_ids)) {
+            $attempted_test_ids = is_object($attempted_test_ids) ? $attempted_test_ids->toArray() : [];
         }
-        
-        $keys = array_keys($allattempts->toArray());
 
-        if(in_array($id,$keys)){
-            return true;
-        }
-        return false;
-
-        // $attempt = Attempt::where('test_id',$id)->where('user_id',$this->id)->first();
-        // if($attempt){
-        //     return true;
-        // }else
-        //     return false;
-        
+        return in_array($id, $attempted_test_ids);
     }
 
     public function testscore($user_id,$test_id){
@@ -283,30 +280,24 @@ class User extends Authenticatable
     }
 
     public function get_testscore($user_id,$test_id){
-        //$attempt = Attempt::where('test_id',$test_id)->where('user_id',$user_id)->get();
+        // OPTIMIZED: Cache score calculations and use more efficient queries
+        $cache_key = 'test_score_'.$user_id.'_'.$test_id;
+        
+        return Cache::remember($cache_key, 600, function() use ($user_id, $test_id) {
+            $attempts = Attempt::where('user_id', $user_id)
+                ->where('test_id', $test_id)
+                ->select('accuracy')
+                ->get();
 
-        $attempts = Cache::remember('attempted_'.$this->id, 240, function() use ($user_id){
-            return Attempt::where('user_id',$user_id)->get();
-        });
-
-        $score = 0;
-        $attempted =  false;
-        $total = 0;
-        foreach($attempts as $r){
-            if($r->test_id == $test_id){
-                if($r->accuracy==1)
-                  $score++;
-              $total++;
-              $attempted = true;
+            if ($attempts->isEmpty()) {
+                return null;
             }
-                
-        }
-        if($attempted){
-            //echo $attempt;
+
+            $score = $attempts->where('accuracy', 1)->count();
+            $total = $attempts->count();
+            
             return 'Score - '.$score.' / '.$total;
-        }
-        else
-            return null;
+        });
     }
 
     public function attempted($user_id,$test_id){
@@ -319,17 +310,8 @@ class User extends Authenticatable
     }
 
     public function has_attempted($test_id){
-        $user_id = $this->id;
-        $attempts = Cache::remember('attempted_'.$this->id, 240, function() use ($user_id){
-            return Attempt::where('user_id',$user_id)->get();
-        });
-
-        foreach($attempts as $a){
-            if($a->test_id == $test_id)
-                return true;
-        }
-
-        return false;
+        // OPTIMIZED: Use the optimized attempt method
+        return $this->attempt($test_id);
     }
 
 

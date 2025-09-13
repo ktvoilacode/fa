@@ -18,7 +18,11 @@ class Subdomain
     public function handle($request, Closure $next)
     {
         $domain = request()->getHost();
-        if( $domain!='prep.firstacademy.in' && $domain!='fa.test' && $domain!='project.test' && $domain!='prep.packetprep.com' && $domain!= 'gradable.in' && $domain!= 'test.piofx.com' ){
+        if(request()->get('refresh')){
+            Cache::forget('client_'.$domain);
+        }
+      
+        if( $domain!='prep.firstacademy.in' && $domain!='fa.test' && $domain!='project.test' && $domain!='prep.packetprep.com' && $domain!= 'gradable.in'  && $domain!= 'localhost' ){
              
              $client = Cache::remember('client_'.$domain,2400,function() use($domain){
                 return Client::where('domains','LIKE',"%{$domain}%")->first();
@@ -70,6 +74,7 @@ class Subdomain
             $client->logo = url('/').'/images/logo.png';
             $request->session()->put('client',$client);
         }
+        
         return $next($request);
 
     }

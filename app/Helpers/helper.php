@@ -414,7 +414,7 @@ if (! function_exists('summernote_imageupload')) {
 if (! function_exists('subdomain')) {
 function subdomain() {
     $url = url()->full();
-    if($_SERVER['HTTP_HOST'] == 'gradable.in' || $_SERVER['HTTP_HOST'] == 'fa.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in' || $_SERVER['HTTP_HOST'] == 'test.piofx.com'  )
+    if($_SERVER['HTTP_HOST'] == 'gradable.in' || $_SERVER['HTTP_HOST'] == 'fa.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in' || $_SERVER['HTTP_HOST'] == 'localhost'  || $_SERVER['HTTP_HOST'] == 'localhost:8000'  )
             return 'prep';
 
     $parsed = parse_url($url);
@@ -448,8 +448,9 @@ function domain() {
         $domain = $exploded[0];
      }
 
-    if($domain == 'gradable' || $domain== 'fa' || $domain =='piofx')
+    if($domain == 'gradable' || $domain== 'fa' || $domain =='piofx' || $domain == 'localhost' || $domain =='localhost:8000')
             $domain  = 'prep';
+
 
     return $domain;
 

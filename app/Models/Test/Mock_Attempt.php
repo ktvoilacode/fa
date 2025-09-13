@@ -28,4 +28,9 @@ class Mock_Attempt extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function mock()
+    {
+        return $this->belongsTo('App\Models\Test\Mock', 'mock_id');
+    }
+
 }

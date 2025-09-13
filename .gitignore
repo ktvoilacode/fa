@@ -1,2 +1,89 @@
+# Environment files
 .env
+.env.local
+.env.production
+.env.staging
+.env.docker
+.env.external
+.env.*.local
+!.env.example
+!.env.*.example
+
+# Node modules
 /node_modules
+
+# Docker files with secrets
+docker-compose.override.yml
+docker-compose.prod.yml
+docker-compose.production.yml  
+docker-compose.staging.yml
+docker-compose.local.yml
+docker-compose.*.yml
+!docker-compose.yml
+!docker-compose.example.yml
+
+# Docker environment files
+.dockerenv
+
+# Docker build context (if contains secrets)
+.dockerignore.local
+
+# Database dumps and backups
+*.sql
+*.dump
+*.backup
+
+# Log files
+/storage/logs/*
+*.log
+
+# Cache and session files
+/bootstrap/cache/*
+/storage/app/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# SSL certificates and keys
+*.pem
+*.key
+*.crt
+*.cert
+
+# Secrets and configuration with credentials  
+config/secrets.php
+config/credentials.php
+auth.json
+
+# Deployment files with secrets
+.do/app.yaml
+.do/deploy.yaml
+.do/*.prod.yaml
+.do/*.staging.yaml
+!.do/*.example
+!.do/*.template
+
+# CI/CD files with secrets
+.github/workflows/*.prod.yml
+.github/workflows/*.staging.yml
+!.github/workflows/*.example.yml
+
+# Cloud deployment configs
+aws-config.json
+gcp-config.json
+azure-config.json
+terraform.tfvars
+terraform.tfvars.json
+.terraform/
+*.tfstate
+*.tfstate.backup

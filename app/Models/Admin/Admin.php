@@ -4,6 +4,7 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Test\Test;
 use App\Models\Test\Group;
 use App\Models\Product\Product;
@@ -17,64 +18,48 @@ class Admin extends Model
 
   public function userAnalytics()
   {
-    $data = array();
+    // OPTIMIZED: Cache analytics data for 1 hour
+    return Cache::remember('admin_user_analytics', 3600, function () {
+      // OPTIMIZED: Single query to get all user statistics
+      $user_stats = User::selectRaw('
+        COUNT(*) as total,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW() - INTERVAL 1 YEAR) THEN 1 END) as last_year,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW()) THEN 1 END) as this_year,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW() - INTERVAL 1 MONTH) THEN 1 END) as last_month,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW()) THEN 1 END) as this_month
+      ')->first();
 
-    $data['total'] = User::count();
-
-    $last_year = (new \Carbon\Carbon('first day of last year'))->year;
-    $this_year = (new \Carbon\Carbon('first day of this year'))->year;
-
-    $last_year_first_day = (new \Carbon\Carbon('first day of January ' . $last_year))->startofMonth()->toDateTimeString();
-    $this_year_first_day = (new \Carbon\Carbon('first day of January ' . $this_year))->startofMonth()->toDateTimeString();
-
-    $last_year_count  = User::where('created_at', '>', $last_year_first_day)->where('created_at', '<', $this_year_first_day)->count();
-    $this_year_count  = User::where(DB::raw('YEAR(created_at)'), '=', $this_year)->count();
-
-    $data['last_year'] = $last_year_count;
-    $data['this_year'] = $this_year_count;
-
-
-    $last_month_first_day = (new \Carbon\Carbon('first day of last month'))->startofMonth()->toDateTimeString();
-    $this_month_first_day = (new \Carbon\Carbon('first day of this month'))->startofMonth()->toDateTimeString();
-
-    $last_month  = User::where('created_at', '>', $last_month_first_day)->where('created_at', '<', $this_month_first_day)->count();
-    $this_month  = User::where(DB::raw('MONTH(created_at)'), '=', date('n'))->count();
-
-    $data['last_month'] = $last_month;
-    $data['this_month'] = $this_month;
-
-    return $data;
+      return [
+        'total' => $user_stats->total,
+        'last_year' => $user_stats->last_year,
+        'this_year' => $user_stats->this_year,
+        'last_month' => $user_stats->last_month,
+        'this_month' => $user_stats->this_month,
+      ];
+    });
   }
 
   public function orderAnalytics()
   {
-    $data = array();
+    // OPTIMIZED: Cache analytics data for 1 hour  
+    return Cache::remember('admin_order_analytics', 3600, function () {
+      // OPTIMIZED: Single query to get all order statistics
+      $order_stats = Order::selectRaw('
+        COUNT(*) as total,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW() - INTERVAL 1 YEAR) THEN 1 END) as last_year,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW()) THEN 1 END) as this_year,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW() - INTERVAL 1 MONTH) THEN 1 END) as last_month,
+        COUNT(CASE WHEN YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW()) THEN 1 END) as this_month
+      ')->first();
 
-    $data['total'] = Order::count();
-
-    $last_year = (new \Carbon\Carbon('first day of last year'))->year;
-    $this_year = (new \Carbon\Carbon('first day of this year'))->year;
-
-    $last_year_first_day = (new \Carbon\Carbon('first day of January ' . $last_year))->startofMonth()->toDateTimeString();
-    $this_year_first_day = (new \Carbon\Carbon('first day of January ' . $this_year))->startofMonth()->toDateTimeString();
-
-    $last_year_count  = Order::where('created_at', '>', $last_year_first_day)->where('created_at', '<', $this_year_first_day)->count();
-    $this_year_count  = Order::where(DB::raw('YEAR(created_at)'), '=', $this_year)->count();
-
-    $data['last_year'] = $last_year_count;
-    $data['this_year'] = $this_year_count;
-
-
-    $last_month_first_day = (new \Carbon\Carbon('first day of last month'))->startofMonth()->toDateTimeString();
-    $this_month_first_day = (new \Carbon\Carbon('first day of this month'))->startofMonth()->toDateTimeString();
-
-    $last_month  = Order::where('created_at', '>', $last_month_first_day)->where('created_at', '<', $this_month_first_day)->count();
-    $this_month  = Order::where(DB::raw('MONTH(created_at)'), '=', date('n'))->count();
-
-    $data['last_month'] = $last_month;
-    $data['this_month'] = $this_month;
-
-    return $data;
+      return [
+        'total' => $order_stats->total,
+        'last_year' => $order_stats->last_year,
+        'this_year' => $order_stats->this_year,
+        'last_month' => $order_stats->last_month,
+        'this_month' => $order_stats->this_month,
+      ];
+    });
   }
 
   public static function whatsappWriting($phone, $name, $testname)
@@ -314,18 +299,29 @@ class Admin extends Model
 
   public function groupCount()
   {
-    return Group::count();
+    return Cache::remember('admin_group_count', 3600, function () {
+      return Group::count();
+    });
   }
+  
   public function testCount()
   {
-    return Test::count();
+    return Cache::remember('admin_test_count', 3600, function () {
+      return Test::count();
+    });
   }
+  
   public function productCount()
   {
-    return Product::count();
+    return Cache::remember('admin_product_count', 3600, function () {
+      return Product::count();
+    });
   }
+  
   public function couponCount()
   {
-    return count(Coupon::all());
+    return Cache::remember('admin_coupon_count', 3600, function () {
+      return Coupon::count();
+    });
   }
 }

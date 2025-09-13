@@ -12,7 +12,7 @@
 
     @csrf
 
-    @if($_SERVER['HTTP_HOST'] == 'project.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in')
+    @if($_SERVER['HTTP_HOST'] == 'project.test' || $_SERVER['HTTP_HOST'] == 'prep.firstacademy.in' || $_SERVER['HTTP_HOST'] == 'localhost')
     <img class="mb-4 mt-3" src="{{ asset('images/logo.png') }}" alt="" width="250" >
 @else
     <img class="" src="@if(request()->session()->get('client')) {{ request()->session()->get('client')->logo }} @else {{ asset('images/piofx.png') }} @endif" alt="Piofx" width="150" >

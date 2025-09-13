@@ -14,6 +14,7 @@ use App\Models\Product\Order;
 use App\Mail\contactmessage;
 use App\Mail\ErrorReport;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -32,127 +33,22 @@ class AdminController extends Controller
     {
         $this->authorize('view', $obj);
         $subdomain = subdomain();
+        
+        // OPTIMIZED: Clear all admin caches at once
         if (request()->get('refresh')) {
-            Cache::forget('tot_users_' . $subdomain);
-            Cache::forget('latest_users_' . $subdomain);
-            Cache::forget('wri_users_' . $subdomain);
-            Cache::forget('att_users_' . $subdomain);
+            $this->clearAdminCache($subdomain);
         }
 
-        $data['ucount'] = Cache::remember('tot_users_' . $subdomain, 240, function () {
-            return User::where('client_slug', subdomain())->count();
-        });
-        $data['users'] = Cache::remember('latest_users_' . $subdomain, 240, function () {
-            return User::where('client_slug', subdomain())->limit(3)->orderBy('id', 'desc')->get();
+        // OPTIMIZED: Cache complete dashboard data
+        $cache_key = "admin_dashboard_{$subdomain}_v2";
+        $data = Cache::remember($cache_key, 600, function () use ($subdomain) {
+            return $this->getOptimizedAdminData($subdomain);
         });
 
-        /* writing data */
-        if (subdomain() == 'prep')
-            $test_ids = Obj::where('client_slug', subdomain())->whereIn('type_id', [3])->pluck('id')->toArray();
-        else
-            $test_ids = [];
-
-
-
-        if (subdomain() == 'prep')
-            $data['writing'] = Cache::remember('wri_users_' . $subdomain, 120, function () use ($test_ids) {
-
-                $d = Attempt::whereIn('test_id', $test_ids)->whereNull('answer')->with('user')->orderBy('created_at', 'desc')->get();
-                foreach ($d as $k => $m) {
-                    $o = Order::where('test_id', $m->test_id)->where('user_id', $m->user_id)->where('product_id', 3)->where('status', 1)->first();
-                    if ($o)
-                        $d[$k]->premium = 1;
-                    else
-                        $d[$k]->premium = 0;
-                    if ($k == 3)
-                        break;
-                }
-
-                $d2 = [];
-                $k = 0;
-                foreach ($d as $a => $b) {
-                    if ($b->premium == 1)
-                        $d2[$k++] = $b;
-                }
-                foreach ($d as $a => $b) {
-                    if ($b->premium != 1)
-                        $d2[$k++] = $b;
-                }
-                return $d2;
-            });
-        else
-            $data['writing'] = [];
-
-
-        //$data['writing'] = $data['writing']->sort('premium');
-
-
-
-        /* duolingo data */
-        $data['duolingo_tests'] = []; //Obj::whereIn('type_id',[9])->where('price','!=',0)->get();
-        //$test_ids2 = $data['duolingo_tests']->pluck('id')->toArray();
-        $data2 = []; //Attempt::whereIn('test_id',$test_ids2)->where('status',0)->whereNotNull('user_id')->with('user')->orderBy('created_at','desc')->get();
-
-
-        $dat = [];
-        $d2 = [];
-        foreach ($data2 as $a) {
-            if ($a->user_id) {
-                $dat[$a->test_id][$a->user_id] = $a->user;
-                $d2[$a->test_id . '_' . $a->user_id] = $a;
-            }
-        }
-        $data['duolingo_count'] = 0;
-        foreach ($dat as $d) {
-            $data['duolingo_count'] += count($d);
-        }
-        $data['duolingo'] = $d2;
-
-
-        $data['balance']  = 0;
-        if (subdomain() == 'prep')
-            $attempts = Cache::remember('att_users_' . $subdomain, 240, function () {
-                return Attempt::where('user_id', '!=', 0)->orderBy('created_at', 'desc')->with('user')->with('test')->limit(100)->get();
-            });
-        else {
-            $credits = Cache::get('credits_' . subdomain());
-            if ($credits)
-                $data['balance'] = $credits['unused'];
-            $attempts = [];
-        }
-
-        if (subdomain() == 'prep') {
-            $data['duo_orders'] = []; //Order::where('product_id',43)->orderBy('created_at','desc')->get();
-            $data['new'] = User::where('admin', '0')->orderBy('lastlogin_at', 'desc')->limit(5)->get();
-            $data['form'] = Form::orderBy('id', 'desc')->limit(5)->get();
-            $data['mock_attempts'] = Mock_Attempt::where('status', '=', -1)->orderBy('id', 'desc')->get();
-            $data['mocks'] = Mock::select('id', 'name')->whereIn('id', $data['mock_attempts']->pluck('mock_id')->toArray())->get()->keyBy('id');
-        }
-
-
-        $latest = [];
-        $count = 0;
-        foreach ($attempts as $a) {
-            if (!in_array($a->test_id, $test_ids))
-                if (!isset($latest[$a->test_id . $a->user_id])) {
-                    $latest[$a->test_id . $a->user_id]['user'] = $a->user;
-                    $latest[$a->test_id . $a->user_id]['test'] = $a->test;
-                    $latest[$a->test_id . $a->user_id]['attempt'] = $a;
-                    $count++;
-                }
-        }
-
-        // dd($count);
-
-        $data['latest'] = $latest;
-        $data['attempt_total'] = $count;
-
-        $data['coupon'] = ''; //Coupon::where('code','FA5Y9')->first();
-
-        $user = \auth::user();
-
+        $user = Auth::user();
         $view = 'appl.admin.admin.index';
-        /* code specific to piofx */
+        
+        // Handle specific host overrides
         if ($_SERVER['HTTP_HOST'] == 'onlinelibrary.test' || $_SERVER['HTTP_HOST'] == 'piofx.com') {
             if ($user->admin == 1)
                 $view = 'appl.admin.bfs.index_superadmin';
@@ -160,12 +56,187 @@ class AdminController extends Controller
                 $view = 'appl.admin.bfs.index_trainer';
         }
 
-
-
-        // if(subdomain()!='prep')
-        //     $view = 'appl.admin.admin.client';
-
         return view($view)->with('data', $data);
+    }
+
+    /**
+     * OPTIMIZED: Get all admin dashboard data efficiently
+     */
+    private function getOptimizedAdminData($subdomain)
+    {
+        $data = [];
+
+        // OPTIMIZED: User counts with single query
+        $user_stats = User::where('client_slug', $subdomain)
+            ->selectRaw('COUNT(*) as total_count')
+            ->first();
+
+        $data['ucount'] = $user_stats->total_count;
+
+        // OPTIMIZED: Latest users
+        $data['users'] = User::where('client_slug', $subdomain)
+            ->select('id', 'name', 'email', 'created_at')
+            ->limit(3)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // OPTIMIZED: Writing test data for 'prep' subdomain only
+        if ($subdomain == 'prep') {
+            $data = array_merge($data, $this->getOptimizedWritingData($subdomain));
+            $data = array_merge($data, $this->getOptimizedAttemptsData($subdomain));
+            $data = array_merge($data, $this->getOptimizedMockData());
+        } else {
+            $data['writing'] = [];
+            $data['latest'] = [];
+            $data['attempt_total'] = 0;
+            
+            // Handle credits for non-prep subdomains
+            $credits = Cache::get('credits_' . $subdomain);
+            $data['balance'] = $credits ? $credits['unused'] : 0;
+        }
+
+        // Static/unused data (keeping for compatibility)
+        $data['duolingo_tests'] = [];
+        $data['duolingo_count'] = 0;
+        $data['duolingo'] = [];
+        $data['duo_orders'] = [];
+        $data['coupon'] = '';
+
+        return $data;
+    }
+
+    /**
+     * OPTIMIZED: Get writing test data efficiently
+     */
+    private function getOptimizedWritingData($subdomain)
+    {
+        $test_ids = Obj::where('client_slug', $subdomain)
+            ->whereIn('type_id', [3])
+            ->pluck('id')
+            ->toArray();
+
+        if (empty($test_ids)) {
+            return ['writing' => []];
+        }
+
+        // OPTIMIZED: Single query with joins to avoid N+1
+        $writing_attempts = Attempt::whereIn('attempts.test_id', $test_ids)
+            ->whereNull('attempts.answer')
+            ->with([
+                'user:id,name,email',
+                'test:id,name'
+            ])
+            ->leftJoin('orders', function ($join) {
+                $join->on('attempts.test_id', '=', 'orders.test_id')
+                     ->on('attempts.user_id', '=', 'orders.user_id')
+                     ->where('orders.product_id', '=', 3)
+                     ->where('orders.status', '=', 1);
+            })
+            ->select('attempts.*', DB::raw('CASE WHEN orders.id IS NOT NULL THEN 1 ELSE 0 END as premium'))
+            ->orderBy('attempts.created_at', 'desc')
+            ->limit(20) // Reasonable limit
+            ->get();
+
+        // OPTIMIZED: Sort by premium status efficiently
+        $writing_data = $writing_attempts->sortByDesc('premium')->take(4)->values();
+
+        return ['writing' => $writing_data];
+    }
+
+    /**
+     * OPTIMIZED: Get recent attempts data efficiently
+     */
+    private function getOptimizedAttemptsData($subdomain)
+    {
+        $writing_test_ids = Obj::where('client_slug', $subdomain)
+            ->whereIn('type_id', [3])
+            ->pluck('id')
+            ->toArray();
+
+        // OPTIMIZED: Single query with eager loading
+        $attempts = Attempt::where('attempts.user_id', '!=', 0)
+            ->whereNotIn('attempts.test_id', $writing_test_ids) // Exclude writing tests
+            ->with([
+                'user:id,name,email',
+                'test:id,name'
+            ])
+            ->orderBy('attempts.created_at', 'desc')
+            ->limit(100)
+            ->get();
+
+        // OPTIMIZED: Use collections for efficient processing
+        $latest = $attempts->groupBy(function ($attempt) {
+            return $attempt->test_id . '_' . $attempt->user_id;
+        })->map(function ($group) {
+            $attempt = $group->first();
+            return [
+                'user' => $attempt->user,
+                'test' => $attempt->test,
+                'attempt' => $attempt
+            ];
+        });
+
+        return [
+            'latest' => $latest->toArray(),
+            'attempt_total' => $latest->count()
+        ];
+    }
+
+    /**
+     * OPTIMIZED: Get mock test data efficiently
+     */
+    private function getOptimizedMockData()
+    {
+        // OPTIMIZED: Single query with eager loading
+        $mock_attempts = Mock_Attempt::where('status', -1)
+            ->with([
+                'mock:id,name',
+                'user:id,name,email'
+            ])
+            ->select('id', 'mock_id', 'user_id', 'status', 'created_at')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // OPTIMIZED: Extract mocks efficiently from loaded relationships
+        $mocks = $mock_attempts->pluck('mock')->filter()->keyBy('id');
+
+        // OPTIMIZED: Recent users and forms
+        $new_users = User::where('admin', 0)
+            ->select('id', 'name', 'email', 'lastlogin_at')
+            ->orderBy('lastlogin_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        $forms = Form::select('id', 'name', 'email', 'subject', 'created_at')
+            ->orderBy('id', 'desc')
+            ->limit(5)
+            ->get();
+
+        return [
+            'mock_attempts' => $mock_attempts,
+            'mocks' => $mocks,
+            'new' => $new_users,
+            'form' => $forms
+        ];
+    }
+
+    /**
+     * Clear all admin-related cache keys
+     */
+    private function clearAdminCache($subdomain)
+    {
+        $cache_keys = [
+            "admin_dashboard_{$subdomain}_v2",
+            'tot_users_' . $subdomain,
+            'latest_users_' . $subdomain,
+            'wri_users_' . $subdomain,
+            'att_users_' . $subdomain,
+            'credits_' . $subdomain
+        ];
+
+        foreach ($cache_keys as $key) {
+            Cache::forget($key);
+        }
     }
 
     public function analytics(Obj $obj)
@@ -386,7 +457,7 @@ class AdminController extends Controller
                 else
                     $description = $description . '<div>' . strtoupper($k) . ' - ' . $r . '</div>';
             } else if ($k == 'email') {
-                $u = \auth::user()->where('email', $r)->first();
+                $u = Auth::user()->where('email', $r)->first();
 
                 if ($u)
                     $description = $description . '<div>' . strtoupper($k) . ' - <a href="' . route('user.show', $u->id) . '">' . $u->email . '</a>';
