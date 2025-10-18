@@ -50,6 +50,12 @@ class AttemptController extends Controller
         $this->test = $cache;
       } else {
         $this->test = Test::where('slug', request()->route('test'))->first();
+
+        // FIX: Check if test exists before accessing properties
+        if(!$this->test){
+            abort(404, 'Test not found');
+        }
+
         $this->test->sections = $this->test->sections;
 
         $this->test->mcq_order = $this->test->mcq_order;

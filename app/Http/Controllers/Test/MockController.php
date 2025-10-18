@@ -343,8 +343,13 @@ class MockController extends Controller
         if($obj->t3){
             $comments['t3'] =Cache::remember('t3_'.$obj->t3.'_'.$user->id, 60, function() use($t3slug,$user){
                 $t3= Test::where('slug',$t3slug)->first();
-               
-                $com = Attempt::where('test_id',$t3->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
+
+                // FIX: Check if test exists before accessing properties
+                if(!$t3) {
+                    return null;
+                }
+
+                $com = Attempt::where('test_id',$t3->id)->where('user_id',$user->id)->where('comment','!=',null)->get();
                 foreach($com as $c){
                     if($c->comment !='')
                         return $c;
@@ -359,7 +364,13 @@ class MockController extends Controller
 
             $comments['t4'] =Cache::remember('t4_'.$obj->t4.'_'.$user->id, 60, function() use($t4slug,$user){
                 $t4= Test::where('slug',$t4slug)->first();
-                $com = Attempt::where('test_id',$t4->id)->where('user_id',$user->id)->where('comment','!=',null)->get(); 
+
+                // FIX: Check if test exists before accessing properties
+                if(!$t4) {
+                    return null;
+                }
+
+                $com = Attempt::where('test_id',$t4->id)->where('user_id',$user->id)->where('comment','!=',null)->get();
                 foreach($com as $c){
                     if($c->comment !='')
                         return $c;

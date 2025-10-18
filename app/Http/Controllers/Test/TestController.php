@@ -38,7 +38,19 @@ class TestController extends Controller
         $obj = Cache::get('test_'.$slug);
         if(!$obj){
             $obj = Obj::where('slug',$slug)->first();
-            Cache::forever('test_'.$slug,$obj);
+
+            // FIX: Don't cache null values, and use remember() instead of forever()
+            if(!$obj){
+                abort(404, 'Test not found');
+            }
+
+            // Use 1 hour cache instead of forever (3600 seconds)
+            Cache::put('test_'.$slug, $obj, 3600);
+        }
+
+        // FIX: Additional null check for safety
+        if(!$obj){
+            abort(404, 'Test not found');
         }
 
         $settings = json_decode($obj->settings);

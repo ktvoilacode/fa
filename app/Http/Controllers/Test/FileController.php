@@ -207,6 +207,11 @@ class FileController extends Controller
     public function show($id)
     {
         $obj = Obj::where('id', $id)->first();
+
+        // FIX: Check if object exists BEFORE accessing properties
+        if (!$obj)
+            abort(404);
+
         $writing = Writing::where('attempt_id', $id)->first();
 
         $obj->session = null;
@@ -215,9 +220,6 @@ class FileController extends Controller
         }
 
         $this->authorize('view', $obj);
-
-        if (!$obj)
-            abort(404);
 
         /* get extension and load player */
         $info = pathinfo(Storage::url($obj->response));

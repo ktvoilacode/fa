@@ -260,7 +260,7 @@ class HomeController extends Controller
         // OPTIMIZED: Single query for all attempts
         $attempts_data = collect();
         $status2 = [];
-        
+
         if ($tests->isNotEmpty()) {
             $attempts_data = Cache::remember("user_attempts_{$user->id}", 300, function () use ($user) {
                 return Attempt::where('user_id', $user->id)
@@ -269,11 +269,14 @@ class HomeController extends Controller
                     ->keyBy('test_id');
             });
 
+            // FIX: Ensure $attempts_data is always a Collection (cache might deserialize as array)
+            $attempts_data = collect($attempts_data);
+
             // OPTIMIZED: Process attempts efficiently
             foreach ($tests as $test) {
                 if ($attempts_data->has($test->id)) {
                     $dashboard_data['status'][$test->id] = 'Completed';
-                    
+
                     // Handle writing test evaluation status
                     if ($test->testtype && $test->testtype->name == 'WRITING') {
                         $attempt = $attempts_data->get($test->id);
