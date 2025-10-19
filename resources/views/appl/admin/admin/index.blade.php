@@ -351,8 +351,19 @@
             </div>
             </a>
         </div>
-       
-        
+
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="{{ route('admin.audit') }}">
+            <div class="border bg-white p-4 rounded mb-3 mr-2">
+                <div>
+                    <img src="{{ asset('images/admin/settings.png') }}" class="w-100 mb-3" >
+                    <div class="text-center">Audit Logs</div>
+                </div>
+            </div>
+            </a>
+        </div>
+
+
         @endif
 
         @if(\auth::user()->admin==4 ||\auth::user()->admin==1)
