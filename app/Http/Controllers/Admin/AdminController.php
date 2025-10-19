@@ -195,6 +195,7 @@ class AdminController extends Controller
             ])
             ->select('id', 'mock_id', 'user_id', 'status', 'created_at')
             ->orderBy('id', 'desc')
+            ->limit(50)  // FIX: Added limit to prevent timeout from loading thousands of records
             ->get();
 
         // OPTIMIZED: Extract mocks efficiently from loaded relationships
