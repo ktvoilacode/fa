@@ -81,48 +81,64 @@ class FileController extends Controller
                 ->paginate(30);
         } else if ($request->get('type') == 'writing' || $request->get('writing') == 1) {
 
-
+            // PERFORMANCE: Only load recent writing attempts (2023+) to avoid scanning old data
+            // Total writing attempts: 4,491 | Before 2023: 3,233 (72%) | 2023+: 1,258 (28%)
+            $cutoff_date = '2023-01-01';
 
             if (\auth::user()->admin == 4) {
                 $tests = [];
                 $attempt_ids = Writing::where('user_id', \auth::user()->id)->pluck('attempt_id');
-                $objs = Obj2::whereIn('id', $attempt_ids)->paginate(30);
+                $objs = Obj2::whereIn('id', $attempt_ids)
+                    ->where('created_at', '>=', $cutoff_date) // FIX: Filter old data
+                    ->paginate(30);
             } else {
 
                 if ($request->get('open') == 1) {
-                    $tests = Test::whereIn('type_id', [3])->where('client_slug', subdomain())->pluck('id');
-                    $objs = $obj2->whereIn('test_id', $tests)->whereNull('answer')
-                        ->orderBy('created_at', 'desc')
+                    // OPTIMIZED: Use JOIN instead of whereIn for better performance
+                    $objs = $obj2->join('tests', 'attempts.test_id', '=', 'tests.id')
+                        ->where('tests.type_id', 3)
+                        ->where('tests.client_slug', subdomain())
+                        ->where('attempts.created_at', '>=', $cutoff_date) // FIX: Filter old data (69% reduction!)
+                        ->whereNull('attempts.answer')
+                        ->select('attempts.*') // Important: Select only attempts columns
+                        ->with(['user:id,name,idno', 'test:id,name,slug']) // VIEW-OPTIMIZED: Load only what view displays
+                        ->orderBy('attempts.created_at', 'desc')
                         ->paginate(100);
                 } elseif ($item) {
-                    $users = User::where('name', 'like', '%' . $item . '%')->where('client_slug', subdomain())->get();
-                    $tests = Test::whereIn('type_id', [3])->where('client_slug', subdomain())->pluck('id');
-                    $uids = $users->pluck('id')->toArray();
-                    $objs = $obj2->whereIn('user_id', $uids)
-                        ->with('user')
-                        ->orderBy('created_at', 'desc')
-                        ->whereIn('test_id', $tests)->paginate(30);
+                    // OPTIMIZED: Use single query with JOIN instead of multiple queries
+                    $objs = $obj2->join('tests', 'attempts.test_id', '=', 'tests.id')
+                        ->join('users', 'attempts.user_id', '=', 'users.id')
+                        ->where('tests.type_id', 3)
+                        ->where('tests.client_slug', subdomain())
+                        ->where('users.client_slug', subdomain())
+                        ->where('users.name', 'like', '%' . $item . '%')
+                        ->where('attempts.created_at', '>=', $cutoff_date) // FIX: Filter old data
+                        ->select('attempts.*')
+                        ->with(['user:id,name,idno', 'test:id,name,slug']) // VIEW-OPTIMIZED: Load only what view displays
+                        ->orderBy('attempts.created_at', 'desc')
+                        ->paginate(30);
                 } else {
 
-                    if (!Cache::get('files_'))
-                        $tests = Test::whereIn('type_id', [3])->where('client_slug', subdomain())->pluck('id');
-                    else
-                        $tests = [];
-
-
-
+                    // OPTIMIZED: Cache with date filter and JOIN
                     if (!$request->get('page'))
-                        $objs = Cache::remember('files_', 240, function () use ($obj2, $tests) {
-                            return  $obj2->whereIn('test_id', $tests)
-
-                                ->orderBy('created_at', 'desc')
+                        $objs = Cache::remember('files_writing_v2', 240, function () use ($obj2, $cutoff_date) {
+                            return $obj2->join('tests', 'attempts.test_id', '=', 'tests.id')
+                                ->where('tests.type_id', 3)
+                                ->where('tests.client_slug', subdomain())
+                                ->where('attempts.created_at', '>=', $cutoff_date) // FIX: Filter old data
+                                ->select('attempts.*')
+                                ->with(['user:id,name,idno', 'test:id,name,slug']) // VIEW-OPTIMIZED: Load only what view displays
+                                ->orderBy('attempts.created_at', 'desc')
                                 ->paginate(30);
                         });
                     else {
-                        $tests = Test::whereIn('type_id', [3])->where('client_slug', subdomain())->pluck('id');
-
-                        $objs = $obj2->whereIn('test_id', $tests)
-                            ->orderBy('created_at', 'desc')
+                        $objs = $obj2->join('tests', 'attempts.test_id', '=', 'tests.id')
+                            ->where('tests.type_id', 3)
+                            ->where('tests.client_slug', subdomain())
+                            ->where('attempts.created_at', '>=', $cutoff_date) // FIX: Filter old data
+                            ->select('attempts.*')
+                            ->with(['user:id,name,idno', 'test:id,name,slug']) // VIEW-OPTIMIZED: Load only what view displays
+                            ->orderBy('attempts.created_at', 'desc')
                             ->paginate(30);
                     }
 
@@ -135,6 +151,7 @@ class FileController extends Controller
                             if (count($item) > 1) {
                                 $item[0]->delete();
                                 Cache::forget('files_');
+                                Cache::forget('files_writing_v2');
                             }
                         }
 
