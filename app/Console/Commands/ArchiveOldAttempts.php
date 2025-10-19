@@ -85,7 +85,7 @@ class ArchiveOldAttempts extends Command
 
         $this->table(
             ['ID', 'User ID', 'Test ID', 'Created At'],
-            $sample->map(fn($s) => [$s->id, $s->user_id, $s->test_id, $s->created_at])->toArray()
+            $sample->map(function($s) { return [$s->id, $s->user_id, $s->test_id, $s->created_at]; })->toArray()
         );
 
         // Verify only mode
