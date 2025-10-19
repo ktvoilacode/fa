@@ -262,6 +262,179 @@ class AdminController extends Controller
         return view('appl.admin.admin.analytics')->with('data', $data);
     }
 
+    /**
+     * Audit Log Viewer - View application errors and logs
+     */
+    public function auditLogs(Request $request)
+    {
+        $days = $request->get('days', 7); // Default: last 7 days
+        $error_type = $request->get('error_type', 'all'); // all, ERROR, WARNING, INFO
+        $status_code = $request->get('status_code', 'all'); // all, 404, 500, 504, etc
+        $search = $request->get('search', ''); // Search keyword
+
+        $logs = $this->parseLogFiles($days, $error_type, $status_code, $search);
+
+        // Get statistics
+        $stats = [
+            'total' => count($logs),
+            'errors' => collect($logs)->where('level', 'ERROR')->count(),
+            'warnings' => collect($logs)->where('level', 'WARNING')->count(),
+            '404s' => collect($logs)->filter(function($log) {
+                return strpos($log['message'], '404') !== false;
+            })->count(),
+            '504s' => collect($logs)->filter(function($log) {
+                return strpos($log['message'], '504') !== false ||
+                       strpos($log['message'], 'timeout') !== false;
+            })->count(),
+            '500s' => collect($logs)->filter(function($log) {
+                return strpos($log['message'], '500') !== false;
+            })->count(),
+        ];
+
+        return view('appl.admin.admin.audit_logs', [
+            'logs' => $logs,
+            'stats' => $stats,
+            'days' => $days,
+            'error_type' => $error_type,
+            'status_code' => $status_code,
+            'search' => $search
+        ]);
+    }
+
+    /**
+     * Parse Laravel log files for the last N days
+     */
+    private function parseLogFiles($days, $error_type, $status_code, $search)
+    {
+        $logs = [];
+        $log_path = storage_path('logs');
+
+        // Get log files for the last N days
+        for ($i = 0; $i < $days; $i++) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $file = "{$log_path}/laravel-{$date}.log";
+
+            if (file_exists($file)) {
+                $logs = array_merge($logs, $this->parseLogFile($file, $error_type, $status_code, $search));
+            }
+        }
+
+        // Sort by timestamp (newest first)
+        usort($logs, function($a, $b) {
+            return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+        });
+
+        // Limit to 500 most recent logs for performance
+        return array_slice($logs, 0, 500);
+    }
+
+    /**
+     * Parse a single log file
+     */
+    private function parseLogFile($file, $error_type, $status_code, $search)
+    {
+        $logs = [];
+        $content = file_get_contents($file);
+
+        // Match Laravel log entries
+        // Format: [2025-10-19 12:00:00] local.ERROR: Message {"exception":"..."}
+        preg_match_all(
+            '/\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \w+\.(\w+): (.+?)(?=\n\[|$)/s',
+            $content,
+            $matches,
+            PREG_SET_ORDER
+        );
+
+        foreach ($matches as $match) {
+            $timestamp = $match[1];
+            $level = $match[2];
+            $message = $match[3];
+
+            // Filter by error type
+            if ($error_type !== 'all' && $level !== $error_type) {
+                continue;
+            }
+
+            // Filter by status code
+            if ($status_code !== 'all') {
+                if (!preg_match('/' . preg_quote($status_code) . '/', $message)) {
+                    continue;
+                }
+            }
+
+            // Filter by search keyword
+            if (!empty($search)) {
+                if (stripos($message, $search) === false) {
+                    continue;
+                }
+            }
+
+            // Extract key information
+            $log_entry = [
+                'timestamp' => $timestamp,
+                'level' => $level,
+                'message' => $this->cleanLogMessage($message),
+                'file' => $this->extractFile($message),
+                'user_id' => $this->extractUserId($message),
+                'url' => $this->extractUrl($message),
+            ];
+
+            $logs[] = $log_entry;
+        }
+
+        return $logs;
+    }
+
+    /**
+     * Clean log message for display
+     */
+    private function cleanLogMessage($message)
+    {
+        // Limit message length
+        $message = substr($message, 0, 500);
+
+        // Remove JSON exception traces for cleaner display
+        $message = preg_replace('/\{.*?\}/s', '', $message);
+
+        return trim($message);
+    }
+
+    /**
+     * Extract file path from log message
+     */
+    private function extractFile($message)
+    {
+        if (preg_match('/at \/home\/forge\/prep\.firstacademy\.in\/(.+?):(\d+)/', $message, $match)) {
+            return $match[1] . ':' . $match[2];
+        }
+        return '-';
+    }
+
+    /**
+     * Extract user ID from log message
+     */
+    private function extractUserId($message)
+    {
+        if (preg_match('/"userId["\']:\s*(\d+)/', $message, $match)) {
+            return $match[1];
+        }
+        return '-';
+    }
+
+    /**
+     * Extract URL from log message
+     */
+    private function extractUrl($message)
+    {
+        if (preg_match('/"url["\']:\s*["\']([^"\']+)["\']/', $message, $match)) {
+            return $match[1];
+        }
+        if (preg_match('/GET|POST|PUT|DELETE\s+([^\s]+)/', $message, $match)) {
+            return $match[1];
+        }
+        return '-';
+    }
+
 
 
 
