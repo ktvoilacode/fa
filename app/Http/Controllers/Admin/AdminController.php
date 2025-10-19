@@ -42,7 +42,7 @@ class AdminController extends Controller
         // OPTIMIZED: Cache complete dashboard data for 30 minutes
         // PERFORMANCE: Extended from 10min to 30min due to date filtering optimizations
         // With 2.3M records, first load can be slow - cache helps significantly
-        $cache_key = "admin_dashboard_{$subdomain}_v3"; // v3 = date-filtered queries
+        $cache_key = "admin_dashboard_{$subdomain}_v4"; // v4 = view-matched limits (load only what's displayed)
         $data = Cache::remember($cache_key, 1800, function () use ($subdomain) {
             return $this->getOptimizedAdminData($subdomain);
         });
@@ -125,6 +125,7 @@ class AdminController extends Controller
         $cutoff_date = '2023-01-01';
 
         // OPTIMIZED: Single query with joins to avoid N+1
+        // VIEW OPTIMIZATION: View only displays 3 items, so we only load 3!
         $writing_attempts = Attempt::whereIn('attempts.test_id', $test_ids)
             ->whereNull('attempts.answer')
             ->where('attempts.created_at', '>=', $cutoff_date) // FIX: Filter old data
@@ -140,11 +141,11 @@ class AdminController extends Controller
             })
             ->select('attempts.*', DB::raw('CASE WHEN orders.id IS NOT NULL THEN 1 ELSE 0 END as premium'))
             ->orderBy('attempts.created_at', 'desc')
-            ->limit(15) // REDUCED: From 20 to 15 for faster load
+            ->limit(4) // OPTIMIZED: View shows 3, load 4 for premium sorting
             ->get();
 
         // OPTIMIZED: Sort by premium status efficiently
-        $writing_data = $writing_attempts->sortByDesc('premium')->take(4)->values();
+        $writing_data = $writing_attempts->sortByDesc('premium')->take(3)->values();
 
         return ['writing' => $writing_data];
     }
@@ -162,8 +163,8 @@ class AdminController extends Controller
         // PERFORMANCE: Only load recent attempts (2023+) to avoid scanning 2.3M records
         $cutoff_date = '2023-01-01';
 
-        // OPTIMIZED: Use DISTINCT ON to get latest attempt per user+test combo directly in DB
-        // This is MUCH faster than loading 100 records and grouping in PHP
+        // VIEW OPTIMIZATION: View only displays 10 items in "Tests Attempted" table!
+        // Previously loading 50, but view breaks at 10 (@if($k==10) @break)
         $attempts = Attempt::select('attempts.*')
             ->where('attempts.user_id', '!=', 0)
             ->where('attempts.created_at', '>=', $cutoff_date) // FIX: Filter old data (cuts 55% of data!)
@@ -173,13 +174,13 @@ class AdminController extends Controller
                 'test:id,name'
             ])
             ->orderBy('attempts.created_at', 'desc')
-            ->limit(50) // REDUCED: From 100 to 50 for faster initial load
+            ->limit(15) // OPTIMIZED: View shows 10, load 15 to account for duplicates
             ->get();
 
-        // OPTIMIZED: Simple grouping - already have latest due to ORDER BY
+        // OPTIMIZED: Get unique combinations and limit to what view displays
         $latest = $attempts->unique(function ($attempt) {
             return $attempt->test_id . '_' . $attempt->user_id;
-        })->take(30) // Show only 30 unique combinations
+        })->take(10) // VIEW OPTIMIZATION: Only load what's displayed!
         ->map(function ($attempt) {
             return [
                 'user' => $attempt->user,
@@ -202,7 +203,7 @@ class AdminController extends Controller
         // PERFORMANCE: Filter recent mock attempts (2024+) for faster queries
         $cutoff_date = '2024-01-01';
 
-        // OPTIMIZED: Single query with eager loading
+        // VIEW OPTIMIZATION: View only displays 3 mock attempts (@if($counter==3) @break)
         $mock_attempts = Mock_Attempt::where('status', -1)
             ->where('created_at', '>=', $cutoff_date) // FIX: Only show recent incomplete attempts
             ->with([
@@ -211,29 +212,25 @@ class AdminController extends Controller
             ])
             ->select('id', 'mock_id', 'user_id', 'status', 'created_at')
             ->orderBy('id', 'desc')
-            ->limit(30)  // REDUCED: From 50 to 30 for faster load
+            ->limit(3)  // OPTIMIZED: View shows exactly 3, so load only 3!
             ->get();
 
         // OPTIMIZED: Extract mocks efficiently from loaded relationships
         $mocks = $mock_attempts->pluck('mock')->filter()->keyBy('id');
 
-        // OPTIMIZED: Recent users and forms - only show very recent
-        $new_users = User::where('admin', 0)
-            ->where('lastlogin_at', '>=', now()->subDays(30)) // Only users active in last 30 days
-            ->select('id', 'name', 'email', 'lastlogin_at')
-            ->orderBy('lastlogin_at', 'desc')
-            ->limit(5)
-            ->get();
+        // REMOVED: New users query - section is HIDDEN in view (class="d-none")!
+        // This was loading 5 users that are never displayed - pure waste!
 
+        // VIEW OPTIMIZATION: Forms card displays 3 items (@if($k==2) @break)
         $forms = Form::select('id', 'name', 'email', 'subject', 'created_at')
             ->orderBy('id', 'desc')
-            ->limit(5)
+            ->limit(3) // OPTIMIZED: Was 5, view shows 3
             ->get();
 
         return [
             'mock_attempts' => $mock_attempts,
             'mocks' => $mocks,
-            'new' => $new_users,
+            'new' => collect([]), // REMOVED QUERY: View section is hidden (d-none), no need to load
             'form' => $forms
         ];
     }
@@ -245,7 +242,8 @@ class AdminController extends Controller
     {
         $cache_keys = [
             "admin_dashboard_{$subdomain}_v2", // Old cache key
-            "admin_dashboard_{$subdomain}_v3", // New cache key with date filters
+            "admin_dashboard_{$subdomain}_v3", // Date filters
+            "admin_dashboard_{$subdomain}_v4", // View-matched limits
             'tot_users_' . $subdomain,
             'latest_users_' . $subdomain,
             'wri_users_' . $subdomain,
