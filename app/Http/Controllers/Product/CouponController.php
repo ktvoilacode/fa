@@ -150,7 +150,7 @@ class CouponController extends Controller
             abort('403','Coupon code cannot be empty');
 
 
-        $client_slug = $request->session()->get('client')->slug;
+        $client_slug = request()->session()->get('client')->slug;
         $coupon = Obj::where('code',$code)->where('client_slug',$client_slug)->first();
          
 

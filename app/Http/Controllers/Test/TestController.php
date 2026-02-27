@@ -157,6 +157,7 @@ class TestController extends Controller
         if($category)
         {
             $cate = Category::where('slug',$category)->first();
+            if(!$cate) abort(404, 'Category not found');
             $category_id = $cate->id;
             if($type=='free')
             $objs = $obj->where('name','LIKE',"%{$item}%")
@@ -1304,5 +1305,183 @@ class TestController extends Controller
 
         flash('('.$this->app.'/'.$this->module.') item  Successfully deleted!')->success();
         return redirect()->route($this->module.'.index');
+    }
+
+    /**
+     * Export test to Voilaco-compatible JSON format
+     */
+    public function exportVoilaco($id)
+    {
+        $test = Obj::where('id', $id)->first();
+
+        if (!$test) {
+            abort(404, 'Test not found');
+        }
+
+        $this->authorize('view', $test);
+
+        // Build export data
+        $exportData = [
+            'test_info' => [
+                'name' => $test->name,
+                'slug' => $test->slug,
+                'description' => $test->description,
+                'instructions' => $test->instructions,
+                'marks' => $test->marks,
+                'test_time' => $test->test_time,
+                'level' => $test->level,
+            ],
+            'sections' => [],
+            'questions' => [],
+        ];
+
+        // Get sections
+        $sections = $test->sections;
+        $sectionMap = [];
+        $sno = 1;
+
+        foreach ($sections as $section) {
+            $sectionMap[$section->id] = $sno;
+            $exportData['sections'][] = [
+                'sno' => $sno,
+                'name' => $section->name,
+                'instructions' => $section->instructions,
+            ];
+            $sno++;
+        }
+
+        // Default section if none exist
+        if (empty($exportData['sections'])) {
+            $exportData['sections'][] = ['sno' => 1, 'name' => 'Default Section', 'instructions' => ''];
+        }
+
+        // Get extracts (passages)
+        $extracts = $test->extracts->keyBy('id');
+        $extractQuestionMap = [];
+        $qno = 1;
+
+        // Export MCQs
+        $mcqs = Mcq::where('test_id', $test->id)->orderBy('section_id')->orderBy('qno')->get();
+
+        foreach ($mcqs as $mcq) {
+            $questionSlug = strtolower(\Illuminate\Support\Str::random(6));
+            $sectionSno = $sectionMap[$mcq->section_id] ?? 1;
+
+            // Determine type
+            $hasExtendedOptions = !empty($mcq->e) || !empty($mcq->f) || !empty($mcq->g) || !empty($mcq->h) || !empty($mcq->i);
+            $isMultipleAnswer = strpos($mcq->answer ?? '', ',') !== false;
+
+            if ($hasExtendedOptions) {
+                $type = $isMultipleAnswer ? 'maqe' : 'mcqe';
+            } else {
+                $type = $isMultipleAnswer ? 'maq' : 'mcq';
+            }
+
+            $qdata = [
+                'question' => $mcq->question,
+                'a' => $mcq->a,
+                'b' => $mcq->b,
+                'c' => $mcq->c,
+                'd' => $mcq->d,
+                'answer' => $mcq->answer,
+                'explanation' => $mcq->explanation,
+                'type' => $type,
+                'level' => 'easy',
+                'topic' => 'general',
+                'mark' => $mcq->mark ?? '1',
+                'negative' => null,
+                'snippet' => null,
+                'passage' => null,
+                'passage_group' => null,
+            ];
+
+            // Add extended options
+            if ($hasExtendedOptions) {
+                $qdata['e'] = $mcq->e;
+                $qdata['f'] = $mcq->f;
+                $qdata['g'] = $mcq->g;
+                $qdata['h'] = $mcq->h;
+                $qdata['i'] = $mcq->i;
+            }
+
+            // Handle extract (passage)
+            if ($mcq->extract_id && isset($extracts[$mcq->extract_id])) {
+                $extract = $extracts[$mcq->extract_id];
+                if (!isset($extractQuestionMap[$mcq->extract_id])) {
+                    $qdata['passage'] = $extract->text;
+                    $extractQuestionMap[$mcq->extract_id] = $questionSlug;
+                } else {
+                    $qdata['passage_group'] = $extractQuestionMap[$mcq->extract_id];
+                }
+            }
+
+            $exportData['questions'][] = [
+                'sno' => $sectionSno,
+                'qno' => $qno,
+                'slug' => $questionSlug,
+                'status' => 1,
+                'qdata' => json_encode([$qdata]),
+            ];
+            $qno++;
+        }
+
+        // Export Fillups
+        $fillups = Fillup::where('test_id', $test->id)->orderBy('section_id')->orderBy('qno')->get();
+
+        foreach ($fillups as $fillup) {
+            $questionSlug = strtolower(\Illuminate\Support\Str::random(6));
+            $sectionSno = $sectionMap[$fillup->section_id] ?? 1;
+
+            $qdata = [
+                'question' => $fillup->label ?? '',
+                'prefix' => $fillup->prefix,
+                'suffix' => $fillup->suffix,
+                'answer' => $fillup->answer,
+                'explanation' => null,
+                'type' => 'fillin',
+                'level' => 'easy',
+                'topic' => 'general',
+                'mark' => $fillup->mark ?? '1',
+                'negative' => null,
+                'snippet' => null,
+                'passage' => null,
+                'passage_group' => null,
+                'a' => null,
+                'b' => null,
+                'c' => null,
+                'd' => null,
+            ];
+
+            // Handle extract (passage)
+            if ($fillup->extract_id && isset($extracts[$fillup->extract_id])) {
+                $extract = $extracts[$fillup->extract_id];
+                if (!isset($extractQuestionMap[$fillup->extract_id])) {
+                    $qdata['passage'] = $extract->text;
+                    $extractQuestionMap[$fillup->extract_id] = $questionSlug;
+                } else {
+                    $qdata['passage_group'] = $extractQuestionMap[$fillup->extract_id];
+                }
+            }
+
+            $exportData['questions'][] = [
+                'sno' => $sectionSno,
+                'qno' => $qno,
+                'slug' => $questionSlug,
+                'status' => 1,
+                'qdata' => json_encode([$qdata]),
+            ];
+            $qno++;
+        }
+
+        // Generate filename
+        $filename = preg_replace('/[^a-z0-9]+/', '-', strtolower($test->name));
+        $filename = trim($filename, '-') . '_' . $test->id . '.json';
+
+        // Return as pretty JSON download
+        $jsonContent = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        return response($jsonContent)
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Content-Type', 'application/json');
     }
 }

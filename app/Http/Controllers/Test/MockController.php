@@ -283,34 +283,38 @@ class MockController extends Controller
 
         if($attempt->t1==-1){
             $test = Test::where('slug',$obj->t1)->first();
-            $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
-            
-            if($attempt_done->sum('status') == $attempt_done->count('id')){
-                $attempt->t1 = 1;
-                $attempt->t1_score = $attempt_done->sum('score');
-                $attempt->save();
+            if($test && $user){
+                $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
+                if($attempt_done->sum('status') == $attempt_done->count('id')){
+                    $attempt->t1 = 1;
+                    $attempt->t1_score = $attempt_done->sum('score');
+                    $attempt->save();
+                }
             }
         }
 
         if($attempt->t3==-1){
             $test = Test::where('slug',$obj->t3)->first();
-            $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
-            
-            if($attempt_done->sum('status') == $attempt_done->count('id')){
-                $attempt->t3 = 1;
-                $attempt->t3_score = $attempt_done->sum('score');
-                $attempt->save();
+            if($test && $user){
+                $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
+                if($attempt_done->sum('status') == $attempt_done->count('id')){
+                    $attempt->t3 = 1;
+                    $attempt->t3_score = $attempt_done->sum('score');
+                    $attempt->save();
+                }
             }
         }
 
          if($attempt->t4==-1){
             $test = Test::where('slug',$obj->t4)->first();
-            $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
-            if($attempt_done->sum('status') == $attempt_done->count('id')){
-                $attempt->t4 = 1;
-                $attempt->t4_score = $attempt_done->sum('score');
-                $attempt->status = 1;
-                $attempt->save();
+            if($test && $user){
+                $attempt_done = Attempt::where('test_id',$test->id)->where('user_id',$user->id)->get();
+                if($attempt_done->sum('status') == $attempt_done->count('id')){
+                    $attempt->t4 = 1;
+                    $attempt->t4_score = $attempt_done->sum('score');
+                    $attempt->status = 1;
+                    $attempt->save();
+                }
             }
         }
 
@@ -336,11 +340,11 @@ class MockController extends Controller
        
         // check for comments
         $t3slug = $obj->t3;
-        if(request()->get('refresh'))
+        if($user && request()->get('refresh'))
             Cache::forget('t3_'.$obj->t3.'_'.$user->id);
         $comments = [];
 
-        if($obj->t3){
+        if($obj->t3 && $user){
             $comments['t3'] =Cache::remember('t3_'.$obj->t3.'_'.$user->id, 60, function() use($t3slug,$user){
                 $t3= Test::where('slug',$t3slug)->first();
 
@@ -357,7 +361,7 @@ class MockController extends Controller
             });
         }
         
-        if($obj->t4){
+        if($obj->t4 && $user){
             $t4slug = $obj->t4;
             if(request()->get('refresh'))
                 Cache::forget('t4_'.$obj->t4.'_'.$user->id);

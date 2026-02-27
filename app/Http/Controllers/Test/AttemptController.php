@@ -2218,10 +2218,14 @@ class AttemptController extends Controller
   {
     if ($request->get('user_id'))
       $user_id = $request->get('user_id');
-    else
+    else if(\auth::user())
       $user_id = \auth::user()->id;
+    else
+      abort(403, 'Please login to view review');
 
     $test = Test::where('slug', $slug)->first();
+    if(!$test)
+      abort(404, 'Test not found');
     $attempt = Attempt::where('test_id', $test->id)->where('user_id', $user_id)->first();
 
     $user = User::find($user_id);

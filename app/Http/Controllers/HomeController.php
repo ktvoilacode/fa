@@ -280,7 +280,7 @@ class HomeController extends Controller
                     // Handle writing test evaluation status
                     if ($test->testtype && $test->testtype->name == 'WRITING') {
                         $attempt = $attempts_data->get($test->id);
-                        $status2[$test->id] = $attempt->answer ? 'evaluated' : 'notevaluated';
+                        $status2[$test->id] = ($attempt && $attempt->answer) ? 'evaluated' : 'notevaluated';
                     }
                 }
             }

@@ -299,6 +299,7 @@ class UserController extends Controller
             // send whatsapp
             $var = [];
             $var[0] = $obj->name;
+            $phone = '';
             if (strlen($obj->phone) == 10)
                 $phone = '91' . $obj->phone;
             else if (strlen($obj->phone) == 12)
