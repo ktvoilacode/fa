@@ -429,7 +429,7 @@ class AdminController extends Controller
         if (preg_match('/"url["\']:\s*["\']([^"\']+)["\']/', $message, $match)) {
             return $match[1];
         }
-        if (preg_match('/GET|POST|PUT|DELETE\s+([^\s]+)/', $message, $match)) {
+        if (preg_match('/(?:GET|POST|PUT|DELETE)\s+([^\s]+)/', $message, $match)) {
             return $match[1];
         }
         return '-';
