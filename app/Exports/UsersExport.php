@@ -20,6 +20,7 @@ class UsersExport implements FromCollection
         $ids = $attempts->pluck('user_id')->toArray();
         $usr = User::whereIn('id', $ids)->get()->keyBy('id');
          
+        $data = [];
         foreach($usr as $k=>$u){
             unset($usr[$k]->created_at);
             unset($usr[$k]->updated_at);
@@ -71,6 +72,7 @@ class UsersExport implements FromCollection
         $ux->name = "Name";
         $ux->email = "Email";
         $ux->phone = "Phone";
+        if($data)
         foreach($data as $name =>$value){
             $ux->$name = $name;
         }
