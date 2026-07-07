@@ -632,11 +632,7 @@
       size: 50,
       borderWidth: 4,
     });
-    cap.appendTo(playerContainer_ {
-      {
-        $item
-      }
-    });
+    cap.appendTo(playerContainer_{{$item}});
   }
 
   @endforeach
@@ -1174,11 +1170,7 @@
           size: 120,
           borderWidth: 10,
         });
-        cap.appendTo(playerContainer_ {
-          {
-            $item
-          }
-        });
+        cap.appendTo(playerContainer_{{$item}});
       }
 
     }
@@ -2077,11 +2069,7 @@
 <script type="application/javascript">
   // Set the datetimepicker we're counting down to
   @if(isset($time))
-  var countDownDate = addMinutes(new Date(), {
-    {
-      ($time)
-    }
-  });
+  var countDownDate = addMinutes(new Date(), {{ ($time) }});
   @endif
 
   // Update the count down every 1 second
@@ -2140,11 +2128,7 @@
 @foreach($secs as $sec => $section)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
 <script type="text/javascript">
-  var options_ {
-    {
-      $section->section_id
-    }
-  } = {
+  var options_{{$section->section_id}} = {
     type: 'horizontalBar',
     data: {
       labels: ["{{$section->labels[0]}}"
@@ -2156,31 +2140,11 @@
       ],
       datasets: [{
         label: '',
-        data: [{
-            {
-              $section->one
-            }
-          }
-          @if(isset($section->two)), {
-            {
-              $section->two
-            }
-          }
-          @endif @if(isset($section->three)), {
-            {
-              $section->three
-            }
-          }
-          @endif @if(isset($section->four)), {
-            {
-              $section->four
-            }
-          }
-          @endif @if(isset($section->five)), {
-            {
-              $section->five
-            }
-          }
+        data: [{{$section->one}}
+          @if(isset($section->two)), {{$section->two}}
+          @endif @if(isset($section->three)), {{$section->three}}
+          @endif @if(isset($section->four)), {{$section->four}}
+          @endif @if(isset($section->five)), {{$section->five}}
           @endif
         ],
         backgroundColor: [
@@ -2211,24 +2175,8 @@
     }
   }
 
-  var ctx_ {
-    {
-      $section->section_id
-    }
-  } = document.getElementById({
-    {
-      $section->section_id
-    }
-  } + 'Container').getContext('2d');
-  new Chart(ctx_ {
-    {
-      $section->section_id
-    }
-  }, options_ {
-    {
-      $section->section_id
-    }
-  });
+  var ctx_{{$section->section_id}} = document.getElementById({{$section->section_id}} + 'Container').getContext('2d');
+  new Chart(ctx_{{$section->section_id}}, options_{{$section->section_id}});
 </script>
 @endforeach
 @endif
